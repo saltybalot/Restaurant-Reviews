@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="register_css.css">
+    <title>Restaurant Review Web Application</title>
+</head>
+<body>
+		
+    <div class="login-container">
+        <h2>Login or Register to post a review.</h2>
+        <div id="tabs">
+			 <button onclick="showModal('loginModal')">Login</button>
+			 <button onclick="showModal('registerModal')">Register</button>
+		<div id="loginModal" class="modal">
+			<div class="modal-content">
+			<span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <form id="loginForm">
+				<h1>Login</h1>
+                <label for="loginUsername">Username:</label>
+                <input type="text" id="loginUsername" name="username" required>
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" name="password" required>
+				<label>Remember Me:<input type="checkbox" id="rememberMe" name="rememberMe"></label>
+				<button type="button" onclick="login()">Login Now</button>
+            </form>
+			</div>
+		</div>
+		<div id="registerModal" class="modal">
+			<div class="modal-content">
+			<span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <form id="registerForm">
+				<h1>Register</h1>
+                <label for="registerUsername">Username:</label>
+                <input type="text" id="registerUsername" name="username" required>
+                
+                <label for="registerPassword">Password:</label>
+                <input type="password" id="registerPassword" name="password" required>
+
+                <label for="avatar">Avatar:</label>
+				<input type="file" id="avatar" name="avatar" accept="image/*">
+                
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" placeholder="Optional"></textarea>
+                 <button type="button" onclick="register()">Register Now</button>
+            </form>
+			</div>
+		</div>
+    
+    <script src="register_script.js"></script>
+</body>
+</html>
