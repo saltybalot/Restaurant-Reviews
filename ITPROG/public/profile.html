@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>User Profile</title>
+	<link rel="stylesheet" type="text/css" href="profile_style.css">
+	<link rel="stylesheet" href="navStyle.css">
+</head>
+
+<body>
+	<header class="header">
+		<div class="header-content">
+			<a href="FrontPageLoggedIn.html" style="text-decoration: none;">
+				<h1 class="header-title">World Peas</h1>
+			</a>
+			<form class="header-form">
+				<input type="text" id="search" name="search">
+				<button type="button" onclick="redirectToPage()">
+					<img src="fpicons/searchicon.png" alt="Search icon">
+				</button>
+			</form>
+		</div>
+		<div class="header-nav">
+			<a href="profile.html" class="header-userprofile">User Profile</a>
+			<a href="index.html" class="header-signout">Sign out</a>
+		</div>
+
+		<script>
+			function redirectToPage() {
+				var redirectTo = "search.html"
+				window.location.href = redirectTo;
+			}
+		</script>
+	</header>
+	<div class="profile">
+		<div class="cover-photo">
+			<img src="images/coverphoto.jpg" alt="Cover Photo">
+		</div>
+		<div class="profile-details">
+			<div id="profile-picture">
+				<img src="images/profilephoto.jpg" alt="Profile Picture">
+			</div>
+			<div class="user-details">
+				<h1 class="username">Patricia Thomas</h1>
+				<p id="profileDescription">Food lover, always exploring new restaurants!</p>
+				<button id="edit-profile-btn">Edit Profile</button>
+			</div>
+		</div>
+
+		<div class="content">
+			<div class="content-left">
+				<div class="comments">
+					<h2 class="section-title">Latest Comments</h2>
+					<div class="comment">
+						<img src="images/restaurant1.jpg" alt="User Profile Picture" class="profile-pic">
+						<p>This place has amazing food!</p>
+					</div>
+					<div class="comment">
+						<img src="images/restaurant2.jpg" alt="User Profile Picture" class="profile-pic">
+						<p>I loved the atmosphere here!</p>
+					</div>
+					<div class="comment">
+						<img src="images/restaurant3.jpg" alt="User Profile Picture" class="profile-pic">
+						<p>Great service and delicious meals!</p>
+					</div>
+					<div class="comment">
+						<img src="images/restaurant4.jpg" alt="User Profile Picture" class="profile-pic">
+						<p>Can't wait to go back again!</p>
+					</div>
+					<div class="comment">
+						<img src="images/restaurant5.jpg" alt="User Profile Picture" class="profile-pic">
+						<p>This restaurant exceeded my expectations!</p>
+					</div>
+				</div>
+				<div class="photos">
+					<h2 class="section-title">Photos</h2>
+					<div class="photo">
+						<img src="images/restaurant1.jpg" alt="Photo 1">
+						<p style="text-align: center">Caption for Photo 1</p>
+					</div>
+					<div class="photo">
+						<img src="images/restaurant2.jpg" alt="Photo 1">
+						<p style="text-align: center">Caption for Photo 2</p>
+					</div>
+					<div class="photo">
+						<img src="images/restaurant3.jpg" alt="Photo 1">
+						<p style="text-align: center">Caption for Photo 3</p>
+					</div>
+					<div class="photo">
+						<img src="images/restaurant4.jpg" alt="Photo 1">
+						<p style="text-align: center">Caption for Photo 4</p>
+					</div>
+					<div class="photo">
+						<img src="images/restaurant5.jpg" alt="Photo 1">
+						<p style="text-align: center">Caption for Photo 5</p>
+					</div>
+				</div>
+			</div>
+			<div class="content-right">
+				<div class="reviews">
+					<h2 class="section-title">Latest Reviews</h2>
+					<div class="review">
+						<div class="review-info">
+							<img src="images/profilephoto.jpg" alt="User Profile Picture" class="profile-pic">
+							<p class="review-label">Patricia Thomas reviewed <span
+									class="restaurant-name">Restaurant#1</span>
+								<br><span class="date">
+									02/12/2024</span>
+							</p>
+							<div class="review-actions">
+								<div class="dropdown">
+									<button class="dropdown-btn">&#8942;</button>
+									<div class="dropdown-content">
+										<a href="#" class="edit-btn">Edit</a>
+										<a href="#" class="delete-btn">Delete</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<img src="images/restaurant1.jpg" alt="Restaurant Review" class="review-photo">
+						<img src="images/5star.png" class="star">
+						<p class="review-content">The food was delicious and the staff was very friendly. Highly
+							recommend!</p>
+					</div>
+					<div class="review">
+						<div class="review-info">
+							<img src="images/profilephoto.jpg" alt="User Profile Picture" class="profile-pic">
+							<p class="review-label">Patricia Thomas reviewed <span
+									class="restaurant-name">Restaurant#2</span>
+								<br><span class="date">
+									02/12/2024</span>
+							</p>
+							<div class="review-actions">
+								<div class="dropdown">
+									<button class="dropdown-btn">&#8942;</button>
+									<div class="dropdown-content">
+										<a href="#" class="edit-btn">Edit</a>
+										<a href="#" class="delete-btn">Delete</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<img src="images/restaurant2.jpg" alt="Restaurant Review" class="review-photo">
+						<img src="images/4star.png" class="star">
+						<p class="review-content">Amazing experience! The ambiance and food were top-notch.</p>
+					</div>
+					<div class="review">
+						<div class="review-info">
+							<img src="images/profilephoto.jpg" alt="User Profile Picture" class="profile-pic">
+							<p class="review-label">Patricia Thomas reviewed <span
+									class="restaurant-name">Restaurant#3</span>
+								<br><span class="date">
+									02/12/2024</span>
+							</p>
+							<div class="review-actions">
+								<div class="dropdown">
+									<button class="dropdown-btn">&#8942;</button>
+									<div class="dropdown-content">
+										<a href="#" class="edit-btn">Edit</a>
+										<a href="#" class="delete-btn">Delete</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<img src="images/restaurant3.jpg" alt="Restaurant Review" class="review-photo">
+						<img src="images/3star.png" class="star">
+						<p class="review-content">Delicious food with great presentation. Will definitely visit again!
+						</p>
+					</div>
+					<div class="review">
+						<div class="review-info">
+							<img src="images/profilephoto.jpg" alt="User Profile Picture" class="profile-pic">
+							<p class="review-label">Patricia Thomas reviewed <span
+									class="restaurant-name">Restaurant#4</span>
+								<br><span class="date">
+									02/12/2024</span>
+							</p>
+							<div class="review-actions">
+								<div class="dropdown">
+									<button class="dropdown-btn">&#8942;</button>
+									<div class="dropdown-content">
+										<a href="#" class="edit-btn">Edit</a>
+										<a href="#" class="delete-btn">Delete</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<img src="images/restaurant4.jpg" alt="Restaurant Review" class="review-photo">
+						<img src="images/2star.png" class="star">
+						<p class="review-content">The service was excellent and the food exceeded my expectations!</p>
+					</div>
+					<div class="review">
+						<div class="review-info">
+							<img src="images/profilephoto.jpg" alt="User Profile Picture" class="profile-pic">
+							<p class="review-label">Patricia Thomas reviewed <span
+									class="restaurant-name">Restaurant#5</span>
+								<br><span class="date">
+									02/12/2024</span>
+							</p>
+							<div class="review-actions">
+								<div class="dropdown">
+									<button class="dropdown-btn">&#8942;</button>
+									<div class="dropdown-content">
+										<a href="#" class="edit-btn">Edit</a>
+										<a href="#" class="delete-btn">Delete</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<img src="images/restaurant5.jpg" alt="Restaurant Review" class="review-photo">
+						<img src="images/1star.png" class="star">
+						<p class="review-content">Had a wonderful dining experience here. The food was divine!</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="edit-profile-modal" class="modal">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h2 style="color:#EE4E34">Edit Profile</h2>
+				<form id="edit-profile-form">
+					<div id="profilelabel"><label for="profile-picture-upload">Profile Picture:</label></div>
+					<input type="file" id="profile-picture-upload" name="profile-picture" accept="image/*">
+					<div id="descriptionDiv"> <label for="description">Short Description:</label></div>
+					<textarea id="description" name="description" rows="4" cols="50"></textarea>
+					<button type="submit">Save Changes</button>
+				</form>
+			</div>
+		</div>
+
+		<div id="edit-review-modal" class="modal">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h2 style="color:#EE4E34">Create a Review</h2>
+				<form id="reviewForm">
+					<label for="rating">Rating (1-5):</label><br>
+					<div class="rating">
+						<span class="star2" data-value="1">&#9734;</span>
+						<span class="star2" data-value="2">&#9734;</span>
+						<span class="star2" data-value="3">&#9734;</span>
+						<span class="star2" data-value="4">&#9734;</span>
+						<span class="star2" data-value="5">&#9734;</span>
+					</div>
+					<input type="hidden" id="rating" name="rating" value="0" required>
+					<div id="mediaLabel"><label for="media">Upload Media (Image/Video):</label></div>
+					<input type="file" id="media" name="media" accept="image/*,video/*">
+					<div id="reviewBodyLabel"><label for="reviewBody">Review Body:</label></div>
+					<textarea id="reviewBody" name="reviewBody" rows="4" required></textarea>
+					<input type="submit" value="Submit Review">
+				</form>
+			</div>
+		</div>
+
+		<script src="profile_script.js"></script>
+</body>
+
+</html>

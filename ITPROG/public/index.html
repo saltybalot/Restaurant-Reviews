@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="FrontPageIndex.css" />
+  <link rel="stylesheet" href="navStyle.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Review</title>
+</head>
+
+<header class="header">
+  <div class="header-content">
+    <h1 class="header-title">World Peas</h1>
+    <form class="header-form">
+      <input type="text" id="search" name="search">
+      <button type="button" onclick="redirectToPage()">
+        <img src="fpicons/searchicon.png" alt="Search icon">
+      </button>
+    </form>
+  </div>
+  <div class="header-nav">
+    <button onclick="showModal('registerModal')" id="header-signup">Sign up</button>
+    <button onclick="showModal('loginModal')" id="header-login">Log in</button>
+  </div>
+
+  <script>
+    function redirectToPage() {
+      var redirectTo = "search.html"
+      window.location.href = redirectTo;
+    }
+  </script>
+</header>
+
+<main class="main">
+  <section class="top-section">
+    <h2 class="section-title">Cuisines</h2>
+    <div class="cuisine-grid">
+      <a href="#" class="cuisine-item">
+        <img src="fpicons/filfood.jpg" alt="Cuisine icon">
+        <p>Filipino</p>
+      </a>
+      <a href="#" class="cuisine-item">
+        <img src="fpicons/usfood.jpg" alt="Cuisine icon">
+        <p>American</p>
+      </a>
+      <a href="#" class="cuisine-item">
+        <img src="fpicons/italianfood.jpg" alt="Cuisine icon">
+        <p>Italian</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="bottom-section">
+    <div class="reviews">
+      <h2 class="section-title2">Recent Reviews</h2>
+      <div class="review-item">
+        <div class="reviewer-info">
+          <img src="fpicons/segstasis.JPG" alt="Profile picture" class="profile-pic">
+          <div class="reviewer-name-rating">
+            <p class="reviewer-name">Prinze P.</p>
+            <div class="rating">
+              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
+              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
+              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
+              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
+              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
+            </div>
+          </div>
+        </div>
+        <div class="review-text">
+          <p>My breakfast go to whenever I come back to the Philippines! My favorite is their Corned Beef Silog.</p>
+          <a href="#" class="review-link">Continue reading</a>
+        </div>
+      </div>
+      <!-- Repeat the .review-item div for each review -->
+    </div>
+  </section>
+</main>
+
+
+<footer>
+  <!-- Add footer information, such as copyright and contact details -->
+</footer>
+
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('loginModal')">&times;</span>
+    <form id="loginForm">
+      <h1 style="text-align: center;">Login</h1>
+      <input type="text" id="loginUsername" name="username" class="textbox-border" placeholder="Username" required>
+      <input type="password" id="loginPassword" name="password" class="textbox-border" placeholder="Password" required>
+      <div class="rememberMeLabel">
+        <label>Remember Me:<input type="checkbox" id="rememberMe" name="rememberMe"></label>
+      </div>
+      <button type="button" onclick="login()">Login Now</button>
+    </form>
+  </div>
+</div>
+
+<div id="registerModal" class="modal">
+  <div class="modal-content2">
+    <span class="close" onclick="closeModal('registerModal')">&times;</span>
+    <form id="registerForm">
+      <h1 style="text-align: center;">Sign up</h1>
+
+      <input type="text" id="registerUsername" name="username" class="textbox-border" placeholder="Username" required>
+
+
+      <input type="password" id="registerPassword" name="password" class="textbox-border" placeholder="Password"
+        required>
+
+      <label for="avatar" class="avatarlabel">Avatar:</label>
+      <input type="file" id="avatar" name="avatar" accept="image/*" class="textbox-border">
+
+      <label for="description" class="descriptionlabel">Description:</label>
+      <textarea id="description" name="description" placeholder="Optional"></textarea>
+      <button type="button" onclick="register()">Register Now</button>
+    </form>
+  </div>
+</div>
+<script src="register_script.js"></script>
+</body>
+
+</html>

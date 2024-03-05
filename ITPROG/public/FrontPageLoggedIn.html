@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="FrontPageIndexLoggedIn.css" />
+  <link rel="stylesheet" href="navStyle.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Review</title>
+</head>
+
+<header class="header">
+  <div class="header-content">
+    <a href="FrontPageLoggedIn.html" style="text-decoration: none;">
+      <h1 class="header-title">World Peas</h1>
+    </a>
+    <form class="header-form">
+      <input type="text" id="search" name="search">
+      <button type="button" onclick="redirectToPage()">
+        <img src="fpicons/searchicon.png" alt="Search icon">
+      </button>
+    </form>
+  </div>
+  <div class="header-nav">
+    <a href="profile.html" class="header-userprofile">User Profile</a>
+    <a href="index.html" class="header-signout">Sign out</a>
+  </div>
+
+  <script>
+    function redirectToPage() {
+      var redirectTo = "search.html"
+      window.location.href = redirectTo;
+    }
+  </script>
+</header>
+
+<main class="main">
+  <section class="top-section">
+    <h2 class="section-title">Cuisines</h2>
+    <div class="cuisine-grid">
+      <a href="#" class="cuisine-item">
+        <img src="fpicons/filfood.jpg" alt="Cuisine icon">
+        <p>Filipino</p>
+      </a>
+      <a href="#" class="cuisine-item">
+        <img src="fpicons/usfood.jpg" alt="Cuisine icon">
+        <p>American</p>
+      </a>
+      <a href="#" class="cuisine-item">
+        <img src="fpicons/italianfood.jpg" alt="Cuisine icon">
+        <p>Italian</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="bottom-section">
+    <div class="reviews">
+      <h2 class="section-title2">Recent Reviews</h2>
+      <div class="review-item">
+        <div class="reviewer-info">
+          <img src="fpicons/segstasis.JPG" alt="Profile picture" class="profile-pic">
+          <div class="reviewer-name-rating">
+            <p class="reviewer-name">Prinze P.</p>
+            <div class="rating">
+              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
+              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
+              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
+              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
+              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
+            </div>
+          </div>
+        </div>
+        <div class="review-text">
+          <p>My breakfast go to whenever I come back to the Philippines! My favorite is their Corned Beef Silog.</p>
+          <a href="#" class="review-link">Continue reading</a>
+        </div>
+      </div>
+      <!-- Repeat the .review-item div for each review -->
+    </div>
+  </section>
+</main>
+
+
+<footer>
+  <!-- Add footer information, such as copyright and contact details -->
+</footer>
+</body>
+
+</html>
