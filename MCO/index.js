@@ -30,6 +30,27 @@ app.use(express.static("public"));
 var hbs = require("hbs");
 app.set("view engine", "hbs");
 
+/*
+const restaurant = Restaurant.find({});
+console.log(restaurant);
+*/
+
+async function findRatings() {
+  try {
+    const ratings = await Rating.find({});
+
+    if (ratings.length > 0) {
+      console.log(ratings);
+    } else {
+      console.log("empty");
+    }
+  } catch (err) {
+    console.error("Error finding ratings", err);
+  }
+}
+
+findRatings();
+
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/public/index.html");
 });
