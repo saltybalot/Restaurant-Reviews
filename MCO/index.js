@@ -51,8 +51,43 @@ async function findRatings() {
 
 findRatings();
 
+/*
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/public/index.html");
+});
+*/
+
+app.get("/", async (req, res) => {
+  const restaurant = await Restaurant.findOne({ name: "Mcdonalds" });
+  const rating = await Rating.findOne({ restaurant: "Mcdonalds" });
+  const review = await Review.find({ restaurant: "Mcdonalds" });
+  const user = await User.findOne({ username: "PatriciaTom" });
+
+  console.log(restaurant);
+  console.log(rating.food);
+  console.log(review);
+  console.log(user);
+
+  //get the average review rating
+  let reviewArray = [];
+
+  review.forEach((reviewNum) => {
+    reviewArray.push(reviewNum.rating);
+  });
+
+  let reviewSum = reviewArray.reduce((acc, val) => acc + val, 0);
+
+  console.log(reviewSum);
+  let reviewAverage = reviewSum / reviewArray.length;
+  let reviewValue = Math.round(reviewAverage);
+  res.render("index", {
+    restaurant,
+    rating,
+    review,
+    user,
+    reviewValue,
+    reviewLength: reviewArray.length,
+  });
 });
 
 /*

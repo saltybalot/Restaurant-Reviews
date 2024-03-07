@@ -1,0 +1,199 @@
+<html>
+
+<head>
+    <title>Review</title>
+    <link rel="stylesheet" href="review.css">
+    <link rel="stylesheet" href="navStyle.css">
+    <script src="jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="FrontPageLoggedIn.html" style="text-decoration: none;">
+                <h1 class="header-title">World Peas</h1>
+            </a>
+            <form class="header-form">
+                <input type="text" id="search" name="search">
+                <button type="button" onclick="redirectToPage()">
+                    <img src="fpicons/searchicon.png" alt="Search icon">
+                </button>
+            </form>
+        </div>
+        <div class="header-nav">
+            <a href="profile.html" class="header-userprofile">User Profile</a>
+            <a href="index.html" class="header-signout">Sign out</a>
+        </div>
+
+        <script>
+            function redirectToPage() {
+                var redirectTo = "search.html"
+                window.location.href = redirectTo;
+            }
+        </script>
+    </header>
+    <section class="layout">
+        <div class="headerReview">
+            <section class="restoTitle">
+                <div>
+                    <span class="username">{{restaurant.name}}</span><br>
+                    <img src="images/{{reviewValue}}star.png" class="rate"> <span class="subReview"> {{reviewLength}} reviews</span> | Fast Food<br>
+                    <img src="images/location-2952.png" class="icon"> {{restaurant.locations}} | <img
+                        src="images/telephone-handle-silhouette.png" class="headericon"> {{restaurant.phone}} | <a
+                        href="https://www.mcdonalds.com.ph/" class="webLink"> <img src="images/laptop.png"
+                            class="headericon">
+                        Website↗</a>
+                </div>
+                <div class="marginLeft">
+                    <a href="https://www.youtube.com/watch?v=BbeeuzU5Qc8" class="webLink"> <img
+                            src="images/pencil-327.png" class="headericon"> Review</a> | <a
+                        href="https://www.youtube.com/watch?v=BbeeuzU5Qc8" class="shareLink"> <img
+                            src="images/share-3798.png" class="headericon"> Share</a>
+                </div>
+            </section>
+        </div>
+        <div class="main">
+            <div class="picCollection">
+                <img src="https://media-cdn.tripadvisor.com/media/photo-s/17/63/66/21/caption.jpg">
+                <img src="https://media-cdn.tripadvisor.com/media/photo-s/17/63/66/42/caption.jpg">
+            </div>
+            <section class="detail">
+                <div class="ratingDetail">
+                    <span class="title"> Ratings and reviews </span><br>
+                    <p><img src="images/{{reviewValue}}star.png" class="rate"> <span class="subReview"> {{reviewLength}} reviews</span></p>
+                    <div class="ratingBottom">
+                        <p><b>Ratings</b></p>
+                        <ul style="list-style-type: none;">
+                            <li><img src="images/food.png" class="icon"> Food <img src="images/{{rating.food}}star.png" class="rate">
+                            </li>
+                            <li><img src="images/service.png" class="icon"> Service <img src="images/{{rating.service}}star.png"
+                                    class="rate">
+                            </li>
+                            <li><img src="images/money.png" class="icon"> Value <img src="images/{{rating.value}}star.png"
+                                    class="rate">
+                            </li>
+                            <li><img src="images/candle.png" class="icon"> Atmosphere <img src="images/{{rating.atmosphere}}star.png"
+                                    class="rate">
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="generalDetail">
+                    <span class="title">Details</span><br><br>
+                    <b>Cuisines</b>
+                    <p>{{restaurant.cuisine}}</p><br>
+                    <b>Meals</b>
+                    <p>{{restaurant.meals}}</p><br>
+                    <b>Features</b>
+                    <p>{{restaurant.features}}</p>
+
+
+
+                </div>
+                <div class="locationDetail">
+                    <span class="title">Location and contact</span>
+                    <img src="images/Screenshot 2024-02-12 101554.png" class="map">
+                    <p><img src="images/location-2952.png" class="icon">{{restaurant.locations}}</p>
+                    <p><a href="https://www.mcdonalds.com.ph/" class="webLink" style="color: black;"><img
+                                src="images/laptop.png" class="headericon"> Website↗</a></p>
+                    <p><img src="images/telephone-handle-silhouette.png" class="headericon"> {{restaurant.phone}}</p>
+                </div>
+            </section>
+        </div>
+        <div class="footer">
+            <table id="reviewtable">
+                <tr>
+                    <td class="reviewHeader">
+                        <ul class="reviewTitle">
+                            <li>
+                                <span class="title"> Reviews ({{reviewLength}})</span><button id="reviewButton">Write a Review</button>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="reviewBody">
+                        <section class="reviewFilter">
+                            <div>
+                                <b>Rating</b><br>
+                                <ul style="list-style-type: none; padding: 0;">
+                                    <li>
+                                        <input type="checkbox" id="excellent">
+                                        <label for="checkbox">Excellent (0)</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="veryGood">
+                                        <label for="checkbox">Very Good (3)</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="average">
+                                        <label for="checkbox">Average (1)</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="poor">
+                                        <label for="checkbox">Poor (1)</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="terrible">
+                                        <label for="checkbox">Terrible (0)</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                        See what travelers are saying:
+                        <div class="search">
+                            <input type="text" id="search" placeholder="Search here...">
+                            <button id="searchButton"><img src="images/search.png" class="icon"></button>
+                        </div>
+                    </td>
+                </tr>
+                {{#each review}}
+                <tr>
+                    <td class="reviewBody">
+                        <div class="review">
+                            <div class="review-info">
+                                <img src="images/profilephoto.jpg" alt="User Profile Picture" class="profile-pic">
+                                <p class="review-label">{{this.username}} reviewed <span
+                                        class="restaurant-name">{{this.restaurant}}</span> <br><span class="date">
+                                        02/12/2024</span></p>
+                            </div>
+
+                            <img src="images/{{this.image}}" alt="Restaurant Review" class="review-photo">
+                            <img src="images/{{this.rating}}star.png" class="star">
+                            <p class="review-content">{{this.body}}</p>
+                            <span class="helpful">Helpful?({{this.helpful}})<button class="helpfulButton">👍</button> </span>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
+                
+            </table>
+        </div>
+    </section>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 style="color:#EE4E34">Create a Review</h2>
+            <form id="reviewForm">
+                <label for="rating">Rating (1-5):</label><br>
+                <div class="rating">
+                    <span class="star2" data-value="1">&#9734;</span>
+                    <span class="star2" data-value="2">&#9734;</span>
+                    <span class="star2" data-value="3">&#9734;</span>
+                    <span class="star2" data-value="4">&#9734;</span>
+                    <span class="star2" data-value="5">&#9734;</span>
+                </div>
+                <input type="hidden" id="rating" name="rating" value="0" required>
+                <div id="mediaLabel"><label for="media">Upload Media (Image/Video):</label></div>
+                <input type="file" id="media" name="media" accept="image/*,video/*">
+                <div id="reviewBodyLabel"><label for="reviewBody">Review Body:</label></div>
+                <textarea id="reviewBody" name="reviewBody" rows="4" required></textarea>
+                <input type="submit" value="Submit Review">
+            </form>
+        </div>
+    </div>
+    <script src="review_script.js"></script>
+</body>
+
+</html>

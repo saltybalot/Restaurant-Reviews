@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const RatingSchema = new mongoose.Schema({
-  restaurant: Number,
+  restaurant: String,
   food: Number,
   service: Number,
   value: Number,
