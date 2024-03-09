@@ -27,7 +27,7 @@
 
   <script>
     function redirectToPage() {
-      var redirectTo = "search.html"
+      var redirectTo = "/view"
       window.location.href = redirectTo;
     }
   </script>
@@ -55,26 +55,26 @@
   <section class="bottom-section">
     <div class="reviews">
       <h2 class="section-title2">Recent Reviews</h2>
+      <div class="review-content">
+      {{#each review}}
       <div class="review-item">
         <div class="reviewer-info">
-          <img src="fpicons/segstasis.JPG" alt="Profile picture" class="profile-pic">
+          <img src="images/{{this.userDetails.profilePic}}" alt="Profile picture" class="profile-pic">
           <div class="reviewer-name-rating">
-            <p class="reviewer-name">Prinze P.</p>
+            <p class="reviewer-name">{{this.username}}</p>
             <div class="rating">
-              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
-              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
-              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
-              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
-              <img src="fpicons/reviewstar.png" alt="Star rating" class="star-icon">
+              <img src="images/{{this.rating}}star.png" class="star">
             </div>
           </div>
         </div>
         <div class="review-text">
-          <p>My breakfast go to whenever I come back to the Philippines! My favorite is their Corned Beef Silog.</p>
-          <a href="#" class="review-link">Continue reading</a>
+          <p>{{this.body}}</p>
+          <a href="/view?restaurant={{this.restaurant}}&reviewID={{this._id}}" class="review-link">Continue reading</a>
         </div>
       </div>
+      {{/each}}
       <!-- Repeat the .review-item div for each review -->
+      </div>
     </div>
   </section>
 </main>

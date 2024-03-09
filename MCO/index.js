@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 try {
-  mongoose.connect("mongodb://127.0.0.1:27017/RestaurantReview");
+  mongoose.connect("mongodb://127.0.0.1:27017/RestaurantDB");
   console.log("Connected to MongoDB successfully");
 } catch (err) {
   console.error(err);
@@ -34,7 +34,7 @@ app.set("view engine", "hbs");
 const restaurant = Restaurant.find({});
 console.log(restaurant);
 */
-
+/*
 async function findRatings() {
   try {
     const ratings = await Rating.find({});
@@ -50,23 +50,58 @@ async function findRatings() {
 }
 
 findRatings();
-
-/*
-app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/public/index.html");
-});
 */
 
 app.get("/", async (req, res) => {
-  const restaurant = await Restaurant.findOne({ name: "Mcdonalds" });
-  const rating = await Rating.findOne({ restaurant: "Mcdonalds" });
-  const review = await Review.find({ restaurant: "Mcdonalds" });
+  //temporarily adding toDate field to sort
+  const review = await Review.aggregate([
+    {
+      $addFields: {
+        dateObject: {
+          $toDate: "$date", // Convert the date string to a Date object
+        },
+      },
+    },
+
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "userDetails",
+      },
+    },
+    {
+      $unwind: "$userDetails",
+    },
+    {
+      $sort: { dateObject: -1 }, // Sort based on the new Date object field
+    },
+  ]);
+  const user = await Review.find({}).populate("userId");
+  console.log(review);
+
+  res.render("index", { review });
+});
+
+app.get("/view", async (req, res) => {
+  const content = req.query.restaurant;
+  const reviewID = req.query.reviewID;
+
+  console.log("Query: " + reviewID);
+  const restaurant = await Restaurant.findOne({ name: content });
+  const rating = await Rating.findOne({ restaurant: content });
+  const review = await Review.find({ restaurant: content });
   const user = await User.findOne({ username: "PatriciaTom" });
 
+  let userReview;
+  let reviewId;
+
+  /*
   console.log(restaurant);
   console.log(rating.food);
   console.log(review);
-  console.log(user);
+  console.log(user);*/
 
   //get the average review rating
   let reviewArray = [];
@@ -80,14 +115,27 @@ app.get("/", async (req, res) => {
   console.log(reviewSum);
   let reviewAverage = reviewSum / reviewArray.length;
   let reviewValue = Math.round(reviewAverage);
-  res.render("index", {
+  res.render("view", {
     restaurant,
     rating,
     review,
     user,
     reviewValue,
     reviewLength: reviewArray.length,
+    reviewID,
   });
+
+  if (reviewID != null) {
+    userReview = await Review.find({ _id: reviewID });
+    console.log(userReview);
+    const convertedReview = userReview.map((doc) => {
+      const convertedDoc = { ...doc.toObject() };
+      convertedDoc._id = convertedDoc._id.toString();
+      reviewId = convertedDoc._id;
+    });
+
+    console.log(reviewId);
+  }
 });
 
 /*

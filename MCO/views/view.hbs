@@ -10,7 +10,7 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <a href="FrontPageLoggedIn.html" style="text-decoration: none;">
+            <a href="/" style="text-decoration: none;">
                 <h1 class="header-title">World Peas</h1>
             </a>
             <form class="header-form">
@@ -27,7 +27,7 @@
 
         <script>
             function redirectToPage() {
-                var redirectTo = "search.html"
+                var redirectTo = "/search"
                 window.location.href = redirectTo;
             }
         </script>
@@ -37,7 +37,8 @@
             <section class="restoTitle">
                 <div>
                     <span class="username">{{restaurant.name}}</span><br>
-                    <img src="images/{{reviewValue}}star.png" class="rate"> <span class="subReview"> {{reviewLength}} reviews</span> | Fast Food<br>
+                    <img src="images/{{reviewValue}}star.png" class="rate"> <span class="subReview"> {{reviewLength}}
+                        reviews</span> | Fast Food<br>
                     <img src="images/location-2952.png" class="icon"> {{restaurant.locations}} | <img
                         src="images/telephone-handle-silhouette.png" class="headericon"> {{restaurant.phone}} | <a
                         href="https://www.mcdonalds.com.ph/" class="webLink"> <img src="images/laptop.png"
@@ -54,26 +55,29 @@
         </div>
         <div class="main">
             <div class="picCollection">
-                <img src="https://media-cdn.tripadvisor.com/media/photo-s/17/63/66/21/caption.jpg">
-                <img src="https://media-cdn.tripadvisor.com/media/photo-s/17/63/66/42/caption.jpg">
+                {{#each restaurant.images}}
+                <img src="{{this}}">
+                {{/each}}
             </div>
             <section class="detail">
                 <div class="ratingDetail">
                     <span class="title"> Ratings and reviews </span><br>
-                    <p><img src="images/{{reviewValue}}star.png" class="rate"> <span class="subReview"> {{reviewLength}} reviews</span></p>
+                    <p><img src="images/{{reviewValue}}star.png" class="rate"> <span class="subReview"> {{reviewLength}}
+                            reviews</span></p>
                     <div class="ratingBottom">
                         <p><b>Ratings</b></p>
                         <ul style="list-style-type: none;">
-                            <li><img src="images/food.png" class="icon"> Food <img src="images/{{rating.food}}star.png" class="rate">
-                            </li>
-                            <li><img src="images/service.png" class="icon"> Service <img src="images/{{rating.service}}star.png"
+                            <li><img src="images/food.png" class="icon"> Food <img src="images/{{rating.food}}star.png"
                                     class="rate">
                             </li>
-                            <li><img src="images/money.png" class="icon"> Value <img src="images/{{rating.value}}star.png"
-                                    class="rate">
+                            <li><img src="images/service.png" class="icon"> Service <img
+                                    src="images/{{rating.service}}star.png" class="rate">
                             </li>
-                            <li><img src="images/candle.png" class="icon"> Atmosphere <img src="images/{{rating.atmosphere}}star.png"
-                                    class="rate">
+                            <li><img src="images/money.png" class="icon"> Value <img
+                                    src="images/{{rating.value}}star.png" class="rate">
+                            </li>
+                            <li><img src="images/candle.png" class="icon"> Atmosphere <img
+                                    src="images/{{rating.atmosphere}}star.png" class="rate">
                             </li>
                         </ul>
                     </div>
@@ -107,7 +111,8 @@
                     <td class="reviewHeader">
                         <ul class="reviewTitle">
                             <li>
-                                <span class="title"> Reviews ({{reviewLength}})</span><button id="reviewButton">Write a Review</button>
+                                <span class="title"> Reviews ({{reviewLength}})</span><button id="reviewButton">Write a
+                                    Review</button>
                             </li>
                         </ul>
                     </td>
@@ -150,7 +155,7 @@
                 </tr>
                 {{#each review}}
                 <tr>
-                    <td class="reviewBody">
+                    <td class="reviewBody" id="{{this._id}}">
                         <div class="review">
                             <div class="review-info">
                                 <img src="images/profilephoto.jpg" alt="User Profile Picture" class="profile-pic">
@@ -162,12 +167,20 @@
                             <img src="images/{{this.image}}" alt="Restaurant Review" class="review-photo">
                             <img src="images/{{this.rating}}star.png" class="star">
                             <p class="review-content">{{this.body}}</p>
-                            <span class="helpful">Helpful?({{this.helpful}})<button class="helpfulButton">👍</button> </span>
+                            <span class="helpful">Helpful?({{this.helpful}})<button class="helpfulButton">👍</button>
+                            </span>
                         </div>
                     </td>
                 </tr>
                 {{/each}}
-                
+                <script>
+                    function scrollToReview() {
+                        const section = document.getElementById("{{ reviewID }}");
+                        section.scrollIntoView({ behavior: "smooth" });
+                    }
+
+                    window.onload = scrollToReview;
+                </script>
             </table>
         </div>
     </section>
