@@ -1,0 +1,75 @@
+[{
+  "_id": {
+    "$oid": "65e70ed9b8ad88c9f4512d39"
+  },
+  "restaurant": "Mcdonalds",
+  "username": "PatriciaTom",
+  "date": "2024-03-03",
+  "rating": 5,
+  "image": "mcdonalds.jpg",
+  "body": "The food was delicious and the staff was very friendly. Highly recommend!",
+  "helpful": 3,
+  "userId": {
+    "$oid": "65e70e1fb8ad88c9f4512d2d"
+  }
+},
+{
+  "_id": {
+    "$oid": "65e70ed9b8ad88c9f4512d3a"
+  },
+  "restaurant": "Sbarro, Paco Manila",
+  "username": "MacieAd",
+  "date": "2024-04-03",
+  "rating": 5,
+  "image": "sbarro.jpeg",
+  "body": "Amazing experience! The ambiance and food were top-notch.",
+  "helpful": 3,
+  "userId": {
+    "$oid": "65e70e1fb8ad88c9f4512d2e"
+  }
+},
+{
+  "_id": {
+    "$oid": "65e70ed9b8ad88c9f4512d3b"
+  },
+  "restaurant": "Angrydobo, Taft Avenue",
+  "username": "WilliamMart",
+  "date": "2024-05-03",
+  "rating": 5,
+  "image": "angrydobo.jpeg",
+  "body": "Delicious food with great presentation. Will definitely visit again!",
+  "helpful": 3,
+  "userId": {
+    "$oid": "65e70e1fb8ad88c9f4512d2f"
+  }
+},
+{
+  "_id": {
+    "$oid": "65e877a5dd0f1c1d7187a917"
+  },
+  "restaurant": "Mcdonalds",
+  "username": "PatriciaTom",
+  "date": "2024-03-03",
+  "rating": 5,
+  "image": "images.jpg",
+  "body": "The food was delicious and the staff was very friendly. Highly recommend!",
+  "helpful": 3,
+  "userId": {
+    "$oid": "65e70e1fb8ad88c9f4512d2d"
+  }
+},
+{
+  "_id": {
+    "$oid": "65e9401962a402efe367ee44"
+  },
+  "restaurant": "Mcdonalds",
+  "username": "PatriciaTom",
+  "date": "2024-03-03",
+  "rating": 1,
+  "image": "images.jpg",
+  "body": "Hi I'm a bot!",
+  "helpful": 3,
+  "userId": {
+    "$oid": "65e70e1fb8ad88c9f4512d2d"
+  }
+}]

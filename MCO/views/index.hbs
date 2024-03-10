@@ -56,24 +56,25 @@
     <div class="reviews">
       <h2 class="section-title2">Recent Reviews</h2>
       <div class="review-content">
-      {{#each review}}
-      <div class="review-item">
-        <div class="reviewer-info">
-          <img src="images/{{this.userDetails.profilePic}}" alt="Profile picture" class="profile-pic">
-          <div class="reviewer-name-rating">
-            <p class="reviewer-name">{{this.username}}</p>
-            <div class="rating">
-              <img src="images/{{this.rating}}star.png" class="star">
+        {{#each review}}
+        <div class="review-item">
+          <div class="reviewer-info">
+            <img src="images/{{this.userDetails.profilePic}}" alt="Profile picture" class="profile-pic">
+            <div class="reviewer-name-rating">
+              <p class="reviewer-name">{{this.username}}</p>
+              <div class="rating">
+                <img src="images/{{this.rating}}star.png" class="star">
+              </div>
             </div>
           </div>
+          <div class="review-text">
+            <p>{{this.body}}</p>
+            <a href="/view?restaurant={{this.restaurant}}&reviewID={{this._id}}" class="review-link">Continue
+              reading</a>
+          </div>
         </div>
-        <div class="review-text">
-          <p>{{this.body}}</p>
-          <a href="/view?restaurant={{this.restaurant}}&reviewID={{this._id}}" class="review-link">Continue reading</a>
-        </div>
-      </div>
-      {{/each}}
-      <!-- Repeat the .review-item div for each review -->
+        {{/each}}
+        <!-- Repeat the .review-item div for each review -->
       </div>
     </div>
   </section>

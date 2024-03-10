@@ -1,0 +1,48 @@
+[{
+  "_id": {
+    "$oid": "65e709ceb8ad88c9f4512d27"
+  },
+  "name": "Mcdonalds",
+  "cuisine": "Fast Food",
+  "meals": "Breakfast, Brunch, Lunch, Dinner",
+  "features": "Seating, Table Service",
+  "locations": "Manila, Philippines",
+  "website": "https://www.mcdonalds.com.ph/",
+  "phone": "+63 2 521 2628",
+  "images": [
+    "https://media-cdn.tripadvisor.com/media/photo-s/17/63/66/21/caption.jpg",
+    "https://media-cdn.tripadvisor.com/media/photo-s/17/63/66/42/caption.jpg"
+  ]
+},
+{
+  "_id": {
+    "$oid": "65e709ceb8ad88c9f4512d28"
+  },
+  "name": "Sbarro, Paco Manila",
+  "cuisine": "Fast Food",
+  "meals": "Breakfast, Brunch, Lunch, Dinner",
+  "features": "Seating, Table Service",
+  "locations": "Manila, Philippines",
+  "website": "https://sbarro.com/",
+  "phone": "(02) 8900-5251",
+  "images": [
+    "images/sbarro1.jpg",
+    "images/sbarro2.jpg"
+  ]
+},
+{
+  "_id": {
+    "$oid": "65e709ceb8ad88c9f4512d29"
+  },
+  "name": "Angrydobo, Taft Avenue",
+  "cuisine": "Fast Food",
+  "meals": "Breakfast, Brunch, Lunch, Dinner",
+  "features": "Seating, Table Service",
+  "locations": "Manila, Philippines",
+  "website": "https://www.facebook.com/officialangrydobo/",
+  "phone": "+63 2 256 3335",
+  "images": [
+    "images/food1.jpg",
+    "images/food2.jpg"
+  ]
+}]
