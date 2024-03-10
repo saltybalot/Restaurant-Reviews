@@ -91,7 +91,36 @@ app.get("/view", async (req, res) => {
   console.log("Query: " + reviewID);
   const restaurant = await Restaurant.findOne({ name: content });
   const rating = await Rating.findOne({ restaurant: content });
-  const review = await Review.find({ restaurant: content });
+  //const review = await Review.find({ restaurant: content });
+  const review = await Review.aggregate([
+    {
+      $addFields: {
+        dateObject: {
+          $toDate: "$date", // Convert the date string to a Date object
+        },
+      },
+    },
+
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "userDetails",
+      },
+    },
+    {
+      $unwind: "$userDetails",
+    },
+    {
+      $match: {
+        restaurant: content,
+      },
+    },
+    {
+      $sort: { dateObject: -1 }, // Sort based on the new Date object field
+    },
+  ]);
   const user = await User.findOne({ username: "PatriciaTom" });
 
   let userReview;
@@ -105,10 +134,20 @@ app.get("/view", async (req, res) => {
 
   //get the average review rating
   let reviewArray = [];
+  let ratingMatrix = [0, 0, 0, 0, 0];
+  //                  1  2  3  4  5 stars
 
-  review.forEach((reviewNum) => {
+  review.forEach((reviewNum, i) => {
     reviewArray.push(reviewNum.rating);
+    ratingMatrix[reviewArray[i] - 1]++;
   });
+
+  //Testing the rating tally portion
+  console.log("num of 1*s: " + ratingMatrix[0]);
+  console.log("num of 2*s: " + ratingMatrix[1]);
+  console.log("num of 3*s: " + ratingMatrix[2]);
+  console.log("num of 4*s: " + ratingMatrix[3]);
+  console.log("num of 5*s: " + ratingMatrix[4]);
 
   let reviewSum = reviewArray.reduce((acc, val) => acc + val, 0);
 
@@ -123,6 +162,11 @@ app.get("/view", async (req, res) => {
     reviewValue,
     reviewLength: reviewArray.length,
     reviewID,
+    excellent: ratingMatrix[4],
+    veryGood: ratingMatrix[3],
+    average: ratingMatrix[2],
+    poor: ratingMatrix[1],
+    terrible: ratingMatrix[0],
   });
 
   if (reviewID != null) {

@@ -22,7 +22,7 @@
         </div>
         <div class="header-nav">
             <a href="profile.html" class="header-userprofile">User Profile</a>
-            <a href="index.html" class="header-signout">Sign out</a>
+            <a href="/" class="header-signout">Sign out</a>
         </div>
 
         <script>
@@ -125,23 +125,23 @@
                                 <ul style="list-style-type: none; padding: 0;">
                                     <li>
                                         <input type="checkbox" id="excellent">
-                                        <label for="checkbox">Excellent (0)</label>
+                                        <label for="checkbox">Excellent ({{excellent}})</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" id="veryGood">
-                                        <label for="checkbox">Very Good (3)</label>
+                                        <label for="checkbox">Very Good ({{veryGood}})</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" id="average">
-                                        <label for="checkbox">Average (1)</label>
+                                        <label for="checkbox">Average ({{average}})</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" id="poor">
-                                        <label for="checkbox">Poor (1)</label>
+                                        <label for="checkbox">Poor ({{poor}})</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" id="terrible">
-                                        <label for="checkbox">Terrible (0)</label>
+                                        <label for="checkbox">Terrible ({{terrible}})</label>
                                     </li>
                                 </ul>
                             </div>
@@ -158,7 +158,8 @@
                     <td class="reviewBody" id="{{this._id}}">
                         <div class="review">
                             <div class="review-info">
-                                <img src="images/profilephoto.jpg" alt="User Profile Picture" class="profile-pic">
+                                <img src="images/{{this.userDetails.profilePic}}" alt="User Profile Picture"
+                                    class="profile-pic">
                                 <p class="review-label">{{this.username}} reviewed <span
                                         class="restaurant-name">{{this.restaurant}}</span> <br><span class="date">
                                         02/12/2024</span></p>
