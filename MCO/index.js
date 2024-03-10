@@ -182,6 +182,10 @@ app.get("/view", async (req, res) => {
   }
 });
 
+app.get("/search", async (req, res) => {
+  res.render("search");
+});
+
 /*
 app.get("/submit", function (req, res) {
   var name = req.query.firstname + " " + req.query.secondname;
