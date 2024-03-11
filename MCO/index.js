@@ -198,26 +198,21 @@ app.post("/submit", function (req, res) {
 });
 */
 app.get("/profile", async (req, res) => {
-  const username = req.query.user; 
+  const username = req.query.user;
+  console.log("user query: " + username);
 
   try {
-    const user = await User.findOne({ username: username }); 
+    const user = await User.findOne({ username: username });
+
     if (!user) {
-      
       return res.status(404).json({ message: "User not found" });
     }
- 
+
     res.render("profile", { user });
   } catch (err) {
-   
     res.status(500).json({ message: err.message });
   }
-  
 });
-
-
-
-
 
 var server = app.listen(3000, function () {
   console.log("Node server running at port 3000");
