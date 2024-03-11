@@ -234,22 +234,12 @@ app.get("/profile", async (req, res) => {
   console.log("user query: " + username);
 
   try {
-<<<<<<< HEAD
     const user = await User.findOne({ username: "PatriciaTom" }); 
-=======
-    const user = await User.findOne({ username: username });
-
->>>>>>> 5828d245367eaabc3759c7b17c2f900172464ab5
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-<<<<<<< HEAD
     const reviews = await Review.find({ userId: user._id });
     res.render("profile", { user, reviews });
-=======
-
-    res.render("profile", { user });
->>>>>>> 5828d245367eaabc3759c7b17c2f900172464ab5
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
