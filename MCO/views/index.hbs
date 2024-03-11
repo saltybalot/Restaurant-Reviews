@@ -12,7 +12,9 @@
 
 <header class="header">
   <div class="header-content">
-    <h1 class="header-title">World Peas</h1>
+    <a href="/" style="text-decoration: none;">
+      <h1 class="header-title">World Peas</h1>
+    </a>
     <form class="header-form">
       <input type="text" id="search" name="search">
       <button type="button" onclick="redirectToPage()">
@@ -21,8 +23,8 @@
     </form>
   </div>
   <div class="header-nav">
-    <button onclick="showModal('registerModal')" id="header-signup">Sign up</button>
-    <button onclick="showModal('loginModal')" id="header-login">Log in</button>
+    <a href="/profile?user=PatriciaTom" class="header-userprofile">User Profile</a>
+    <a href="/loggedOut" class="header-signout">Sign out</a>
   </div>
 
   <script>

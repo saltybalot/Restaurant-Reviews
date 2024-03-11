@@ -101,10 +101,10 @@ body {
   display: flex;
 }
 #filter {
-	color: #FFFFFF;
+  color: #ffffff;
 }
 .filter {
-  color: #FFFFFF;
+  color: #ffffff;
   background-color: #ee4e34;
   margin-top: 80px;
   padding: 2px;
@@ -146,9 +146,8 @@ body {
   left: -110px;
 }
 h2 {
-	margin-left: 30px;	
+  margin-left: 30px;
 }
-	
 
 .section-title2 {
   margin-top: 0;
@@ -191,74 +190,73 @@ h2 {
   margin: 0;
 }
 .container {
-    width: 90%;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-	background-color: #FFFFFF;
-    border: 3px solid black;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 3px solid black;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .section-title {
-    font-size: 24px;
-	margin-left: 120px;
-	margin-top: 25px;
-    margin-bottom: 20px;
-	color: #ee4e34;
+  font-size: 24px;
+  margin-left: 120px;
+  margin-top: 25px;
+  margin-bottom: 20px;
+  color: #ee4e34;
 }
 
 .restaurant {
-    display: flex;
-    margin-bottom: 30px;
-	background-color: #fcedda;
-    border: 3px solid black; 
-    padding: 10px; 
+  display: flex;
+  margin-bottom: 30px;
+  background-color: #fcedda;
+  border: 3px solid black;
+  padding: 10px;
 }
 
 .restaurant-photo {
-	padding: 20px;
-    width: 350px;
-    height: auto;
+  padding: 20px;
+  width: 350px;
+  height: auto;
 }
 
 .restaurant-info {
-	margin-top: 20px;
-	width: 65%;
-    display: flex;
-	flex-direction: column;
+  margin-top: 20px;
+  width: 65%;
+  display: flex;
+  flex-direction: column;
 }
 
 .restaurant-name {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 10px;
-	text-decoration: underline;
-	margin: 0;
-	margin-bottom: 5px;
-	
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-decoration: underline;
+  margin: 0;
+  margin-bottom: 5px;
 }
 .restaurant-rating {
-    margin-bottom: 5px; 
+  margin-bottom: 5px;
 }
 .restaurant-rating img,
 .restaurant-rating p {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
-  
+
 .star {
-	display: inline-block;
-	margin-right: 5px;
-	width: 100px;
-	height: 20px;
-	background-repeat: no-repeat; 
+  display: inline-block;
+  margin-right: 5px;
+  width: 100px;
+  height: 20px;
+  background-repeat: no-repeat;
 }
 
 .restaurant-location {
-    color: #666;
-	font-weight: lighter;
-	font-style: italic;
-	margin: 0;
- }
+  color: #666;
+  font-weight: lighter;
+  font-style: italic;
+  margin: 0;
+}

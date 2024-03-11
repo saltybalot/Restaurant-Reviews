@@ -84,6 +84,38 @@ app.get("/", async (req, res) => {
   res.render("index", { review });
 });
 
+app.get("/loggedOut", async (req, res) => {
+  //temporarily adding toDate field to sort
+  const review = await Review.aggregate([
+    {
+      $addFields: {
+        dateObject: {
+          $toDate: "$date", // Convert the date string to a Date object
+        },
+      },
+    },
+
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "userDetails",
+      },
+    },
+    {
+      $unwind: "$userDetails",
+    },
+    {
+      $sort: { dateObject: -1 }, // Sort based on the new Date object field
+    },
+  ]);
+  const user = await Review.find({}).populate("userId");
+  console.log(review);
+
+  res.render("loggedOutIndex", { review });
+});
+
 app.get("/view", async (req, res) => {
   const content = req.query.restaurant;
   const reviewID = req.query.reviewID;
@@ -198,26 +230,30 @@ app.post("/submit", function (req, res) {
 });
 */
 app.get("/profile", async (req, res) => {
-  const username = req.query.user; 
+  const username = req.query.user;
+  console.log("user query: " + username);
 
   try {
+<<<<<<< HEAD
     const user = await User.findOne({ username: "PatriciaTom" }); 
+=======
+    const user = await User.findOne({ username: username });
+
+>>>>>>> 5828d245367eaabc3759c7b17c2f900172464ab5
     if (!user) {
-      
       return res.status(404).json({ message: "User not found" });
     }
+<<<<<<< HEAD
     const reviews = await Review.find({ userId: user._id });
     res.render("profile", { user, reviews });
+=======
+
+    res.render("profile", { user });
+>>>>>>> 5828d245367eaabc3759c7b17c2f900172464ab5
   } catch (err) {
-   
     res.status(500).json({ message: err.message });
   }
-  
 });
-
-
-
-
 
 var server = app.listen(3000, function () {
   console.log("Node server running at port 3000");
