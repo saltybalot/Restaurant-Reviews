@@ -12,7 +12,7 @@
 <body>
 	<header class="header">
 		<div class="header-content">
-			<a href="FrontPageLoggedIn.html" style="text-decoration: none;">
+			<a href="/" style="text-decoration: none;">
 				<h1 class="header-title">World Peas</h1>
 			</a>
 			<form class="header-form">
@@ -23,8 +23,8 @@
 			</form>
 		</div>
 		<div class="header-nav">
-			<a href="profile.html" class="header-userprofile">User Profile</a>
-			<a href="index.html" class="header-signout">Sign out</a>
+			<a href="/profile?user=username" class="header-userprofile">User Profile</a>
+			<a href="/" class="header-signout">Sign out</a>
 		</div>
 
 		<script>
@@ -40,11 +40,11 @@
 		</div>
 		<div class="profile-details">
 			<div id="profile-picture">
-				<img src="{{this.profilePic}}" alt="Profile Picture">
+				<img src="images/{{user.profilePic}}" alt="Profile Picture">
 			</div>
 			<div class="user-details">
-				<h1 class="username">{{this.username}}</h1>
-				<p id="profileDescription">{{this.description}}</p>
+				<h1 class="username">{{user.username}}</h1>
+				<p id="profileDescription">{{user.description}}</p>
 				<button id="edit-profile-btn">Edit Profile</button>
 			</div>
 		</div>
@@ -101,11 +101,12 @@
 			<div class="content-right">
 				<div class="reviews">
 					<h2 class="section-title">Latest Reviews</h2>
+					{{#each review}}
 					<div class="review">
 						<div class="review-info">
 							<img src="images/profilephoto.jpg" alt="User Profile Picture" class="profile-pic">
-							<p class="review-label">Patricia Thomas reviewed <span
-									class="restaurant-name">Restaurant#1</span>
+							<p class="review-label">{{this.username}} reviewed <span
+									class="restaurant-name">{{this.restaurant}}</span>
 								<br><span class="date">
 									02/12/2024</span>
 							</p>
@@ -119,11 +120,11 @@
 								</div>
 							</div>
 						</div>
-						<img src="images/restaurant1.jpg" alt="Restaurant Review" class="review-photo">
-						<img src="images/5star.png" class="star">
-						<p class="review-content">The food was delicious and the staff was very friendly. Highly
-							recommend!</p>
+						<img src="images/{{this.image}}" alt="Restaurant Review" class="review-photo">
+						<img src="images/{{this.rating}}star.png" class="star">
+						<p class="review-content">{{this.body}}</p>
 					</div>
+					{{/each}}
 					<div class="review">
 						<div class="review-info">
 							<img src="images/profilephoto.jpg" alt="User Profile Picture" class="profile-pic">

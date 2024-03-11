@@ -201,13 +201,13 @@ app.get("/profile", async (req, res) => {
   const username = req.query.user; 
 
   try {
-    const user = await User.findOne({ username: username }); 
+    const user = await User.findOne({ username: "PatriciaTom" }); 
     if (!user) {
       
       return res.status(404).json({ message: "User not found" });
     }
- 
-    res.render("profile", { user });
+    const reviews = await Review.find({ userId: user._id });
+    res.render("profile", { user, reviews });
   } catch (err) {
    
     res.status(500).json({ message: err.message });
