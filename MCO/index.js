@@ -234,11 +234,41 @@ app.get("/profile", async (req, res) => {
   console.log("user query: " + username);
 
   try {
-    const user = await User.findOne({ username: "PatriciaTom" }); 
+    const user = await User.findOne({ username: "PatriciaTom" });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    const reviews = await Review.find({ userId: user._id });
+    const reviews = await Review.aggregate([
+      {
+        $addFields: {
+          dateObject: {
+            $toDate: "$date", // Convert the date string to a Date object
+          },
+        },
+      },
+
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: "$userDetails",
+      },
+      {
+        $match: {
+          username: "PatriciaTom",
+        },
+      },
+      {
+        $sort: { dateObject: -1 }, // Sort based on the new Date object field
+      },
+    ]);
+
+    console.log(reviews);
     res.render("profile", { user, reviews });
   } catch (err) {
     res.status(500).json({ message: err.message });

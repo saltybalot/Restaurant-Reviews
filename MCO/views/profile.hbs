@@ -101,14 +101,15 @@
 			<div class="content-right">
 				<div class="reviews">
 					<h2 class="section-title">Latest Reviews</h2>
-					{{#each review}}
+					{{#each reviews}}
 					<div class="review">
 						<div class="review-info">
-							<img src="images/profilephoto.jpg" alt="User Profile Picture" class="profile-pic">
+							<img src="images/{{this.userDetails.profilePic}}" alt="User Profile Picture"
+								class="profile-pic">
 							<p class="review-label">{{this.username}} reviewed <span
 									class="restaurant-name">{{this.restaurant}}</span>
 								<br><span class="date">
-									02/12/2024</span>
+									{{this.date}}</span>
 							</p>
 							<div class="review-actions">
 								<div class="dropdown">
