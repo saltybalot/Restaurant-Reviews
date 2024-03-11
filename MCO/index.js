@@ -84,6 +84,38 @@ app.get("/", async (req, res) => {
   res.render("index", { review });
 });
 
+app.get("/loggedOut", async (req, res) => {
+  //temporarily adding toDate field to sort
+  const review = await Review.aggregate([
+    {
+      $addFields: {
+        dateObject: {
+          $toDate: "$date", // Convert the date string to a Date object
+        },
+      },
+    },
+
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "userDetails",
+      },
+    },
+    {
+      $unwind: "$userDetails",
+    },
+    {
+      $sort: { dateObject: -1 }, // Sort based on the new Date object field
+    },
+  ]);
+  const user = await Review.find({}).populate("userId");
+  console.log(review);
+
+  res.render("loggedOutIndex", { review });
+});
+
 app.get("/view", async (req, res) => {
   const content = req.query.restaurant;
   const reviewID = req.query.reviewID;
