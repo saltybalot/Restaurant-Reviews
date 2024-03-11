@@ -106,3 +106,32 @@ document.getElementById("reviewForm").onsubmit = function (event) {
   event.preventDefault();
   modal.style.display = "none";
 };
+
+var check1 = document.getElementById("excellent");
+var check2 = document.getElementById("veryGood");
+var check3 = document.getElementById("average");
+var check4 = document.getElementById("poor");
+var check5 = document.getElementById("terrible");
+
+check1.addEventListener("change", function () {
+  var isChecked = this.checked;
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        //sectionContent.innerHTML = xhr.responseText;
+      } else {
+        console.error("Error fetching section content:", xhr.status);
+      }
+    }
+  };
+  if (isChecked) {
+    console.log("Excellent check");
+    xhr.open("GET", "/filter?rating=excellent&isChecked=" + isChecked, true);
+    xhr.send();
+  } else {
+    console.log("Excellent unchecked");
+    xhr.open("GET", "/filter?rating=excellent&isChecked=" + isChecked, true);
+    xhr.send();
+  }
+});
