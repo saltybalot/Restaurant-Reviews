@@ -10,7 +10,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 10px solid #ee4e34;
 }
 
 .header h1 {
@@ -22,12 +21,23 @@
 
 .header-content {
   display: flex;
+  align-items: center;
 }
 
 .header-form {
   display: flex;
   align-items: center;
   padding: 5px;
+}
+
+.header-logo {
+  margin-right: 8px;
+}
+
+.header-logo-image {
+  width: 60px;
+  height: auto;
+  padding-left: 15px;
 }
 
 .header input {
@@ -37,6 +47,11 @@
   border: 1px solid #ffffff;
   border-radius: 1px;
   margin-left: 30px;
+}
+
+.header-title {
+  margin: 0;
+  margin-left: -15px;
 }
 
 .header button {

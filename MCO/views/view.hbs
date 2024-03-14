@@ -9,9 +9,16 @@
 
 <header class="header">
     <div class="header-content">
-        <a href="/" style="text-decoration: none;">
-            <h1 class="header-title">World Peas</h1>
-        </a>
+        <div class="header-logo">
+            <a href="/" style="text-decoration: none;">
+                <img src="images/worldpeace.png" alt="Cuisine icon" class="header-logo-image">
+            </a>
+        </div>
+        <div class="header-title">
+            <a href="/" style="text-decoration: none;">
+                <h1>World Peas</h1>
+            </a>
+        </div>
         <form class="header-form">
             <input type="text" id="search" name="search">
             <button type="button" onclick="redirectToPage()">
@@ -20,8 +27,8 @@
         </form>
     </div>
     <div class="header-nav">
-        <a href="/profile?user=username" class="header-userprofile">User Profile</a>
-        <a href="/" class="header-signout">Sign out</a>
+        <a href="/profile?user=PatriciaTom" class="header-userprofile">User Profile</a>
+        <a href="/loggedOut" class="header-signout">Sign out</a>
     </div>
 
     <script>

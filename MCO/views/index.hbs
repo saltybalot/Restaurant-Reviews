@@ -12,9 +12,16 @@
 
 <header class="header">
   <div class="header-content">
-    <a href="/" style="text-decoration: none;">
-      <h1 class="header-title">World Peas</h1>
-    </a>
+    <div class="header-logo">
+      <a href="/" style="text-decoration: none;">
+        <img src="images/worldpeace.png" alt="Cuisine icon" class="header-logo-image">
+      </a>
+    </div>
+    <div class="header-title">
+      <a href="/" style="text-decoration: none;">
+        <h1>World Peas</h1>
+      </a>
+    </div>
     <form class="header-form">
       <input type="text" id="search" name="search">
       <button type="button" onclick="redirectToPage()">
@@ -86,7 +93,9 @@
 
 
 <footer>
-  <!-- Add footer information, such as copyright and contact details -->
+  <div class="footer-content">
+    <a href="about.html">About Us</a>
+  </div>
 </footer>
 
 <div id="loginModal" class="modal">
@@ -126,6 +135,7 @@
   </div>
 </div>
 <script src="register_script.js"></script>
+
 </body>
 
 </html>
