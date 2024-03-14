@@ -275,6 +275,68 @@ app.get("/profile", async (req, res) => {
   }
 });
 
+var reviewArray = [];
+var currentRestaurant;
+app.get("/filter", async (req, res) => {
+  const restaurant = req.query.restaurant;
+  const rating = parseInt(req.query.rating);
+  const isChecked = req.query.isChecked === "true";
+  let temp = [];
+
+  if (restaurant != undefined) {
+    console.log(rating + "is " + isChecked + restaurant);
+
+    if (currentRestaurant != restaurant) {
+      reviewArray = [];
+      currentRestaurant = restaurant;
+    }
+    if (isChecked) {
+      reviewArray.push(rating);
+    } else {
+      console.log("array data deleted");
+      temp = reviewArray.filter((item) => item !== rating);
+      reviewArray = temp;
+    }
+
+    const reviews = await Review.aggregate([
+      {
+        $addFields: {
+          dateObject: {
+            $toDate: "$date", // Convert the date string to a Date object
+          },
+        },
+      },
+
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: "$userDetails",
+      },
+      {
+        $match: {
+          restaurant: currentRestaurant,
+          rating: { $in: reviewArray },
+        },
+      },
+      {
+        $sort: { dateObject: -1 }, // Sort based on the new Date object field
+      },
+    ]);
+    console.log(reviews);
+    console.log(reviewArray.length);
+    console.log(reviewArray);
+
+    //console.log(content);
+    res.send(reviews);
+  }
+});
+
 var server = app.listen(3000, function () {
   console.log("Node server running at port 3000");
 });

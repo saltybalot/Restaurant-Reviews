@@ -116,15 +116,45 @@ var check5 = document.getElementById("terrible");
 check1.addEventListener("change", function () {
   var isChecked = this.checked;
   var xhr = new XMLHttpRequest();
+  var restoName = document.querySelector(".username").textContent;
+
+  console.log(document.querySelector(".username").textContent);
+
   xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
+        //console.log(xhr.responseText);
         //sectionContent.innerHTML = xhr.responseText;
+        //reviewTable.innerHTML += xhr.responseText;
+        let sections = JSON.parse(xhr.responseText);
+
+        let reviewRows = document.querySelectorAll(".reviewRow");
+        reviewRows.forEach(function (row) {
+          row.parentNode.removeChild(row);
+        });
+
+        console.log(sections[0]);
       } else {
         console.error("Error fetching section content:", xhr.status);
       }
     }
   };
+
+  if (restoName != undefined) {
+    xhr.open(
+      "GET",
+      "/filter?restaurant=" + restoName + "&rating=5&isChecked=" + isChecked,
+      true
+    );
+    xhr.send();
+  }
+});
+
+/*
+check1.addEventListener("change", function () {
+  var isChecked = this.checked;
+  var xhr = new XMLHttpRequest();
+
   if (isChecked) {
     console.log("Excellent check");
     xhr.open("GET", "/filter?rating=excellent&isChecked=" + isChecked, true);
@@ -134,4 +164,15 @@ check1.addEventListener("change", function () {
     xhr.open("GET", "/filter?rating=excellent&isChecked=" + isChecked, true);
     xhr.send();
   }
-});
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        console.log("gottem");
+        //sectionContent.innerHTML = xhr.responseText;
+      } else {
+        console.error("Error fetching section content:", xhr.status);
+      }
+    }
+  };
+});*/

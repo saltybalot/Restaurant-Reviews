@@ -28,12 +28,27 @@ body {
 
 .header-content {
   display: flex;
+  align-items: center;
+}
+
+.header-logo {
+  margin-right: 8px;
+}
+
+.header-logo-image {
+  width: 60px;
+  height: auto;
+  padding-left: 15px;
+}
+
+.header-title {
+  margin: 0;
+  margin-left: -15px;
 }
 
 .header-form {
   display: flex;
   align-items: center;
-  padding: 5px;
 }
 
 .header input {
@@ -239,8 +254,13 @@ h2 {
 }
 
 footer {
-  background-color: #333;
+  background-color: #ee4e34;
   color: white;
-  padding: 5px;
-  text-align: center;
+  text-align: left;
+  padding: 25px 35px;
+  height: 150px;
+}
+
+.footer-content a {
+  color: white;
 }

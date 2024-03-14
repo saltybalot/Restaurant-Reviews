@@ -1,0 +1,47 @@
+body {
+  margin: 0;
+  font-family: Alata, sans-serif;
+  background-color: #fcedda;
+  font-size: 18px;
+}
+
+header {
+  background-size: cover;
+  height: 100px;
+  text-align: center;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.container {
+  max-width: 660px;
+  margin: auto;
+  padding: 20px;
+}
+
+.about-section,
+.mission-section {
+  color: #333; /* Text color for sections */
+  padding: 50px 0;
+}
+
+.about-section h2 {
+  color: white;
+  margin-top: -50px;
+  height: 175px;
+  text-align: center;
+  font-size: 44px;
+}
+.mission-section h2 {
+  color: #ee4e34; /* Heading color for sections */
+  text-align: center;
+}
+
+.about-section p,
+.mission-section p {
+  text-align: justify;
+  line-height: 1.6;
+}

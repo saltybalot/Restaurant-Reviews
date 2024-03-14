@@ -8,21 +8,21 @@
 </head>
 
 <header class="header">
-        <div class="header-content">
-            <a href="/" style="text-decoration: none;">
-                <h1 class="header-title">World Peas</h1>
-            </a>
-            <form class="header-form">
-                <input type="text" id="search" name="search">
-                <button type="button" onclick="redirectToPage()">
-                    <img src="fpicons/searchicon.png" alt="Search icon">
-                </button>
-            </form>
-        </div>
-        <div class="header-nav">
-            <a href="/profile?user=username" class="header-userprofile">User Profile</a>
-            <a href="/" class="header-signout">Sign out</a>
-        </div>
+    <div class="header-content">
+        <a href="/" style="text-decoration: none;">
+            <h1 class="header-title">World Peas</h1>
+        </a>
+        <form class="header-form">
+            <input type="text" id="search" name="search">
+            <button type="button" onclick="redirectToPage()">
+                <img src="fpicons/searchicon.png" alt="Search icon">
+            </button>
+        </form>
+    </div>
+    <div class="header-nav">
+        <a href="/profile?user=username" class="header-userprofile">User Profile</a>
+        <a href="/" class="header-signout">Sign out</a>
+    </div>
 
     <script>
         function redirectToPage() {
@@ -158,7 +158,7 @@
                     </td>
                 </tr>
                 {{#each review}}
-                <tr>
+                <tr class="reviewRow">
                     <td class="reviewBody" id="{{this._id}}">
                         <div class="review">
                             <div class="review-info">
@@ -178,15 +178,15 @@
                     </td>
                 </tr>
                 {{/each}}
-                <script>
-                    function scrollToReview() {
-                        const section = document.getElementById("{{ reviewID }}");
-                        section.scrollIntoView({ behavior: "smooth" });
-                    }
-
-                    window.onload = scrollToReview;
-                </script>
             </table>
+            <script>
+                function scrollToReview() {
+                    const section = document.getElementById("{{ reviewID }}");
+                    section.scrollIntoView({ behavior: "smooth" });
+                }
+
+                window.onload = scrollToReview;
+            </script>
         </div>
     </section>
     <div id="myModal" class="modal">
