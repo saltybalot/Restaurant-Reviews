@@ -1,0 +1,27 @@
+[{
+  "_id": {
+    "$oid": "65e70e1fb8ad88c9f4512d2d"
+  },
+  "username": "PatriciaTom",
+  "password": "PatForever",
+  "profilePic": "patPic.png",
+  "description": "This is Patricia Thomas."
+},
+{
+  "_id": {
+    "$oid": "65e70e1fb8ad88c9f4512d2e"
+  },
+  "username": "MacieAd",
+  "password": "MacieForever",
+  "profilePic": "maciePic.jpg",
+  "description": "This is Macie Adams."
+},
+{
+  "_id": {
+    "$oid": "65e70e1fb8ad88c9f4512d2f"
+  },
+  "username": "WilliamMart",
+  "password": "WilliamForever",
+  "profilePic": "williamPic.JPG",
+  "description": "This is Donna Martinez."
+}]

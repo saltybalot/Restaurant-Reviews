@@ -1,0 +1,30 @@
+[{
+  "_id": {
+    "$oid": "65e70e5db8ad88c9f4512d36"
+  },
+  "restaurant": "Mcdonalds",
+  "food": 5,
+  "service": 5,
+  "value": 5,
+  "atmosphere": 5
+},
+{
+  "_id": {
+    "$oid": "65e70e5db8ad88c9f4512d37"
+  },
+  "restaurant": "Sbarro, Paco Manila",
+  "food": 5,
+  "service": 5,
+  "value": 5,
+  "atmosphere": 5
+},
+{
+  "_id": {
+    "$oid": "65e70e5db8ad88c9f4512d38"
+  },
+  "restaurant": "Angrydobo, Taft Avenue",
+  "food": 5,
+  "service": 5,
+  "value": 5,
+  "atmosphere": 5
+}]
