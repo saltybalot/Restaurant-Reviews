@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" type="text/css" href="aboutuspage.css">
+    <link rel="stylesheet" href="navStyle.css">
+</head>
+<header class="header">
+    <div class="header-content">
+        <div class="header-logo">
+            <a href="/" style="text-decoration: none;">
+                <img src="images/worldpeace.png" alt="Cuisine icon" class="header-logo-image">
+            </a>
+        </div>
+        <div class="header-title">
+            <a href="/" style="text-decoration: none;">
+                <h1>World Peas</h1>
+            </a>
+        </div>
+        <form class="header-form">
+            <input type="text" id="search" name="search">
+            <button type="button" onclick="redirectToPage()">
+                <img src="fpicons/searchicon.png" alt="Search icon">
+            </button>
+        </form>
+    </div>
+    <div class="header-nav">
+        <a href="/profile?user=PatriciaTom" class="header-userprofile">User Profile</a>
+        <a href="/loggedOut" class="header-signout">Sign out</a>
+    </div>
+
+    <script>
+        function redirectToPage() {
+            var redirectTo = "/search"
+            window.location.href = redirectTo;
+        }
+    </script>
+</header>
+
+<body>
+    <header>
+        <img src="images/pizzeria-header.jpg" alt="Header Image" class="header-image">
+        <div class="header-content">
+            <p>About Us</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="about-section">
+            <div class="container">
+                <h2>About Us</h2>
+                <p>"World Peas is a passionate community-driven platform dedicated to promoting and celebrating local
+                    restaurants worldwide. Our mission is to celebrate the diverse culinary culture of different regions
+                    and support small businesses in the food industry. With World Peas, you can explore hidden gems,
+                    traditional eateries, and innovative culinary experiences in your neighborhood and beyond. We
+                    believe in the power of local flavors and strive to connect food enthusiasts with authentic dining
+                    experiences. Whether you're a foodie looking for new dining adventures or a restaurant owner seeking
+                    to increase your visibility, We are here to provide World Peas for everyone!</p>
+            </div>
+        </section>
+
+        <section class="mission-section">
+            <div class="container">
+                <h2>Our Mission</h2>
+                <p>Our mission at World Peas is to serve as a global platform that fosters a vibrant culinary community,
+                    connecting food enthusiasts with local restaurants and celebrating the rich tapestry of global
+                    cuisines. We are dedicated to promoting and supporting local restaurants worldwide, providing a
+                    platform for them to showcase their unique flavors and culinary traditions. Through our platform, we
+                    aim to empower small businesses in the food industry and contribute to the cultural diversity of
+                    communities. </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!-- Footer content goes here -->
+    </footer>
+</body>
+
+</html>

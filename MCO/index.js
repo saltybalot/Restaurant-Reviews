@@ -337,6 +337,10 @@ app.get("/filter", async (req, res) => {
   }
 });
 
+app.get("/about", async (req, res) => {
+  res.render("about");
+});
+
 var server = app.listen(3000, function () {
   console.log("Node server running at port 3000");
 });
