@@ -8,7 +8,37 @@
 	<link rel="stylesheet" type="text/css" href="aboutuspage.css">
 	<link rel="stylesheet" href="navStyle.css">
 </head>
-
+<header class="header">
+    <div class="header-content">
+      <div class="header-logo">
+        <a href="/" style="text-decoration: none;">
+          <img src="images/worldpeace.png" alt="Cuisine icon" class="header-logo-image">
+        </a>
+      </div>
+      <div class="header-title">
+        <a href="/" style="text-decoration: none;">
+          <h1>World Peas</h1>
+        </a>
+      </div>
+      <form class="header-form">
+        <input type="text" id="search" name="search">
+        <button type="button" onclick="redirectToPage()">
+          <img src="fpicons/searchicon.png" alt="Search icon">
+        </button>
+      </form>
+    </div>
+    <div class="header-nav">
+      <a href="/profile?user=PatriciaTom" class="header-userprofile">User Profile</a>
+      <a href="/loggedOut" class="header-signout">Sign out</a>
+    </div>
+  
+    <script>
+      function redirectToPage() {
+        var redirectTo = "/search"
+        window.location.href = redirectTo;
+      }
+    </script>
+  </header>
 <body>
     <header>
         <img src="images/pizzeria-header.jpg" alt="Header Image" class="header-image">
