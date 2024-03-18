@@ -91,8 +91,7 @@ document.getElementById("reviewForm").onsubmit = function (event) {
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      // Handle the response
-      //console.log(xhr.responseText);
+      location.reload();
     }
   };
   xhr.open(
@@ -134,6 +133,7 @@ document.getElementById("reviewForm").onsubmit = function (event) {
   );
   event.preventDefault();
   modal.style.display = "none";
+  location.reload();
 };
 
 var check1 = document.getElementById("excellent");
