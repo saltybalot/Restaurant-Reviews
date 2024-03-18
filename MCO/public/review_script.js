@@ -56,15 +56,35 @@ stars.forEach(function (star) {
   });
 });
 
+/*
 var helpfulbtns = document.querySelectorAll(".helpfulButton");
 
 helpfulbtns.forEach((button) => {
   button.addEventListener("click", () => {
     var parentItem = button.closest(".helpful");
+    var reviewBodyClass = button.closest(".reviewBody");
+    var reviewBodyID = reviewBodyClass.id;
 
-    parentItem.textContent = "👍(1) Thanks for your vote";
+    console.log(reviewBodyID);
+
+    var xhr = new XMLHttpRequest();
+
+    // Make a GET request
+    parentItem.textContent = "👍 Thanks for your vote";
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        console.log("helpful success");
+      }
+    };
+    xhr.open(
+      "GET",
+      "/getHelp?restaurant=" + restoName + "&id=" + reviewBodyID,
+      true
+    );
+    xhr.send();
   });
-});
+});*/
+getHelp();
 
 var reviewImg;
 var reviewText;
@@ -204,15 +224,7 @@ check1.addEventListener("change", function () {
         });
 
         console.log(sections[0]);
-        helpfulbtns = document.querySelectorAll(".helpfulButton");
-
-        helpfulbtns.forEach((button) => {
-          button.addEventListener("click", () => {
-            var parentItem = button.closest(".helpful");
-
-            parentItem.textContent = "👍 Thanks for your vote";
-          });
-        });
+        getHelp();
       } else {
         console.error("Error fetching section content:", xhr.status);
       }
@@ -296,15 +308,7 @@ check2.addEventListener("change", function () {
         });
 
         console.log(sections[0]);
-        helpfulbtns = document.querySelectorAll(".helpfulButton");
-
-        helpfulbtns.forEach((button) => {
-          button.addEventListener("click", () => {
-            var parentItem = button.closest(".helpful");
-
-            parentItem.textContent = "👍 Thanks for your vote";
-          });
-        });
+        getHelp();
       } else {
         console.error("Error fetching section content:", xhr.status);
       }
@@ -388,15 +392,7 @@ check3.addEventListener("change", function () {
         });
 
         console.log(sections[0]);
-        helpfulbtns = document.querySelectorAll(".helpfulButton");
-
-        helpfulbtns.forEach((button) => {
-          button.addEventListener("click", () => {
-            var parentItem = button.closest(".helpful");
-
-            parentItem.textContent = "👍 Thanks for your vote";
-          });
-        });
+        getHelp();
       } else {
         console.error("Error fetching section content:", xhr.status);
       }
@@ -480,15 +476,7 @@ check4.addEventListener("change", function () {
         });
 
         console.log(sections[0]);
-        helpfulbtns = document.querySelectorAll(".helpfulButton");
-
-        helpfulbtns.forEach((button) => {
-          button.addEventListener("click", () => {
-            var parentItem = button.closest(".helpful");
-
-            parentItem.textContent = "👍 Thanks for your vote";
-          });
-        });
+        getHelp();
       } else {
         console.error("Error fetching section content:", xhr.status);
       }
@@ -572,15 +560,7 @@ check5.addEventListener("change", function () {
         });
 
         console.log(sections[0]);
-        helpfulbtns = document.querySelectorAll(".helpfulButton");
-
-        helpfulbtns.forEach((button) => {
-          button.addEventListener("click", () => {
-            var parentItem = button.closest(".helpful");
-
-            parentItem.textContent = "👍 Thanks for your vote";
-          });
-        });
+        getHelp();
       } else {
         console.error("Error fetching section content:", xhr.status);
       }
@@ -601,3 +581,31 @@ check5.addEventListener("change", function () {
     xhr.send();
   }
 });
+
+function getHelp() {
+  var helpfulbtns = document.querySelectorAll(".helpfulButton");
+
+  helpfulbtns.forEach((button) => {
+    button.addEventListener("click", () => {
+      var parentItem = button.closest(".helpful");
+      var reviewBodyClass = button.closest(".reviewBody");
+      var reviewBodyID = reviewBodyClass.id;
+
+      console.log(reviewBodyID);
+
+      var xhr = new XMLHttpRequest();
+
+      // Make a GET request
+
+      parentItem.textContent = "👍 Thanks for your vote";
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          console.log("helpful success");
+        }
+      };
+      xhr.open("GET", "/getHelp?&id=" + reviewBodyID, true);
+      xhr.send();
+    });
+  });
+}

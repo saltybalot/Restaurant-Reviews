@@ -366,6 +366,16 @@ app.get("/reviewSubmit", async (req, res) => {
   console.log(savedReview);
 });
 
+app.get("/getHelp", async (req, res) => {
+  const reviewID = req.query.id;
+
+  const selectedReview = await Review.findById(reviewID);
+  selectedReview.helpful++;
+  let temp = await selectedReview.save();
+  console.log("r/woooooooooooooooooooooooooooosh");
+  console.log(temp);
+});
+
 app.get("/about", async (req, res) => {
   res.render("about");
 });
