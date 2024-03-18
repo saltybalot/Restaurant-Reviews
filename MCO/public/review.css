@@ -316,6 +316,7 @@ input[type="text"] {
 
 .review-photo {
   width: 80%;
+  max-height: 300px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   margin: 0 auto;

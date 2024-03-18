@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
 
 const ReviewSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
   restaurant: String,
   username: String,
-  date: Date,
+  date: String,
   rating: Number,
   image: String,
   body: String,

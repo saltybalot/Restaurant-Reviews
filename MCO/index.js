@@ -292,10 +292,15 @@ app.get("/filter", async (req, res) => {
     }
     if (isChecked) {
       reviewArray.push(rating);
+      temp = reviewArray;
     } else {
       console.log("array data deleted");
       temp = reviewArray.filter((item) => item !== rating);
       reviewArray = temp;
+    }
+
+    if (reviewArray.length == 0) {
+      temp = [1, 2, 3, 4, 5];
     }
 
     const reviews = await Review.aggregate([
@@ -321,7 +326,7 @@ app.get("/filter", async (req, res) => {
       {
         $match: {
           restaurant: currentRestaurant,
-          rating: { $in: reviewArray },
+          rating: { $in: temp },
         },
       },
       {
@@ -337,6 +342,30 @@ app.get("/filter", async (req, res) => {
   }
 });
 
+app.get("/reviewSubmit", async (req, res) => {
+  const restaurant = req.query.restaurant;
+  const username = req.query.username;
+  const image = req.query.image;
+  const rating = parseInt(req.query.rating);
+  const body = req.query.body;
+  const id = req.query.id;
+
+  const newReview = new Review({
+    restaurant: restaurant,
+    username: username,
+    date: getCurrentDate(),
+    rating: rating,
+    image: image,
+    body: body,
+    helpful: 0,
+    userId: id,
+  });
+
+  let savedReview = await newReview.save();
+
+  console.log(savedReview);
+});
+
 app.get("/about", async (req, res) => {
   res.render("about");
 });
@@ -344,3 +373,20 @@ app.get("/about", async (req, res) => {
 var server = app.listen(3000, function () {
   console.log("Node server running at port 3000");
 });
+
+// Other Functions
+function getCurrentDate() {
+  const currentDate = new Date();
+
+  // Get the year, month, and day
+  const year = currentDate.getFullYear();
+  let month = currentDate.getMonth() + 1; // Month starts from 0
+  let day = currentDate.getDate();
+
+  // Add leading zeros if month/day is single digit
+  month = month < 10 ? "0" + month : month;
+  day = day < 10 ? "0" + day : day;
+
+  // Return the date in "YYYY-MM-DD" format
+  return `${year}-${month}-${day}`;
+}
