@@ -151,7 +151,7 @@ body {
 
 .modal-content textarea {
   width: calc(100% - 22px);
-  /height: 100px;
+  height: 100px;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;

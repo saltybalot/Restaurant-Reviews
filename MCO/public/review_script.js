@@ -211,6 +211,10 @@ check1.addEventListener("change", function () {
           helpfulSpan.innerHTML = `Helpful?(${row.helpful})`;
           helpButton.innerHTML = `👍`;
 
+          let unHelpButton = document.createElement("button");
+          unHelpButton.className = "unHelpfulButton";
+          unHelpButton.innerHTML = `👎`;
+
           reviewTable.appendChild(tr);
           tr.appendChild(td);
           td.appendChild(reviewDiv);
@@ -221,6 +225,7 @@ check1.addEventListener("change", function () {
           //reviewDiv.appendChild(reviewBottom);
           reviewDiv.appendChild(helpfulSpan);
           helpfulSpan.appendChild(helpButton);
+          helpfulSpan.appendChild(unHelpButton);
         });
 
         console.log(sections[0]);
@@ -295,6 +300,10 @@ check2.addEventListener("change", function () {
           helpfulSpan.innerHTML = `Helpful?(${row.helpful})`;
           helpButton.innerHTML = `👍`;
 
+          let unHelpButton = document.createElement("button");
+          unHelpButton.className = "unHelpfulButton";
+          unHelpButton.innerHTML = `👎`;
+
           reviewTable.appendChild(tr);
           tr.appendChild(td);
           td.appendChild(reviewDiv);
@@ -305,6 +314,7 @@ check2.addEventListener("change", function () {
           //reviewDiv.appendChild(reviewBottom);
           reviewDiv.appendChild(helpfulSpan);
           helpfulSpan.appendChild(helpButton);
+          helpfulSpan.appendChild(unHelpButton);
         });
 
         console.log(sections[0]);
@@ -379,6 +389,10 @@ check3.addEventListener("change", function () {
           helpfulSpan.innerHTML = `Helpful?(${row.helpful})`;
           helpButton.innerHTML = `👍`;
 
+          let unHelpButton = document.createElement("button");
+          unHelpButton.className = "unHelpfulButton";
+          unHelpButton.innerHTML = `👎`;
+
           reviewTable.appendChild(tr);
           tr.appendChild(td);
           td.appendChild(reviewDiv);
@@ -389,6 +403,7 @@ check3.addEventListener("change", function () {
           //reviewDiv.appendChild(reviewBottom);
           reviewDiv.appendChild(helpfulSpan);
           helpfulSpan.appendChild(helpButton);
+          helpfulSpan.appendChild(unHelpButton);
         });
 
         console.log(sections[0]);
@@ -463,6 +478,10 @@ check4.addEventListener("change", function () {
           helpfulSpan.innerHTML = `Helpful?(${row.helpful})`;
           helpButton.innerHTML = `👍`;
 
+          let unHelpButton = document.createElement("button");
+          unHelpButton.className = "unHelpfulButton";
+          unHelpButton.innerHTML = `👎`;
+
           reviewTable.appendChild(tr);
           tr.appendChild(td);
           td.appendChild(reviewDiv);
@@ -473,6 +492,7 @@ check4.addEventListener("change", function () {
           //reviewDiv.appendChild(reviewBottom);
           reviewDiv.appendChild(helpfulSpan);
           helpfulSpan.appendChild(helpButton);
+          helpfulSpan.appendChild(unHelpButton);
         });
 
         console.log(sections[0]);
@@ -547,6 +567,10 @@ check5.addEventListener("change", function () {
           helpfulSpan.innerHTML = `Helpful?(${row.helpful})`;
           helpButton.innerHTML = `👍`;
 
+          let unHelpButton = document.createElement("button");
+          unHelpButton.className = "unHelpfulButton";
+          unHelpButton.innerHTML = `👎`;
+
           reviewTable.appendChild(tr);
           tr.appendChild(td);
           td.appendChild(reviewDiv);
@@ -557,6 +581,7 @@ check5.addEventListener("change", function () {
           //reviewDiv.appendChild(reviewBottom);
           reviewDiv.appendChild(helpfulSpan);
           helpfulSpan.appendChild(helpButton);
+          helpfulSpan.appendChild(unHelpButton);
         });
 
         console.log(sections[0]);
@@ -584,6 +609,7 @@ check5.addEventListener("change", function () {
 
 function getHelp() {
   var helpfulbtns = document.querySelectorAll(".helpfulButton");
+  var unHelpfulbtns = document.querySelectorAll(".unHelpfulButton");
 
   helpfulbtns.forEach((button) => {
     button.addEventListener("click", () => {
@@ -604,7 +630,35 @@ function getHelp() {
           console.log("helpful success");
         }
       };
-      xhr.open("GET", "/getHelp?&id=" + reviewBodyID, true);
+      xhr.open("GET", "/getHelp?&id=" + reviewBodyID + "&isHelpful=true", true);
+      xhr.send();
+    });
+  });
+
+  unHelpfulbtns.forEach((button) => {
+    button.addEventListener("click", () => {
+      var parentItem = button.closest(".helpful");
+      var reviewBodyClass = button.closest(".reviewBody");
+      var reviewBodyID = reviewBodyClass.id;
+
+      console.log(reviewBodyID);
+
+      var xhr = new XMLHttpRequest();
+
+      // Make a GET request
+
+      parentItem.textContent = "👎 Thanks for your vote";
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          console.log("unhelpful success");
+        }
+      };
+      xhr.open(
+        "GET",
+        "/getHelp?&id=" + reviewBodyID + "&isHelpful=false",
+        true
+      );
       xhr.send();
     });
   });

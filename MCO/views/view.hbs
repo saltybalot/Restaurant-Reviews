@@ -160,8 +160,11 @@
                         </section>
                         See what travelers are saying:
                         <div class="search">
-                            <input type="text" id="search" placeholder="Search here...">
-                            <button id="searchButton"><img src="images/search.png" class="icon"></button>
+                            <form method="post" action="/reviewSearch">
+                                <input name="body" type="text" id="reviewSearch" placeholder="Search here...">
+                                <button id="searchButton" type="submit"><img src="images/search.png"
+                                        class="icon"></button>
+                            </form>
                         </div>
                     </td>
                 </tr>
@@ -172,15 +175,26 @@
                             <div class="review-info">
                                 <img src="images/{{this.userDetails.profilePic}}" alt="User Profile Picture"
                                     class="profile-pic">
-                                <p class="review-label">{{this.username}} reviewed <span
-                                        class="restaurant-name">{{this.restaurant}}</span> <br><span class="date">
+                                <p class="review-label"><a href="/profile?user={{this.username}}"> {{this.username}}
+                                    </a>
+                                    reviewed <span class="restaurant-name">{{this.restaurant}}</span> <br><span
+                                        class="date">
                                         {{this.date}}</span></p>
+                                <div class="review-actions">
+                                    <div class="dropdown">
+                                        <button class="dropdown-btn">&#8942;</button>
+                                        <div class="dropdown-content">
+                                            <a href="#" class="edit-btn">Edit</a>
+                                            <a href="#" class="delete-btn">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
                             <img src="images/{{this.image}}" alt="Restaurant Review" class="review-photo">
                             <img src="images/{{this.rating}}star.png" class="star">
                             <p class="review-content">{{this.body}}</p>
-                            <span class="helpful">Helpful?({{this.helpful}})<button class="helpfulButton">👍</button>
+                            <span class="helpful">Helpful?({{this.helpful}})<button
+                                    class="helpfulButton">👍</button><button class="unHelpfulButton">👎</button>
                             </span>
                         </div>
                     </td>

@@ -119,11 +119,17 @@ app.get("/loggedOut", async (req, res) => {
 app.get("/view", async (req, res) => {
   const content = req.query.restaurant;
   const reviewID = req.query.reviewID;
+  const searchQuery = req.query.searchQuery;
 
   console.log("Query: " + reviewID);
   const restaurant = await Restaurant.findOne({ name: content });
   const rating = await Rating.findOne({ restaurant: content });
   //const review = await Review.find({ restaurant: content });
+
+  let tempQuery = {
+    restaurant: content,
+  };
+
   const review = await Review.aggregate([
     {
       $addFields: {
@@ -234,7 +240,7 @@ app.get("/profile", async (req, res) => {
   console.log("user query: " + username);
 
   try {
-    const user = await User.findOne({ username: "PatriciaTom" });
+    const user = await User.findOne({ username: username });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -260,7 +266,7 @@ app.get("/profile", async (req, res) => {
       },
       {
         $match: {
-          username: "PatriciaTom",
+          username: username,
         },
       },
       {
@@ -368,9 +374,14 @@ app.get("/reviewSubmit", async (req, res) => {
 
 app.get("/getHelp", async (req, res) => {
   const reviewID = req.query.id;
+  const isHelpful = req.query.isHelpful === "true";
 
   const selectedReview = await Review.findById(reviewID);
-  selectedReview.helpful++;
+  if (isHelpful) {
+    selectedReview.helpful++;
+  } else {
+    selectedReview.helpful--;
+  }
   let temp = await selectedReview.save();
   console.log("r/woooooooooooooooooooooooooooosh");
   console.log(temp);
@@ -378,6 +389,11 @@ app.get("/getHelp", async (req, res) => {
 
 app.get("/about", async (req, res) => {
   res.render("about");
+});
+
+app.post("/reviewSearch", async (req, res) => {
+  console.log(req.body.body);
+  //res.redirect("")
 });
 
 var server = app.listen(3000, function () {
