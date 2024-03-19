@@ -118,7 +118,7 @@ app.get("/loggedOut", async (req, res) => {
 
 app.get("/view", async (req, res) => {
   const content = req.query.restaurant;
-  const reviewID = req.query.reviewID;
+  let reviewID = req.query.reviewID;
   const searchQuery = req.query.searchQuery;
 
   console.log("Query: " + reviewID);
@@ -126,9 +126,14 @@ app.get("/view", async (req, res) => {
   const rating = await Rating.findOne({ restaurant: content });
   //const review = await Review.find({ restaurant: content });
 
-  let tempQuery = {
-    restaurant: content,
-  };
+  let tempQuery = {};
+  tempQuery["restaurant"] = content;
+
+  if (searchQuery != null) {
+    tempQuery["body"] = new RegExp(searchQuery, "i");
+  }
+
+  console.log(tempQuery);
 
   const review = await Review.aggregate([
     {
@@ -151,9 +156,7 @@ app.get("/view", async (req, res) => {
       $unwind: "$userDetails",
     },
     {
-      $match: {
-        restaurant: content,
-      },
+      $match: tempQuery,
     },
     {
       $sort: { dateObject: -1 }, // Sort based on the new Date object field
@@ -162,13 +165,19 @@ app.get("/view", async (req, res) => {
   const user = await User.findOne({ username: "PatriciaTom" });
 
   let userReview;
-  let reviewId;
+  let firstReviewId;
 
   /*
   console.log(restaurant);
   console.log(rating.food);
   console.log(review);
   console.log(user);*/
+
+  if (searchQuery != null) {
+    reviewID = review[0]._id.toString();
+    console.log("wahoooo");
+    console.log(review[0]._id.toString());
+  }
 
   //get the average review rating
   let reviewArray = [];
@@ -393,7 +402,10 @@ app.get("/about", async (req, res) => {
 
 app.post("/reviewSearch", async (req, res) => {
   console.log(req.body.body);
-  //res.redirect("")
+
+  const query = req.body.body;
+  const restoName = req.body.restoName;
+  res.redirect("/view?restaurant=" + restoName + "&searchQuery=" + query);
 });
 
 var server = app.listen(3000, function () {

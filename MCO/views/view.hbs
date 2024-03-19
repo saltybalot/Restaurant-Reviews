@@ -162,6 +162,7 @@
                         <div class="search">
                             <form method="post" action="/reviewSearch">
                                 <input name="body" type="text" id="reviewSearch" placeholder="Search here...">
+                                <input name="restoName" type="hidden" value="{{restaurant.name}}">
                                 <button id="searchButton" type="submit"><img src="images/search.png"
                                         class="icon"></button>
                             </form>
@@ -180,15 +181,7 @@
                                     reviewed <span class="restaurant-name">{{this.restaurant}}</span> <br><span
                                         class="date">
                                         {{this.date}}</span></p>
-                                <div class="review-actions">
-                                    <div class="dropdown">
-                                        <button class="dropdown-btn">&#8942;</button>
-                                        <div class="dropdown-content">
-                                            <a href="#" class="edit-btn">Edit</a>
-                                            <a href="#" class="delete-btn">Delete</a>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                             <img src="images/{{this.image}}" alt="Restaurant Review" class="review-photo">
                             <img src="images/{{this.rating}}star.png" class="star">
