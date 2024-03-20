@@ -48,3 +48,15 @@ function register() {
     );
   }
 }
+
+var reviewBodyClass = document.querySelectorAll(".review-body");
+
+reviewBodyClass.forEach((body) => {
+  var maxLength = 120; // Maximum length of the text
+  var text = body.textContent;
+  var fullText = body.getAttribute("data-full-text");
+
+  if (text.length > maxLength) {
+    body.textContent = text.substring(0, maxLength) + "...";
+  }
+});

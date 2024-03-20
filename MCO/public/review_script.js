@@ -153,7 +153,6 @@ document.getElementById("reviewForm").onsubmit = function (event) {
   );
   event.preventDefault();
   modal.style.display = "none";
-  location.reload();
 };
 
 var check1 = document.getElementById("excellent");
@@ -663,3 +662,23 @@ function getHelp() {
     });
   });
 }
+
+var reviewBodyClass = document.querySelectorAll(".review-content");
+
+reviewBodyClass.forEach((body) => {
+  var maxLength = 120; // Maximum length of the text
+  var text = body.textContent;
+  var fullText = body.getAttribute("data-full-text");
+
+  if (text.length > maxLength) {
+    body.textContent = text.substring(0, maxLength) + "...";
+    let seeMore = document.createElement("a");
+    seeMore.className = "seeMore";
+    seeMore.innerHTML = "See More";
+    body.appendChild(seeMore);
+
+    seeMore.addEventListener("click", function () {
+      body.textContent = fullText;
+    });
+  }
+});

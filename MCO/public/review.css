@@ -396,6 +396,15 @@ input[type="text"] {
   text-decoration: underline;
 }
 
+.seeMore {
+  font-weight: 800;
+}
+
+.seeMore:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .review-actions {
   position: relative;
   left: 150px;
