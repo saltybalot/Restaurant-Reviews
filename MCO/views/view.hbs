@@ -189,6 +189,29 @@
                             <span class="helpful">Helpful?({{this.helpful}})<button
                                     class="helpfulButton">👍</button><button class="unHelpfulButton">👎</button>
                             </span>
+                            <span class="replyBtn"><img src="images/reply.png" style="height: 17px; width: 17px;">
+                                Reply</span>
+                            <div class="reply">
+                                <div class=" replyHeader">
+                                    <div class="replyUsername"> <span class="replyResto"> {{this.restaurant}}</span>
+                                        replied: </div>
+                                    <div class="replyDate">{{this.date}}</div> <!-- Placeholder -->
+                                </div>
+                                <div class="replyBody">
+                                    {{this.replyDetails.body}}
+                                </div>
+                            </div>
+                            <!--
+                            <div class="reply">
+                                <div class="replyHeader">
+                                    <div class="replyUsername">{{this.restaurant}}</div>
+                                    <div class="replyDate">{{this.date}}</div> 
+                                </div>
+                                <div class="replyBody">
+                                    This is good
+                                </div>
+                            </div>
+                            -->
                         </div>
                     </td>
                 </tr>
@@ -222,6 +245,18 @@
                 <input type="file" id="media" name="media" accept="image/*,video/*">
                 <div id="reviewBodyLabel"><label for="reviewBody">Review Body:</label></div>
                 <textarea id="reviewBody" name="reviewBody" rows="4" required></textarea>
+                <input type="submit" value="Submit Review">
+            </form>
+        </div>
+    </div>
+
+    <div id="replyModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 style="color:#EE4E34">Create a Response</h2>
+            <form id="replyForm">
+                <div id="reviewBodyLabel"><label for="replyBody">Review Body:</label></div>
+                <textarea id="replyBody" name="reviewBody" rows="4" required></textarea>
                 <input type="submit" value="Submit Review">
             </form>
         </div>

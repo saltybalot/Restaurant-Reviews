@@ -1,40 +1,40 @@
 var modal = document.getElementById("myModal");
 
+var replyModal = document.getElementById("replyModal");
+
 var btn = document.getElementById("reviewButton");
 
-var span = document.getElementsByClassName("close")[0];
+var replyBtns = document.querySelectorAll(".replyBtn");
+
+var span = document.querySelectorAll(".close");
 
 btn.onclick = function () {
   modal.style.display = "block";
 };
 
-span.onclick = function () {
-  modal.style.display = "none";
-};
+replyBtns.forEach((button) => {
+  button.addEventListener("click", function () {
+    replyModal.style.display = "block";
+  });
+});
+
+span.forEach((button) => {
+  button.onclick = function () {
+    modal.style.display = "none";
+    replyModal.style.display = "none";
+  };
+});
 
 window.onclick = function (event) {
-  if (event.target == modal) {
+  if (event.target == modal || event.target == replyModal) {
     modal.style.display = "none";
+    replyModal.style.display = "none";
   }
 };
 
 document.getElementById("reviewForm").onsubmit = function (event) {
   event.preventDefault();
   modal.style.display = "none";
-};
-
-btn.onclick = function () {
-  modal.style.display = "block";
-};
-
-span.onclick = function () {
-  modal.style.display = "none";
-};
-
-window.onclick = function (event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
 };
 
 var stars = document.querySelectorAll(".star2");
@@ -85,6 +85,17 @@ helpfulbtns.forEach((button) => {
   });
 });*/
 getHelp();
+
+var replyBlock = document.querySelectorAll(".replyBody");
+
+replyBlock.forEach((reply) => {
+  console.log(reply.textContent);
+  if (reply.textContent.trim() == "") {
+    let replyParent = reply.closest(".reply");
+    replyParent.style.display = "none";
+    console.log("reply hidden");
+  }
+});
 
 var reviewImg;
 var reviewText;

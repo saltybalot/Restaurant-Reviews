@@ -405,6 +405,56 @@ input[type="text"] {
   cursor: pointer;
 }
 
+.replyBtn {
+  position: relative;
+  left: 160px;
+  bottom: 20px;
+}
+
+.replyBtn:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.reply {
+  padding: 10px;
+  max-width: 400px;
+  margin: 0 auto;
+  background-color: #ee4e34;
+  border: 1px solid black;
+  border-radius: 8px;
+  color: white;
+}
+
+.replyHeader {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+/*
+.replyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+*/
+
+.replyUsername {
+  margin-bottom: 5px;
+}
+
+.replyResto {
+  font-weight: bold;
+}
+
+.replyDate {
+  font-size: 13px;
+  font-weight: lighter;
+  color: white;
+}
+
 .review-actions {
   position: relative;
   left: 150px;
@@ -455,7 +505,8 @@ input[type="text"] {
   background-color: #cd3d23;
 }
 
-.modal {
+.modal,
+.replyModal {
   display: none;
   position: fixed;
   z-index: 1;

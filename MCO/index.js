@@ -18,6 +18,7 @@ const Restaurant = require("./database/models/Restaurant");
 const Review = require("./database/models/Review");
 const Rating = require("./database/models/Rating");
 const User = require("./database/models/User");
+const Reply = require("./database/models/Reply");
 const path = require("path"); // our path directory
 
 var bodyParser = require("body-parser");
@@ -156,16 +157,58 @@ app.get("/view", async (req, res) => {
       $unwind: "$userDetails",
     },
     {
+      $lookup: {
+        from: "replies",
+        localField: "_id",
+        foreignField: "reviewId",
+        as: "replyDetails",
+      },
+    },
+    {
+      $unwind: { path: "$replyDetails", preserveNullAndEmptyArrays: true },
+    },
+    {
       $match: tempQuery,
     },
     {
       $sort: { dateObject: -1 }, // Sort based on the new Date object field
     },
   ]);
+
+  /*
+  const reply = await Reply.aggregate([
+    {
+      $addFields: {
+        dateObject: {
+          $toDate: "$date", // Convert the date string to a Date object
+        },
+      },
+    },
+
+    {
+      $lookup: {
+        from: "reviews",
+        localField: "reviewId",
+        foreignField: "_id",
+        as: "reviewDetails",
+      },
+    },
+    {
+      $unwind: "$reviewDetails",
+    },
+    {
+      $match: { restaurant: content },
+    },
+    {
+      $sort: { dateObject: -1 }, // Sort based on the new Date object field
+    },
+  ]);*/
+
+  console.log("review:");
+  console.log(review);
   const user = await User.findOne({ username: "PatriciaTom" });
 
   let userReview;
-  let firstReviewId;
 
   /*
   console.log(restaurant);
