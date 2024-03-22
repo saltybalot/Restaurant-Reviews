@@ -4,33 +4,40 @@ var replyModal = document.getElementById("replyModal");
 
 var btn = document.getElementById("reviewButton");
 
-var replyBtns = document.querySelectorAll(".replyBtn");
-
-var span = document.querySelectorAll(".close");
-
 btn.onclick = function () {
   modal.style.display = "block";
 };
 
-replyBtns.forEach((button) => {
-  button.addEventListener("click", function () {
-    replyModal.style.display = "block";
+var reviewID;
+interactButtons();
+
+function interactButtons() {
+  var replyBtns = document.querySelectorAll(".replyBtn");
+
+  var span = document.querySelectorAll(".close");
+
+  replyBtns.forEach((button) => {
+    button.addEventListener("click", function () {
+      reviewID = button.closest(".reviewBody").id;
+      console.log(reviewID);
+      replyModal.style.display = "block";
+    });
   });
-});
 
-span.forEach((button) => {
-  button.onclick = function () {
-    modal.style.display = "none";
-    replyModal.style.display = "none";
+  span.forEach((button) => {
+    button.onclick = function () {
+      modal.style.display = "none";
+      replyModal.style.display = "none";
+    };
+  });
+
+  window.onclick = function (event) {
+    if (event.target == modal || event.target == replyModal) {
+      modal.style.display = "none";
+      replyModal.style.display = "none";
+    }
   };
-});
-
-window.onclick = function (event) {
-  if (event.target == modal || event.target == replyModal) {
-    modal.style.display = "none";
-    replyModal.style.display = "none";
-  }
-};
+}
 
 document.getElementById("reviewForm").onsubmit = function (event) {
   event.preventDefault();
@@ -84,6 +91,8 @@ helpfulbtns.forEach((button) => {
     xhr.send();
   });
 });*/
+
+//Stop it, get some help
 getHelp();
 
 var replyBlock = document.querySelectorAll(".replyBody");
@@ -141,29 +150,15 @@ document.getElementById("reviewForm").onsubmit = function (event) {
     true
   );
   xhr.send();
+};
 
-  reviewTable.insertAdjacentHTML(
-    "beforeend",
-    `<tr>
-  <td class="reviewBody">
-      <div class="review">
-          <div class="review-info">
-              <img src="images/profilephoto.jpg" alt="User Profile Picture" class="profile-pic">
-              <p class="review-label">Inda Karane reviewed <span
-                      class="restaurant-name">McDonalds</span> <br><span class="date">
-                      02/12/2024</span></p>
-          </div>
+var replyForm = document.getElementById("replyForm");
 
-          <img src="images/${reviewImg}" alt="Restaurant Review" class="review-photo">
-          <img src="images/${starValue}star.png" class="star">
-          <p class="review-content">${reviewText}</p>
-          <span class="helpful">Helpful?<button class="helpfulButton">👍</button> </span>
-      </div>
-  </td>
-</tr>`
-  );
+replyForm.onsubmit = function (event) {
   event.preventDefault();
-  modal.style.display = "none";
+  let replyBody = document.getElementById("replyBody").value;
+
+  window.location.href = "/writeReply?id=" + reviewID + "&body=" + replyBody;
 };
 
 var check1 = document.getElementById("excellent");
@@ -180,18 +175,20 @@ check1.addEventListener("change", function () {
 
   var uniqueParam = "timestamp=" + new Date().getTime();
 
-  console.log(document.querySelector(".username").textContent);
-
   xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
-        //console.log(xhr.responseText);
+        console.log(xhr.responseText);
         let sections = JSON.parse(xhr.responseText);
 
         let reviewRows = document.querySelectorAll(".reviewRow");
         reviewRows.forEach(function (row) {
           row.parentNode.removeChild(row);
         });
+
+        //console.log(sections);
+        console.log("hello");
+        //console.log(sections[0].replyDetails);
 
         sections.forEach(function (row) {
           let tr = document.createElement("tr");
@@ -225,21 +222,51 @@ check1.addEventListener("change", function () {
           unHelpButton.className = "unHelpfulButton";
           unHelpButton.innerHTML = `👎`;
 
+          let replyButton = document.createElement("span");
+          replyButton.className = "replyBtn";
+          replyButton.innerHTML = `<img src="images/reply.png" style="height: 17px; width: 17px;">
+          Reply`;
+
           reviewTable.appendChild(tr);
           tr.appendChild(td);
           td.appendChild(reviewDiv);
           reviewDiv.appendChild(reviewInfo);
           reviewDiv.innerHTML += `<img src="images/${row.image}" alt="Restaurant Review" class="review-photo">
-          <img src="images/${row.rating}star.png" class="star">
-          <p class="review-content">${row.body}</p>`;
+          <img src="images/${row.rating}star.png" class="star">`;
+
+          let replyContent = document.createElement("div");
+          replyContent.className = "reply";
+          if (row.replyDetails == null) {
+            replyContent.style.display = "none";
+            console.log("reply hidden");
+          } else {
+            replyContent.innerHTML = `<div class=" replyHeader">
+          <div class="replyUsername"> <span class="replyResto"> ${row.restaurant}</span>
+              replied: </div>
+          <div class="replyDate">${row.replyDetails.date}</div>
+      </div>
+      <div class="replyBody">
+          ${row.replyDetails.body}
+      </div>`;
+          }
+
+          let reviewContent = document.createElement("p");
+          reviewContent.className = "review-content";
+          reviewContent.setAttribute("data-full-text", row.body);
+          reviewContent.innerHTML = row.body;
+          reviewDiv.appendChild(reviewContent);
           //reviewDiv.appendChild(reviewBottom);
           reviewDiv.appendChild(helpfulSpan);
           helpfulSpan.appendChild(helpButton);
           helpfulSpan.appendChild(unHelpButton);
+          reviewDiv.appendChild(replyButton);
+          reviewDiv.appendChild(replyContent);
         });
 
         console.log(sections[0]);
         getHelp();
+        truncateReview();
+        interactButtons();
       } else {
         console.error("Error fetching section content:", xhr.status);
       }
@@ -274,13 +301,17 @@ check2.addEventListener("change", function () {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
-        //console.log(xhr.responseText);
+        console.log(xhr.responseText);
         let sections = JSON.parse(xhr.responseText);
 
         let reviewRows = document.querySelectorAll(".reviewRow");
         reviewRows.forEach(function (row) {
           row.parentNode.removeChild(row);
         });
+
+        //console.log(sections);
+        console.log("hello");
+        //console.log(sections[0].replyDetails);
 
         sections.forEach(function (row) {
           let tr = document.createElement("tr");
@@ -314,21 +345,51 @@ check2.addEventListener("change", function () {
           unHelpButton.className = "unHelpfulButton";
           unHelpButton.innerHTML = `👎`;
 
+          let replyButton = document.createElement("span");
+          replyButton.className = "replyBtn";
+          replyButton.innerHTML = `<img src="images/reply.png" style="height: 17px; width: 17px;">
+          Reply`;
+
           reviewTable.appendChild(tr);
           tr.appendChild(td);
           td.appendChild(reviewDiv);
           reviewDiv.appendChild(reviewInfo);
           reviewDiv.innerHTML += `<img src="images/${row.image}" alt="Restaurant Review" class="review-photo">
-          <img src="images/${row.rating}star.png" class="star">
-          <p class="review-content">${row.body}</p>`;
+          <img src="images/${row.rating}star.png" class="star">`;
+
+          let replyContent = document.createElement("div");
+          replyContent.className = "reply";
+          if (row.replyDetails == null) {
+            replyContent.style.display = "none";
+            console.log("reply hidden");
+          } else {
+            replyContent.innerHTML = `<div class=" replyHeader">
+          <div class="replyUsername"> <span class="replyResto"> ${row.restaurant}</span>
+              replied: </div>
+          <div class="replyDate">${row.replyDetails.date}</div>
+      </div>
+      <div class="replyBody">
+          ${row.replyDetails.body}
+      </div>`;
+          }
+
+          let reviewContent = document.createElement("p");
+          reviewContent.className = "review-content";
+          reviewContent.setAttribute("data-full-text", row.body);
+          reviewContent.innerHTML = row.body;
+          reviewDiv.appendChild(reviewContent);
           //reviewDiv.appendChild(reviewBottom);
           reviewDiv.appendChild(helpfulSpan);
           helpfulSpan.appendChild(helpButton);
           helpfulSpan.appendChild(unHelpButton);
+          reviewDiv.appendChild(replyButton);
+          reviewDiv.appendChild(replyContent);
         });
 
         console.log(sections[0]);
         getHelp();
+        truncateReview();
+        interactButtons();
       } else {
         console.error("Error fetching section content:", xhr.status);
       }
@@ -363,13 +424,17 @@ check3.addEventListener("change", function () {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
-        //console.log(xhr.responseText);
+        console.log(xhr.responseText);
         let sections = JSON.parse(xhr.responseText);
 
         let reviewRows = document.querySelectorAll(".reviewRow");
         reviewRows.forEach(function (row) {
           row.parentNode.removeChild(row);
         });
+
+        //console.log(sections);
+        console.log("hello");
+        //console.log(sections[0].replyDetails);
 
         sections.forEach(function (row) {
           let tr = document.createElement("tr");
@@ -403,21 +468,51 @@ check3.addEventListener("change", function () {
           unHelpButton.className = "unHelpfulButton";
           unHelpButton.innerHTML = `👎`;
 
+          let replyButton = document.createElement("span");
+          replyButton.className = "replyBtn";
+          replyButton.innerHTML = `<img src="images/reply.png" style="height: 17px; width: 17px;">
+          Reply`;
+
           reviewTable.appendChild(tr);
           tr.appendChild(td);
           td.appendChild(reviewDiv);
           reviewDiv.appendChild(reviewInfo);
           reviewDiv.innerHTML += `<img src="images/${row.image}" alt="Restaurant Review" class="review-photo">
-          <img src="images/${row.rating}star.png" class="star">
-          <p class="review-content">${row.body}</p>`;
+          <img src="images/${row.rating}star.png" class="star">`;
+
+          let replyContent = document.createElement("div");
+          replyContent.className = "reply";
+          if (row.replyDetails == null) {
+            replyContent.style.display = "none";
+            console.log("reply hidden");
+          } else {
+            replyContent.innerHTML = `<div class=" replyHeader">
+          <div class="replyUsername"> <span class="replyResto"> ${row.restaurant}</span>
+              replied: </div>
+          <div class="replyDate">${row.replyDetails.date}</div>
+      </div>
+      <div class="replyBody">
+          ${row.replyDetails.body}
+      </div>`;
+          }
+
+          let reviewContent = document.createElement("p");
+          reviewContent.className = "review-content";
+          reviewContent.setAttribute("data-full-text", row.body);
+          reviewContent.innerHTML = row.body;
+          reviewDiv.appendChild(reviewContent);
           //reviewDiv.appendChild(reviewBottom);
           reviewDiv.appendChild(helpfulSpan);
           helpfulSpan.appendChild(helpButton);
           helpfulSpan.appendChild(unHelpButton);
+          reviewDiv.appendChild(replyButton);
+          reviewDiv.appendChild(replyContent);
         });
 
         console.log(sections[0]);
         getHelp();
+        truncateReview();
+        interactButtons();
       } else {
         console.error("Error fetching section content:", xhr.status);
       }
@@ -452,13 +547,17 @@ check4.addEventListener("change", function () {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
-        //console.log(xhr.responseText);
+        console.log(xhr.responseText);
         let sections = JSON.parse(xhr.responseText);
 
         let reviewRows = document.querySelectorAll(".reviewRow");
         reviewRows.forEach(function (row) {
           row.parentNode.removeChild(row);
         });
+
+        //console.log(sections);
+        console.log("hello");
+        //console.log(sections[0].replyDetails);
 
         sections.forEach(function (row) {
           let tr = document.createElement("tr");
@@ -492,21 +591,51 @@ check4.addEventListener("change", function () {
           unHelpButton.className = "unHelpfulButton";
           unHelpButton.innerHTML = `👎`;
 
+          let replyButton = document.createElement("span");
+          replyButton.className = "replyBtn";
+          replyButton.innerHTML = `<img src="images/reply.png" style="height: 17px; width: 17px;">
+          Reply`;
+
           reviewTable.appendChild(tr);
           tr.appendChild(td);
           td.appendChild(reviewDiv);
           reviewDiv.appendChild(reviewInfo);
           reviewDiv.innerHTML += `<img src="images/${row.image}" alt="Restaurant Review" class="review-photo">
-          <img src="images/${row.rating}star.png" class="star">
-          <p class="review-content">${row.body}</p>`;
+          <img src="images/${row.rating}star.png" class="star">`;
+
+          let replyContent = document.createElement("div");
+          replyContent.className = "reply";
+          if (row.replyDetails == null) {
+            replyContent.style.display = "none";
+            console.log("reply hidden");
+          } else {
+            replyContent.innerHTML = `<div class=" replyHeader">
+          <div class="replyUsername"> <span class="replyResto"> ${row.restaurant}</span>
+              replied: </div>
+          <div class="replyDate">${row.replyDetails.date}</div>
+      </div>
+      <div class="replyBody">
+          ${row.replyDetails.body}
+      </div>`;
+          }
+
+          let reviewContent = document.createElement("p");
+          reviewContent.className = "review-content";
+          reviewContent.setAttribute("data-full-text", row.body);
+          reviewContent.innerHTML = row.body;
+          reviewDiv.appendChild(reviewContent);
           //reviewDiv.appendChild(reviewBottom);
           reviewDiv.appendChild(helpfulSpan);
           helpfulSpan.appendChild(helpButton);
           helpfulSpan.appendChild(unHelpButton);
+          reviewDiv.appendChild(replyButton);
+          reviewDiv.appendChild(replyContent);
         });
 
         console.log(sections[0]);
         getHelp();
+        truncateReview();
+        interactButtons();
       } else {
         console.error("Error fetching section content:", xhr.status);
       }
@@ -541,13 +670,17 @@ check5.addEventListener("change", function () {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
-        //console.log(xhr.responseText);
+        console.log(xhr.responseText);
         let sections = JSON.parse(xhr.responseText);
 
         let reviewRows = document.querySelectorAll(".reviewRow");
         reviewRows.forEach(function (row) {
           row.parentNode.removeChild(row);
         });
+
+        //console.log(sections);
+        console.log("hello");
+        //console.log(sections[0].replyDetails);
 
         sections.forEach(function (row) {
           let tr = document.createElement("tr");
@@ -581,21 +714,51 @@ check5.addEventListener("change", function () {
           unHelpButton.className = "unHelpfulButton";
           unHelpButton.innerHTML = `👎`;
 
+          let replyButton = document.createElement("span");
+          replyButton.className = "replyBtn";
+          replyButton.innerHTML = `<img src="images/reply.png" style="height: 17px; width: 17px;">
+          Reply`;
+
           reviewTable.appendChild(tr);
           tr.appendChild(td);
           td.appendChild(reviewDiv);
           reviewDiv.appendChild(reviewInfo);
           reviewDiv.innerHTML += `<img src="images/${row.image}" alt="Restaurant Review" class="review-photo">
-          <img src="images/${row.rating}star.png" class="star">
-          <p class="review-content">${row.body}</p>`;
+          <img src="images/${row.rating}star.png" class="star">`;
+
+          let replyContent = document.createElement("div");
+          replyContent.className = "reply";
+          if (row.replyDetails == null) {
+            replyContent.style.display = "none";
+            console.log("reply hidden");
+          } else {
+            replyContent.innerHTML = `<div class=" replyHeader">
+          <div class="replyUsername"> <span class="replyResto"> ${row.restaurant}</span>
+              replied: </div>
+          <div class="replyDate">${row.replyDetails.date}</div>
+      </div>
+      <div class="replyBody">
+          ${row.replyDetails.body}
+      </div>`;
+          }
+
+          let reviewContent = document.createElement("p");
+          reviewContent.className = "review-content";
+          reviewContent.setAttribute("data-full-text", row.body);
+          reviewContent.innerHTML = row.body;
+          reviewDiv.appendChild(reviewContent);
           //reviewDiv.appendChild(reviewBottom);
           reviewDiv.appendChild(helpfulSpan);
           helpfulSpan.appendChild(helpButton);
           helpfulSpan.appendChild(unHelpButton);
+          reviewDiv.appendChild(replyButton);
+          reviewDiv.appendChild(replyContent);
         });
 
         console.log(sections[0]);
         getHelp();
+        truncateReview();
+        interactButtons();
       } else {
         console.error("Error fetching section content:", xhr.status);
       }
@@ -674,22 +837,26 @@ function getHelp() {
   });
 }
 
-var reviewBodyClass = document.querySelectorAll(".review-content");
+function truncateReview() {
+  var reviewBodyClass = document.querySelectorAll(".review-content");
 
-reviewBodyClass.forEach((body) => {
-  var maxLength = 120; // Maximum length of the text
-  var text = body.textContent;
-  var fullText = body.getAttribute("data-full-text");
+  reviewBodyClass.forEach((body) => {
+    var maxLength = 120; // Maximum length of the text
+    var text = body.textContent;
+    var fullText = body.getAttribute("data-full-text");
 
-  if (text.length > maxLength) {
-    body.textContent = text.substring(0, maxLength) + "...";
-    let seeMore = document.createElement("a");
-    seeMore.className = "seeMore";
-    seeMore.innerHTML = "See More";
-    body.appendChild(seeMore);
+    if (text.length > maxLength) {
+      body.textContent = text.substring(0, maxLength) + "...";
+      let seeMore = document.createElement("a");
+      seeMore.className = "seeMore";
+      seeMore.innerHTML = "See More";
+      body.appendChild(seeMore);
 
-    seeMore.addEventListener("click", function () {
-      body.textContent = fullText;
-    });
-  }
-});
+      seeMore.addEventListener("click", function () {
+        body.textContent = fullText;
+      });
+    }
+  });
+}
+
+truncateReview();

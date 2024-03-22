@@ -447,6 +447,7 @@ input[type="text"] {
 
 .replyResto {
   font-weight: bold;
+  text-decoration: underline;
 }
 
 .replyDate {

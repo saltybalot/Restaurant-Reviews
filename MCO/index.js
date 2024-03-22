@@ -272,10 +272,6 @@ app.get("/view", async (req, res) => {
   }
 });
 
-app.get("/search", async (req, res) => {
-  res.render("search");
-});
-
 /*
 app.get("/submit", function (req, res) {
   var name = req.query.firstname + " " + req.query.secondname;
@@ -315,6 +311,17 @@ app.get("/profile", async (req, res) => {
       },
       {
         $unwind: "$userDetails",
+      },
+      {
+        $lookup: {
+          from: "replies",
+          localField: "_id",
+          foreignField: "reviewId",
+          as: "replyDetails",
+        },
+      },
+      {
+        $unwind: { path: "$replyDetails", preserveNullAndEmptyArrays: true },
       },
       {
         $match: {
@@ -382,6 +389,17 @@ app.get("/filter", async (req, res) => {
         $unwind: "$userDetails",
       },
       {
+        $lookup: {
+          from: "replies",
+          localField: "_id",
+          foreignField: "reviewId",
+          as: "replyDetails",
+        },
+      },
+      {
+        $unwind: { path: "$replyDetails", preserveNullAndEmptyArrays: true },
+      },
+      {
         $match: {
           restaurant: currentRestaurant,
           rating: { $in: temp },
@@ -407,6 +425,10 @@ app.get("/reviewSubmit", async (req, res) => {
   const rating = parseInt(req.query.rating);
   const body = req.query.body;
   const id = req.query.id;
+
+  console.log(
+    "If you see this text when you submit the reply, you have a problem"
+  );
 
   const newReview = new Review({
     restaurant: restaurant,
@@ -439,11 +461,33 @@ app.get("/getHelp", async (req, res) => {
   console.log(temp);
 });
 
+app.get("/writeReply", async (req, res) => {
+  const id = req.query.id;
+  const replyBody = req.query.body;
+
+  const review = await Review.findById(id);
+  let newReply = new Reply({
+    restaurant: review.restaurant,
+    username: review.restaurant, //Placeholder
+    date: getCurrentDate(),
+    body: replyBody,
+    reviewId: id,
+  });
+
+  let savedReply = newReply.save();
+
+  console.log("Saved Reply:");
+  console.log(savedReply);
+
+  res.redirect("/view?restaurant=" + review.restaurant + "&reviewID=" + id);
+});
+
 app.get("/about", async (req, res) => {
   res.render("about");
 });
 
 app.post("/reviewSearch", async (req, res) => {
+  console.log("This is the search module");
   console.log(req.body.body);
 
   const query = req.body.body;
