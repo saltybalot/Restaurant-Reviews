@@ -109,7 +109,8 @@
 				<div class="reviews">
 					<h2 class="section-title">Latest Reviews</h2>
 					{{#each reviews}}
-					<div class="review">
+					<div class="review" id="{{this._id}}" image="{{this.image}}" rating="{{this.rating}}"
+						body="{{this.body}}" isEdited="true">
 						<div class="review-info">
 							<img src="images/{{this.userDetails.profilePic}}" alt="User Profile Picture"
 								class="profile-pic">

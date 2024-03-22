@@ -495,6 +495,38 @@ app.post("/reviewSearch", async (req, res) => {
   res.redirect("/view?restaurant=" + restoName + "&searchQuery=" + query);
 });
 
+app.get("/reviewEdit", async (req, res) => {
+  const id = req.query.id;
+  const img = req.query.img;
+  const star = req.query.star;
+  var body = req.query.body;
+  const isEdited = body.includes("(edited)");
+
+  if (!isEdited) {
+    body += " (edited)";
+  }
+  var review = await Review.findById(id);
+
+  review.image = img;
+  review.rating = star;
+  review.body = body;
+
+  var editedReview = review.save();
+
+  console.log(editedReview);
+
+  res.redirect("/profile?user=PatriciaTom"); //edit this after session is implemented
+});
+
+app.get("/reviewDelete", async (req, res) => {
+  const id = req.query.id;
+
+  console.log(id);
+
+  editedReview = await Review.findByIdAndDelete(id);
+  res.redirect("/profile?user=PatriciaTom"); //edit this after session is implemented
+});
+
 var server = app.listen(3000, function () {
   console.log("Node server running at port 3000");
 });

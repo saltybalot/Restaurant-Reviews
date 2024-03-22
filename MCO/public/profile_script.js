@@ -45,24 +45,43 @@ document.getElementById("edit-profile-form").onsubmit = function (event) {
 var deleteBtns = document.querySelectorAll(".delete-btn");
 
 deleteBtns.forEach((button) => {
-  button.addEventListener("click", () => {
+  button.addEventListener("click", (event) => {
     var parentItem = button.closest(".review");
-
-    parentItem.innerHTML = "deleted";
+    isDelete = confirm("Are you sure you want to delete?");
+    if (isDelete) {
+      window.location.href = "/reviewDelete?id=" + parentItem.id;
+    }
+    event.preventDefault();
   });
 });
 
 var editBtns = document.querySelectorAll(".edit-btn");
+var reviewID;
 
-editBtns.forEach((button) => {
+editBtns.forEach((button, i) => {
   button.addEventListener("click", (event) => {
     var parentItem = button.closest(".review");
     console.log(parentItem);
     reviewModal.style.display = "block";
     span = document.getElementsByClassName("close")[1];
+    console.log(parentItem.getAttribute("body"));
+
+    reviewID = parentItem.id;
+
+    console.log(reviewID);
+
+    //console.log(button.closest(""));
 
     var stars = document.querySelectorAll(".star2");
-    var starValue = 1;
+    var starValue = parentItem.getAttribute("rating");
+
+    stars.forEach(function (s) {
+      if (parseInt(s.dataset.value) <= starValue) {
+        s.classList.add("active");
+      } else {
+        s.classList.remove("active");
+      }
+    });
 
     stars.forEach(function (star) {
       star.addEventListener("click", function () {
@@ -84,8 +103,11 @@ editBtns.forEach((button) => {
 
     var fileForm = document.getElementById("media");
     var textForm = document.getElementById("reviewBody");
-    var reviewTable = document.getElementById("reviewtable");
+    var isEdited = parentItem.getAttribute("isEdited");
 
+    textForm.value = parentItem.getAttribute("body");
+
+    reviewImg = parentItem.getAttribute("image");
     fileForm.addEventListener("change", function (event) {
       var fileList = event.target.files;
       reviewImg = fileList[0].name;
@@ -120,6 +142,18 @@ editBtns.forEach((button) => {
         </p>`;
       event.preventDefault();
       reviewModal.style.display = "none";
+
+      window.location.href =
+        "/profileEdit?id=" +
+        reviewID +
+        "&img=" +
+        reviewImg +
+        "&star=" +
+        starValue +
+        "&body=" +
+        reviewText +
+        "&isEdited=" +
+        isEdited;
     };
 
     span.onclick = function () {
