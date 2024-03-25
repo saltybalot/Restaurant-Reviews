@@ -1,3 +1,4 @@
+const port = process.env.PORT || 3000;
 const mongoose = require("mongoose");
 
 try {
@@ -527,8 +528,8 @@ app.get("/reviewDelete", async (req, res) => {
   res.redirect("/profile?user=PatriciaTom"); //edit this after session is implemented
 });
 
-var server = app.listen(3000, function () {
-  console.log("Node server running at port 3000");
+var server = app.listen(port, "0.0.0.0", function () {
+  console.log("Node server running at port " + port);
 });
 
 // Other Functions
