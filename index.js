@@ -1,6 +1,8 @@
 const port = process.env.PORT || 3000;
 const mongoose = require("mongoose");
-const connectionString = process.env.DATABASE_URL;
+const connectionString =
+  process.env.DATABASE_URL || "mongodb://127.0.0.1:27017/RestaurantDB";
+console.log(connectionString);
 try {
   mongoose.connect(connectionString);
   console.log("Connected to MongoDB successfully");
