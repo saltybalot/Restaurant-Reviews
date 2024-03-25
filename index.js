@@ -2,7 +2,7 @@ const port = process.env.PORT || 3000;
 const mongoose = require("mongoose");
 
 try {
-  mongoose.connect("mongodb://127.0.0.1:27017/RestaurantDB");
+  mongoose.connect("mongodb://DATABASE_URL/RestaurantDB");
   console.log("Connected to MongoDB successfully");
 } catch (err) {
   console.error(err);
