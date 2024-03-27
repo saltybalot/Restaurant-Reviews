@@ -31,7 +31,7 @@
   </div>
   <div class="header-nav">
     <a href="/profile?user=PatriciaTom" class="header-userprofile">User Profile</a>
-    <a href="/loggedOut" class="header-signout">Sign out</a>
+    <a href="/" class="header-signout">Sign out</a>
   </div>
 
   <script>
@@ -118,7 +118,6 @@
     <span class="close" onclick="closeModal('registerModal')">&times;</span>
     <form id="registerForm" action="/register" method="POST">
       <h1 style="text-align: center;">Sign up</h1>
-      {{> messages}}
       <input type="text" id="username" name="username" class="textbox-border" placeholder="Username" required>
 
 

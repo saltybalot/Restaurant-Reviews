@@ -44,6 +44,17 @@ app.use(express.static("public"));
 var hbs = require("hbs");
 app.set("view engine", "hbs");
 // Flash
+
+app.use(
+  session({
+    secret: "somegibberishsecret",
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 },
+  })
+);
+
 app.use(flash());
 
 app.use("/", viewRouter);
@@ -130,7 +141,7 @@ app.get("/", async (req, res) => {
  * Logged our version of Index page (I'm not sure if this is relevant)
  */
 
-app.get("/loggedOut", async (req, res) => {
+app.get("/loggedIn", async (req, res) => {
   //temporarily adding toDate field to sort
   const review = await Review.aggregate([
     {

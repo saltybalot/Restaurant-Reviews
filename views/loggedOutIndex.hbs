@@ -119,7 +119,7 @@
 <div id="registerModal" class="modal">
     <div class="modal-content2">
         <span class="close" onclick="closeModal('registerModal')">&times;</span>
-        <form id="registerForm" action="/register" method="POST">
+        <form id="registerForm" enctype="multipart/form-data" action="/register" method="POST">
             <h1 style="text-align: center;">Sign up</h1>
 
             <input type="text" id="registerUsername" name="username" class="textbox-border" placeholder="Username"
