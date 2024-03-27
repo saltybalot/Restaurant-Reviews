@@ -79,6 +79,10 @@ app.use((req, res, next) => {
 });
 
 
+/**
+ * This is for Index page
+ */
+
 app.get("/", async (req, res) => {
   //temporarily adding toDate field to sort
   req.session.isAuth = true;
@@ -113,6 +117,10 @@ app.get("/", async (req, res) => {
   res.render("loggedoutIndex", { review });
 });
 
+/**
+ * Logged our version of Index page (I'm not sure if this is relevant)
+ */
+
 app.get("/loggedOut", async (req, res) => {
   //temporarily adding toDate field to sort
   const review = await Review.aggregate([
@@ -144,6 +152,10 @@ app.get("/loggedOut", async (req, res) => {
 
   res.render("index", { review });
 });
+
+/**
+ * This is for rendering the VIEW page
+ */
 
 app.get("/view", async (req, res) => {
   const content = req.query.restaurant;
@@ -300,17 +312,10 @@ app.get("/view", async (req, res) => {
   }
 });
 
-/*
-app.get("/submit", function (req, res) {
-  var name = req.query.firstname + " " + req.query.secondname;
-  res.send(name);
-});
+/**
+ * This is for rendering the PROFILE page
+ */
 
-app.post("/submit", function (req, res) {
-  var name = req.body.firstname + " " + req.body.secondname;
-  res.send(name);
-});
-*/
 app.get("/profile", async (req, res) => {
   const username = req.query.user;
   console.log("user query: " + username);
@@ -370,6 +375,11 @@ app.get("/profile", async (req, res) => {
 
 var reviewArray = [];
 var currentRestaurant;
+
+/**
+ * This is for filtering reviews in VIEW page
+ */
+
 app.get("/filter", async (req, res) => {
   const restaurant = req.query.restaurant;
   const rating = parseInt(req.query.rating);
@@ -446,6 +456,9 @@ app.get("/filter", async (req, res) => {
   }
 });
 
+/**
+ * This is for writing new reviews in the VIEW page
+ */
 app.get("/reviewSubmit", async (req, res) => {
   const restaurant = req.query.restaurant;
   const username = req.query.username;
@@ -474,6 +487,10 @@ app.get("/reviewSubmit", async (req, res) => {
   console.log(savedReview);
 });
 
+/**
+ * This is for the helpful function in VIEW page
+ */
+
 app.get("/getHelp", async (req, res) => {
   const reviewID = req.query.id;
   const isHelpful = req.query.isHelpful === "true";
@@ -489,6 +506,10 @@ app.get("/getHelp", async (req, res) => {
   console.log(temp);
 });
 
+/**
+ * This is for writing new reply/response to reviews as a
+ * establishment owner in the VIEW page
+ */
 app.get("/writeReply", async (req, res) => {
   const id = req.query.id;
   const replyBody = req.query.body;
@@ -510,9 +531,17 @@ app.get("/writeReply", async (req, res) => {
   res.redirect("/view?restaurant=" + review.restaurant + "&reviewID=" + id);
 });
 
+/**
+ * This is For About Page
+ */
+
 app.get("/about", async (req, res) => {
   res.render("about");
 });
+
+/**
+ * This is for review search query in VIEW page
+ */
 
 app.post("/reviewSearch", async (req, res) => {
   console.log("This is the search module");
@@ -522,6 +551,10 @@ app.post("/reviewSearch", async (req, res) => {
   const restoName = req.body.restoName;
   res.redirect("/view?restaurant=" + restoName + "&searchQuery=" + query);
 });
+
+/**
+ * This for editing and deleting reviews in ABOUT page
+ */
 
 app.get("/reviewEdit", async (req, res) => {
   const id = req.query.id;
