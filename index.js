@@ -116,7 +116,7 @@ app.get("/", async (req, res) => {
   const user = await Review.find({}).populate("userId");
   console.log(review);
 
-  res.render("index", { review });
+  res.render("loggedoutIndex", { review });
 });
 
 /**
@@ -152,7 +152,7 @@ app.get("/loggedOut", async (req, res) => {
   const user = await Review.find({}).populate("userId");
   console.log(review);
 
-  res.render("loggedOutIndex", { review });
+  res.render("index", { review });
 });
 
 /**
