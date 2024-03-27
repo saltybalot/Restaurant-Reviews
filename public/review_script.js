@@ -39,10 +39,11 @@ function interactButtons() {
   };
 }
 
+/*
 document.getElementById("reviewForm").onsubmit = function (event) {
   event.preventDefault();
   modal.style.display = "none";
-};
+};*/
 
 var stars = document.querySelectorAll(".star2");
 var starValue = 1;
@@ -119,6 +120,7 @@ fileForm.addEventListener("change", function (event) {
   console.log(reviewImg);
 });
 
+/*
 document.getElementById("reviewForm").onsubmit = function (event) {
   var restoName = document.querySelector(".username").textContent;
   var userID = document.getElementById("userID").value;
@@ -150,7 +152,7 @@ document.getElementById("reviewForm").onsubmit = function (event) {
     true
   );
   xhr.send();
-};
+};*/
 
 var replyForm = document.getElementById("replyForm");
 

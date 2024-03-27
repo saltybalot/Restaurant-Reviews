@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 const connectionString =
   process.env.DATABASE_URL || "mongodb://127.0.0.1:27017/RestaurantDB";
 console.log(connectionString);
-const session = require('express-session');
-const flash = require('connect-flash');
-const MongoStore = require('connect-mongo')(session);
-const exphbs = require('express-handlebars');
+const session = require("express-session");
+const flash = require("connect-flash");
+const MongoStore = require("connect-mongo")(session);
+const exphbs = require("express-handlebars");
 
 try {
   mongoose.connect(connectionString);
@@ -20,6 +20,7 @@ var app = new express();
 
 /* For file uplods */
 const fileUpload = require("express-fileupload");
+app.use(fileUpload()); //initialize file upload middleware
 
 /* Initialize our post */
 const Restaurant = require("./database/models/Restaurant");
@@ -34,8 +35,6 @@ var bodyParser = require("body-parser");
 app.use(express.json()); // use json
 app.use(express.urlencoded({ extended: true })); // files consist of more than strings
 app.use(express.static("public"));
-
-
 
 /* We'll use handlebars for this one */
 var hbs = require("hbs");
@@ -62,24 +61,25 @@ async function findRatings() {
 
 findRatings();
 */
-app.use(session({
-  secret: 'somegibberishsecret',
-  store: new MongoStore({ mongooseConnection: mongoose.connection }),
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }
-}));
+app.use(
+  session({
+    secret: "somegibberishsecret",
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 },
+  })
+);
 
 // Flash
 app.use(flash());
 
 // Global messages vars
 app.use((req, res, next) => {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
   next();
 });
-
 
 /**
  * This is for Index page
@@ -461,30 +461,40 @@ app.get("/filter", async (req, res) => {
 /**
  * This is for writing new reviews in the VIEW page
  */
-app.get("/reviewSubmit", async (req, res) => {
-  const restaurant = req.query.restaurant;
-  const username = req.query.username;
-  const image = req.query.image;
-  const rating = parseInt(req.query.rating);
-  const body = req.query.body;
-  const id = req.query.id;
+app.post("/reviewSubmit", async (req, res) => {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send("No files were uploaded.");
+  }
+
+  const restaurant = req.body.restaurant;
+  const username = "PatriciaTom"; //placeholder, please replace if you have session
+  const image = req.files.media;
+  const rating = parseInt(req.body.rating);
+  const body = req.body.reviewBody;
+  const id = "65e70e1fb8ad88c9f4512d2d"; //placeholder, please replace if you have session
 
   console.log(
     "If you see this text when you submit the reply, you have a problem"
   );
+
+  image.mv("public/images/" + image.name);
 
   const newReview = new Review({
     restaurant: restaurant,
     username: username,
     date: getCurrentDate(),
     rating: rating,
-    image: image,
+    image: image.name,
     body: body,
     helpful: 0,
     userId: id,
   });
 
   let savedReview = await newReview.save();
+
+  res.redirect(
+    "/view?restaurant=" + restaurant + "&reviewID=" + savedReview._id
+  );
 
   console.log(savedReview);
 });
@@ -588,6 +598,29 @@ app.get("/reviewDelete", async (req, res) => {
 
   editedReview = await Review.findByIdAndDelete(id);
   res.redirect("/profile?user=PatriciaTom"); //edit this after session is implemented
+});
+
+/**
+ * This is for editing profile in the PROFILE page
+ */
+
+app.post("/editProfile", async (req, res) => {
+  var user = await User.findById("65e70e1fb8ad88c9f4512d2d"); //edit this after session is implemented
+  var profilePic;
+  if (!req.files || Object.keys(req.files).length === 0) {
+    console.log("no file uploaded, no changes are made");
+  } else {
+    profilePic = req.files.profilePicture;
+    profilePic.mv("public/images/" + profilePic.name);
+    user.profilePic = profilePic.name;
+  }
+  const description = req.body.description;
+  user.description = description;
+
+  var updatedUser = await user.save();
+
+  console.log(updatedUser);
+  res.redirect("/profile?user=PatriciaTom");
 });
 
 var server = app.listen(port, "0.0.0.0", function () {

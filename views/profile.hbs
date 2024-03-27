@@ -51,7 +51,7 @@
 			</div>
 			<div class="user-details">
 				<h1 class="username">{{user.username}}</h1>
-				<p id="profileDescription">{{user.description}}</p>
+				<p id="profileDescription" content="{{user.description}}">{{user.description}}</p>
 				<button id="edit-profile-btn">Edit Profile</button>
 			</div>
 		</div>
@@ -142,9 +142,9 @@
 			<div class="modal-content">
 				<span class="close">&times;</span>
 				<h2 style="color:#EE4E34">Edit Profile</h2>
-				<form id="edit-profile-form">
+				<form id="edit-profile-form" enctype="multipart/form-data" method="post" action="/editProfile">
 					<div id="profilelabel"><label for="profile-picture-upload">Profile Picture:</label></div>
-					<input type="file" id="profile-picture-upload" name="profile-picture" accept="image/*">
+					<input type="file" id="profile-picture-upload" name="profilePicture" accept="image/*">
 					<div id="descriptionDiv"> <label for="description">Short Description:</label></div>
 					<textarea id="description" name="description" rows="4" cols="50"></textarea>
 					<button type="submit">Save Changes</button>

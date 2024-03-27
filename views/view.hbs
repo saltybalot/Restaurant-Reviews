@@ -231,8 +231,8 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2 style="color:#EE4E34">Create a Review</h2>
-            <form id="reviewForm">
-                <label for="rating">Rating (1-5):</label><br>
+            <form id="reviewForm" enctype="multipart/form-data" method="post" action="/reviewSubmit">
+                <label for=" rating">Rating (1-5):</label><br>
                 <div class="rating">
                     <span class="star2" data-value="1">&#9734;</span>
                     <span class="star2" data-value="2">&#9734;</span>
@@ -245,6 +245,7 @@
                 <input type="file" id="media" name="media" accept="image/*,video/*">
                 <div id="reviewBodyLabel"><label for="reviewBody">Review Body:</label></div>
                 <textarea id="reviewBody" name="reviewBody" rows="4" required></textarea>
+                <input type="hidden" name="restaurant" value="{{restaurant.name}}">
                 <input type="submit" value="Submit Review">
             </form>
         </div>

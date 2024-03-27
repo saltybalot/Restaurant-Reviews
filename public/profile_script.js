@@ -8,7 +8,13 @@ var submitBtn = document.getElementById("submitBtn");
 
 var reviewModal = document.getElementById("edit-review-modal");
 
+var profileForm = document.getElementById("profile-picture-upload");
+var descForm = document.getElementById("description");
+
 btn.onclick = function () {
+  descForm.value = document
+    .getElementById("profileDescription")
+    .getAttribute("content");
   modal.style.display = "block";
 };
 
@@ -20,15 +26,13 @@ span.onclick = function () {
 var profilePic;
 var desc;
 
-var profileForm = document.getElementById("profile-picture-upload");
-var descForm = document.getElementById("description");
-
 profileForm.addEventListener("change", function (event) {
   var fileList = event.target.files;
   profilePic = fileList[0].name;
   console.log(profilePic);
 });
 
+/*
 document.getElementById("edit-profile-form").onsubmit = function (event) {
   var profilePicBlock = document.getElementById("profile-picture");
   var descriptionBlock = document.getElementById("profileDescription");
@@ -40,7 +44,7 @@ document.getElementById("edit-profile-form").onsubmit = function (event) {
   descriptionBlock.innerHTML = desc;
   event.preventDefault();
   modal.style.display = "none";
-};
+};*/
 
 var deleteBtns = document.querySelectorAll(".delete-btn");
 
