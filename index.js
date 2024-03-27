@@ -3,6 +3,11 @@ const mongoose = require("mongoose");
 const connectionString =
   process.env.DATABASE_URL || "mongodb://127.0.0.1:27017/RestaurantDB";
 console.log(connectionString);
+const session = require('express-session');
+const flash = require('connect-flash');
+const MongoStore = require('connect-mongo')(session);
+const exphbs = require('express-handlebars');
+
 try {
   mongoose.connect(connectionString);
   console.log("Connected to MongoDB successfully");
@@ -30,6 +35,8 @@ app.use(express.json()); // use json
 app.use(express.urlencoded({ extended: true })); // files consist of more than strings
 app.use(express.static("public"));
 
+
+
 /* We'll use handlebars for this one */
 var hbs = require("hbs");
 app.set("view engine", "hbs");
@@ -55,9 +62,29 @@ async function findRatings() {
 
 findRatings();
 */
+app.use(session({
+  secret: 'somegibberishsecret',
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }
+}));
+
+// Flash
+app.use(flash());
+
+// Global messages vars
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  next();
+});
+
 
 app.get("/", async (req, res) => {
   //temporarily adding toDate field to sort
+  req.session.isAuth = true;
+  console.log(req.session);
   const review = await Review.aggregate([
     {
       $addFields: {

@@ -100,8 +100,9 @@
 <div id="loginModal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal('loginModal')">&times;</span>
-    <form id="loginForm">
+    <form id="loginForm" action="/login" method="POST">
       <h1 style="text-align: center;">Login</h1>
+  
       <input type="text" id="loginUsername" name="username" class="textbox-border" placeholder="Username" required>
       <input type="password" id="loginPassword" name="password" class="textbox-border" placeholder="Password" required>
       <div class="rememberMeLabel">
@@ -115,15 +116,17 @@
 <div id="registerModal" class="modal">
   <div class="modal-content2">
     <span class="close" onclick="closeModal('registerModal')">&times;</span>
-    <form id="registerForm">
+    <form id="registerForm" action="/login" method="POST">
       <h1 style="text-align: center;">Sign up</h1>
+  
+      <input type="text" id="username" name="username" class="textbox-border" placeholder="Username" required>
 
-      <input type="text" id="registerUsername" name="username" class="textbox-border" placeholder="Username" required>
 
-
-      <input type="password" id="registerPassword" name="password" class="textbox-border" placeholder="Password"
+      <input type="password" id="password" name="password" class="textbox-border" placeholder="Password"
         required>
 
+      <input type="password" id="confirmassword" name="confirmpassword" class="textbox-border" placeholder="Confirm Password"
+        required>
       <label for="avatar" class="avatarlabel">Avatar:</label>
       <input type="file" id="avatar" name="avatar" accept="image/*" class="textbox-border">
 
