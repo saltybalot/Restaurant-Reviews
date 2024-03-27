@@ -7,7 +7,7 @@ function closeModal(modalId) {
   var modal = document.getElementById(modalId);
   modal.style.display = "none";
 }
-
+/*
 function login() {
   var username = document.getElementById("loginUsername").value;
   var password = document.getElementById("loginPassword").value;
@@ -47,7 +47,7 @@ function register() {
       "Please enter a valid username, password, and select an avatar file."
     );
   }
-}
+}*/
 
 var reviewBodyClass = document.querySelectorAll(".review-body");
 

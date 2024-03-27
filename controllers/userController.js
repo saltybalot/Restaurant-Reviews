@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const userModel = require("../database/models/User");
 const { validationResult } = require("express-validator");
 
@@ -20,36 +20,39 @@ exports.registerUser = (req, res) => {
     const { username, password, confirmpassword, avatar, description } =
       req.body;
 
-      userModel.getOne({ username: username }, (err, result) => {
-        if (result) {
-          console.log(result);
-          // found a match, return to login with error
-          req.flash('error_msg', 'User already exists. Please login.');
-          res.redirect('/login');
-        } else {
-          const saltRounds = 10;
+    userModel.getOne({ username: username }, (err, result) => {
+      if (result) {
+        console.log(result);
+        // found a match, return to login with error
+        req.flash("error_msg", "User already exists. Please login.");
+        res.redirect("/login");
+      } else {
+        const saltRounds = 10;
 
-          // Hash password
-          bcrypt.hash(password, saltRounds, (err, hashed) => {
-           const newUser = {
-           name,
-          password: hashed
-         };
+        // Hash password
+        bcrypt.hash(password, saltRounds, (err, hashed) => {
+          const newUser = {
+            name,
+            password: hashed,
+          };
 
-  userModel.create(newUser, (err, user) => {
-    if (err) {
-      req.flash('error_msg', 'Could not create user. Please try again.');
-      res.redirect('/register');
-      // res.status(500).send({ message: "Could not create user"});
-    } else {
-      console.log(user);
-      req.flash('success_msg', 'You are now registered! Login below.');
-      res.redirect('/login');
-    }
-  });
-});
-        }
-      });
+          userModel.create(newUser, (err, user) => {
+            if (err) {
+              req.flash(
+                "error_msg",
+                "Could not create user. Please try again."
+              );
+              res.redirect("/register");
+              // res.status(500).send({ message: "Could not create user"});
+            } else {
+              console.log(user);
+              req.flash("success_msg", "You are now registered! Login below.");
+              res.redirect("/login");
+            }
+          });
+        });
+      }
+    });
   } else {
     const messages = errors.array().map((item) => item.msg);
 
