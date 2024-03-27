@@ -317,4 +317,17 @@ function getCurrentDate() {
   return `${year}-${month}-${day}`;
 }
 
+/**
+ * This is for review search query in VIEW page
+ */
+
+router.post("/reviewSearch", async (req, res) => {
+  console.log("This is the search module");
+  console.log(req.body.body);
+
+  const query = req.body.body;
+  const restoName = req.body.restoName;
+  res.redirect("/view?restaurant=" + restoName + "&searchQuery=" + query);
+});
+
 module.exports = router;

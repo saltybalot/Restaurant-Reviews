@@ -148,7 +148,7 @@ editBtns.forEach((button, i) => {
       reviewModal.style.display = "none";
 
       window.location.href =
-        "/profileEdit?id=" +
+        "/reviewEdit?id=" +
         reviewID +
         "&img=" +
         reviewImg +
