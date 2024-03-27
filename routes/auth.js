@@ -3,17 +3,13 @@ const userController = require('../controllers/userController');
 const { registerValidation } = require('../validators.js');
 
 // GET login to display login page
-router.get('/login',(req, res) => {
-  res.render('login', {
-    pageTitle: 'Login',
-  });
+router.get('/login', (req, res) => {
+  res.send({ showModal: true, pageTitle: 'Login' });
 });
 
 // GET register to display registration page
 router.get('/register', (req, res) => {
-  res.render('register', {
-    pageTitle: 'Registration',
-  });
+  res.send({ showModal: true, pageTitle: 'Registration' });
 });
 
 // POST methods for form submissions

@@ -35,8 +35,6 @@ app.use(express.json()); // use json
 app.use(express.urlencoded({ extended: true })); // files consist of more than strings
 app.use(express.static("public"));
 
-
-
 /* We'll use handlebars for this one */
 var hbs = require("hbs");
 app.set("view engine", "hbs");
@@ -112,7 +110,7 @@ app.get("/", async (req, res) => {
   const user = await Review.find({}).populate("userId");
   console.log(review);
 
-  res.render("index", { review });
+  res.render("loggedoutIndex", { review });
 });
 
 app.get("/loggedOut", async (req, res) => {
@@ -144,7 +142,7 @@ app.get("/loggedOut", async (req, res) => {
   const user = await Review.find({}).populate("userId");
   console.log(review);
 
-  res.render("loggedOutIndex", { review });
+  res.render("index", { review });
 });
 
 app.get("/view", async (req, res) => {
