@@ -1,5 +1,5 @@
-const userModel = require('../models/user');
-const { validationResult } = require('express-validator');
+const userModel = require("../database/models/User");
+const { validationResult } = require("express-validator");
 
 exports.registerUser = (req, res) => {
   // 1. Validate request
@@ -16,17 +16,18 @@ exports.registerUser = (req, res) => {
   const errors = validationResult(req);
 
   if (errors.isEmpty()) {
-    const { username, password, confirmpassword, avatar, description } = req.body;
-  
+    const { username, password, confirmpassword, avatar, description } =
+      req.body;
+
     // Next items go here...
     // This line can be deleted in the next step.
     // Adding it so that the error validation can be tested.
-    res.redirect('/login');
+    res.redirect("/login");
   } else {
     const messages = errors.array().map((item) => item.msg);
-  
-    req.flash('error_msg', messages.join(' '));
-    res.redirect('/register');
+
+    req.flash("error_msg", messages.join(" "));
+    res.redirect("/register");
   }
 };
 
@@ -42,10 +43,10 @@ exports.loginUser = (req, res) => {
   //        a. Redirect to login page with error message
 
   // 3. If INVALID, redirect to login page with errors
-  res.redirect('/');
+  res.redirect("/");
 };
 
 exports.logoutUser = (req, res) => {
   // Destroy the session and redirect to login page
-  res.redirect('/loggedout');
+  res.redirect("/loggedout");
 };
