@@ -40,6 +40,7 @@ app.use(express.json()); // use json
 app.use(express.urlencoded({ extended: true })); // files consist of more than strings
 app.use(express.static("public"));
 
+
 /* We'll use handlebars for this one */
 var hbs = require("hbs");
 app.set("view engine", "hbs");

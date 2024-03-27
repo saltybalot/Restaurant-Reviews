@@ -4,11 +4,13 @@ const { registerValidation } = require('../validators.js');
 
 // GET login to display login page
 router.get('/login', (req, res) => {
+  console.log("Linked to auth.js"),
   res.send({ showModal: true, pageTitle: 'Login' });
 });
 
 // GET register to display registration page
 router.get('/register', (req, res) => {
+  console.log("Linked to auth.js"),
   res.send({ showModal: true, pageTitle: 'Registration' });
 });
 
