@@ -134,7 +134,7 @@ app.get("/", async (req, res) => {
   const user = await Review.find({}).populate("userId");
   //console.log(review);
 
-  res.render("loggedoutIndex", { review });
+  res.render("loggedOutIndex", { review });
 });
 
 /**
