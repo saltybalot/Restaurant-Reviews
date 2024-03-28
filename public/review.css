@@ -506,7 +506,7 @@ input[type="text"] {
   background-color: #cd3d23;
 }
 
-.modal,
+.reviewModal,
 .replyModal {
   display: none;
   position: fixed;
@@ -519,7 +519,7 @@ input[type="text"] {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-content {
+.modal-content3 {
   background-color: #fcedda;
   margin: 15% auto;
   padding: 20px;
@@ -543,11 +543,11 @@ input[type="text"] {
   cursor: pointer;
 }
 
-.modal-content input[type="text"],
-.modal-content input[type="number"],
-.modal-content textarea,
-.modal-content input[type="file"],
-.modal-content input[type="submit"] {
+.modal-content3 input[type="text"],
+.modal-content3 input[type="number"],
+.modal-content3 textarea,
+.modal-content3 input[type="file"],
+.modal-content3 input[type="submit"] {
   width: 100%;
   padding: 10px;
   margin: 5px 0;
@@ -556,33 +556,33 @@ input[type="text"] {
   border-radius: 5px;
 }
 
-.modal-content input[type="submit"] {
+.modal-content3 input[type="submit"] {
   background-color: #ee4e34;
   color: white;
   cursor: pointer;
 }
 
-.modal-content input[type="submit"]:hover {
+.modal-content3 input[type="submit"]:hover {
   background-color: #ff6347;
 }
 
-.modal-content label {
+.modal-content3 label {
   font-weight: bold;
 }
 
-.modal-content input[type="file"] {
+.modal-content3 input[type="file"] {
   padding-top: 8px;
 }
 
-.modal-content textarea {
+.modal-content3 textarea {
   resize: vertical;
   height: 100px;
 }
 
-.modal-content input[type="text"],
-.modal-content input[type="number"],
-.modal-content textarea,
-.modal-content input[type="file"] {
+.modal-content3 input[type="text"],
+.modal-content3 input[type="number"],
+.modal-content3 textarea,
+.modal-content3 input[type="file"] {
   width: 100%;
   padding: 10px;
   margin: 5px 0;
@@ -593,10 +593,10 @@ input[type="text"] {
   transition: border-color 0.3s;
 }
 
-.modal-content input[type="text"]:focus,
-.modal-content input[type="number"]:focus,
-.modal-content textarea:focus,
-.modal-content input[type="file"]:focus {
+.modal-content3 input[type="text"]:focus,
+.modal-content3 input[type="number"]:focus,
+.modal-content3 textarea:focus,
+.modal-content3 input[type="file"]:focus {
   border-color: #ee4e34;
   outline: none;
 }

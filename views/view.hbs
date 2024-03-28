@@ -7,38 +7,9 @@
     <script src="jquery-3.6.0.min.js"></script>
 </head>
 
-<header class="header">
-    <div class="header-content">
-        <div class="header-logo">
-            <a href="/" style="text-decoration: none;">
-                <img src="images/worldpeace.png" alt="Cuisine icon" class="header-logo-image">
-            </a>
-        </div>
-        <div class="header-title">
-            <a href="/" style="text-decoration: none;">
-                <h1>World Peas</h1>
-            </a>
-        </div>
-        <form class="header-form">
-            <input type="text" id="search" name="search">
-            <button type="button" onclick="redirectToPage()">
-                <img src="fpicons/searchicon.png" alt="Search icon">
-            </button>
-        </form>
-    </div>
-    <div class="header-nav">
-        <a href="/profile?user=PatriciaTom" class="header-userprofile">User Profile</a>
-        <input type="hidden" id="userID" value="65e70e1fb8ad88c9f4512d2d">
-        <a href="/loggedOut" class="header-signout">Sign out</a>
-    </div>
+{{> messages}}
 
-    <script>
-        function redirectToPage() {
-            var redirectTo = "/search"
-            window.location.href = redirectTo;
-        }
-    </script>
-</header>
+{{>navBar}}
 
 
 
@@ -227,8 +198,8 @@
             </script>
         </div>
     </section>
-    <div id="myModal" class="modal">
-        <div class="modal-content">
+    <div id="myModal" class="reviewModal">
+        <div class="modal-content3">
             <span class="close">&times;</span>
             <h2 style="color:#EE4E34">Create a Review</h2>
             <form id="reviewForm" enctype="multipart/form-data" method="post" action="/reviewSubmit">
@@ -252,7 +223,7 @@
     </div>
 
     <div id="replyModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content3">
             <span class="close">&times;</span>
             <h2 style="color:#EE4E34">Create a Response</h2>
             <form id="replyForm">
@@ -263,6 +234,7 @@
         </div>
     </div>
     <script src="review_script.js"></script>
+    <script src="register_script.js"></script>
 </body>
 
 </html>

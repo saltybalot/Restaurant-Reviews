@@ -10,37 +10,9 @@
 </head>
 
 <body>
-	<header class="header">
-		<div class="header-content">
-			<div class="header-logo">
-				<a href="/" style="text-decoration: none;">
-					<img src="images/worldpeace.png" alt="Cuisine icon" class="header-logo-image">
-				</a>
-			</div>
-			<div class="header-title">
-				<a href="/" style="text-decoration: none;">
-					<h1>World Peas</h1>
-				</a>
-			</div>
-			<form class="header-form">
-				<input type="text" id="search" name="search">
-				<button type="button" onclick="redirectToPage()">
-					<img src="fpicons/searchicon.png" alt="Search icon">
-				</button>
-			</form>
-		</div>
-		<div class="header-nav">
-			<a href="/profile?user=PatriciaTom" class="header-userprofile">User Profile</a>
-			<a href="/loggedOut" class="header-signout">Sign out</a>
-		</div>
+	{{> messages}}
 
-		<script>
-			function redirectToPage() {
-				var redirectTo = "/search"
-				window.location.href = redirectTo;
-			}
-		</script>
-	</header>
+	{{>navBar}}
 	<div class="profile">
 		<div class="cover-photo">
 			<img src="images/coverphoto.jpg" alt="Cover Photo">
@@ -139,7 +111,7 @@
 		</div>
 
 		<div id="edit-profile-modal" class="modal">
-			<div class="modal-content">
+			<div class="modal-content3">
 				<span class="close">&times;</span>
 				<h2 style="color:#EE4E34">Edit Profile</h2>
 				<form id="edit-profile-form" enctype="multipart/form-data" method="post" action="/editProfile">
@@ -153,7 +125,7 @@
 		</div>
 
 		<div id="edit-review-modal" class="modal">
-			<div class="modal-content">
+			<div class="modal-content3">
 				<span class="close">&times;</span>
 				<h2 style="color:#EE4E34">Create a Review</h2>
 				<form id="reviewForm">
@@ -176,6 +148,7 @@
 		</div>
 
 		<script src="profile_script.js"></script>
+		<script src="register_script.js"></script>
 </body>
 
 </html>

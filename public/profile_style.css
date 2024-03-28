@@ -118,7 +118,7 @@ body {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-content {
+.modal-content3 {
   background-color: #fbefe1;
   font-weight: bold;
   margin: 15% auto;
@@ -141,7 +141,7 @@ body {
   border-top: 1px solid #ddd;
 }
 
-.modal-content input[type="file"] {
+.modal-content3 input[type="file"] {
   margin-bottom: 10px;
   padding: 10px;
   border: 1px solid black;
@@ -149,7 +149,7 @@ body {
   background-color: #fefefe;
 }
 
-.modal-content textarea {
+.modal-content3 textarea {
   width: calc(100% - 22px);
   height: 100px;
   padding: 10px;
@@ -159,7 +159,7 @@ body {
   background-color: #fefefe;
 }
 
-.modal-content button {
+.modal-content3 button {
   padding: 10px 20px;
   background-color: #ee4e34;
   color: white;
@@ -168,7 +168,7 @@ body {
   cursor: pointer;
 }
 
-.modal-content button:hover {
+.modal-content3 button:hover {
   background-color: #ff6347;
 }
 

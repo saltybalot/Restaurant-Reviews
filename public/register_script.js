@@ -1,12 +1,3 @@
-function showModal(modalId) {
-  var modal = document.getElementById(modalId);
-  modal.style.display = "block";
-}
-
-function closeModal(modalId) {
-  var modal = document.getElementById(modalId);
-  modal.style.display = "none";
-}
 /*
 function login() {
   var username = document.getElementById("loginUsername").value;
@@ -59,10 +50,4 @@ reviewBodyClass.forEach((body) => {
   if (text.length > maxLength) {
     body.textContent = text.substring(0, maxLength) + "...";
   }
-});
-
-var messageOverlay = document.querySelector(".message-overlay");
-
-messageOverlay.addEventListener("click", function (event) {
-  messageOverlay.hidden = "true";
 });
