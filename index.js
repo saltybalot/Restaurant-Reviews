@@ -42,7 +42,6 @@ app.use(express.static("public"));
 
 /* We'll use handlebars for this one */
 var hbs = require("hbs");
-app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 hbs.registerPartials(path.join(__dirname, "views", "partials"));
 // Flash
