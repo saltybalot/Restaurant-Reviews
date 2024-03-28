@@ -60,3 +60,9 @@ reviewBodyClass.forEach((body) => {
     body.textContent = text.substring(0, maxLength) + "...";
   }
 });
+
+var messageOverlay = document.querySelector(".message-overlay");
+
+messageOverlay.addEventListener("click", function (event) {
+  messageOverlay.hidden = "true";
+});

@@ -1,0 +1,31 @@
+<header class="header">
+    <div class="header-content">
+        <div class="header-logo">
+            <a href="/" style="text-decoration: none;">
+                <img src="images/worldpeace.png" alt="Cuisine icon" class="header-logo-image">
+            </a>
+        </div>
+        <div class="header-title">
+            <a href="/" style="text-decoration: none;">
+                <h1>World Peas</h1>
+            </a>
+        </div>
+        <form class="header-form">
+            <input type="text" id="search" name="search">
+            <button type="button" onclick="redirectToPage()">
+                <img src="fpicons/searchicon.png" alt="Search icon">
+            </button>
+        </form>
+    </div>
+    <div class="header-nav">
+        <button onclick="showModal('registerModal')" id="header-signup">Sign up</button>
+        <button onclick="showModal('loginModal')" id="header-login">Log in</button>
+    </div>
+
+    <script>
+        function redirectToPage() {
+            var redirectTo = "/search"
+            window.location.href = redirectTo;
+        }
+    </script>
+</header>

@@ -42,7 +42,9 @@ app.use(express.static("public"));
 
 /* We'll use handlebars for this one */
 var hbs = require("hbs");
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
+hbs.registerPartials(path.join(__dirname, "views", "partials"));
 // Flash
 
 app.use(
@@ -106,7 +108,6 @@ app.use((req, res, next) => {
 app.get("/", async (req, res) => {
   //temporarily adding toDate field to sort
   req.session.isAuth = true;
-  console.log(req.session);
   const review = await Review.aggregate([
     {
       $addFields: {
@@ -132,7 +133,7 @@ app.get("/", async (req, res) => {
     },
   ]);
   const user = await Review.find({}).populate("userId");
-  console.log(review);
+  //console.log(review);
 
   res.render("loggedoutIndex", { review });
 });
@@ -170,7 +171,9 @@ app.get("/loggedIn", async (req, res) => {
   const user = await Review.find({}).populate("userId");
   console.log(review);
 
-  res.render("index", { review });
+  const message = req.flash();
+
+  res.render("index", { review, message });
 });
 
 /**
