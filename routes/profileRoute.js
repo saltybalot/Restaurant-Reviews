@@ -5,12 +5,13 @@ const Rating = require("../database/models/Rating");
 const User = require("../database/models/User");
 const Reply = require("../database/models/Reply");
 const router = Router();
+const { isLoggedIn } = require("../index");
 
 /**
  * This is for rendering the PROFILE page
  */
 
-router.get("/profile", async (req, res) => {
+router.get("/profile", isLoggedIn, async (req, res) => {
   const username = req.query.user;
   console.log("user query: " + username);
 

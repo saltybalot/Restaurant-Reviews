@@ -7,6 +7,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const MongoStore = require("connect-mongo")(session);
 const exphbs = require("express-handlebars");
+const bcrypt = require("bcryptjs");
 
 try {
   mongoose.connect(connectionString);
@@ -21,6 +22,37 @@ var app = new express();
 /* For file uplods */
 const fileUpload = require("express-fileupload");
 app.use(fileUpload()); //initialize file upload middleware
+
+app.use(
+  session({
+    secret: "somegibberishsecret",
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 },
+  })
+);
+
+app.use(flash());
+// Global messages vars
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
+  next();
+});
+
+function isLoggedIn(req, res, next) {
+  if (req.session && req.session.user) {
+    // User is logged in
+    res.locals.isLoggedIn = true;
+  } else {
+    // User is not logged in
+    res.locals.isLoggedIn = false;
+  }
+  next();
+}
+
+module.exports.isLoggedIn = isLoggedIn;
 
 /* Initialize our post */
 const Restaurant = require("./database/models/Restaurant");
@@ -45,18 +77,6 @@ var hbs = require("hbs");
 app.set("view engine", "hbs");
 hbs.registerPartials(path.join(__dirname, "views", "partials"));
 // Flash
-
-app.use(
-  session({
-    secret: "somegibberishsecret",
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 },
-  })
-);
-
-app.use(flash());
 
 app.use("/", viewRouter);
 app.use("/", authRouter);
@@ -83,28 +103,12 @@ async function findRatings() {
 
 findRatings();
 */
-app.use(
-  session({
-    secret: "somegibberishsecret",
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 },
-  })
-);
-
-// Global messages vars
-app.use((req, res, next) => {
-  res.locals.success_msg = req.flash("success_msg");
-  res.locals.error_msg = req.flash("error_msg");
-  next();
-});
 
 /**
  * This is for Index page
  */
 
-app.get("/", async (req, res) => {
+app.get("/", isLoggedIn, async (req, res) => {
   //temporarily adding toDate field to sort
   req.session.isAuth = true;
   const review = await Review.aggregate([
@@ -134,7 +138,7 @@ app.get("/", async (req, res) => {
   const user = await Review.find({}).populate("userId");
   //console.log(review);
 
-  res.render("loggedOutIndex", { review });
+  res.render("loggedOutIndex", { review, isLoggedIn: res.locals.isLoggedIn });
 });
 
 /**
@@ -186,6 +190,24 @@ app.get("/loggedIn", async (req, res) => {
 app.get("/about", async (req, res) => {
   res.render("about");
 });
+
+/*
+// Encrypt passwords of accounts with unecrypted password
+async function encryptPassword() {
+  const users = await User.find();
+  for (const user of users) {
+    if (user.password) {
+      // Hash the password using bcrypt
+      const hashedPassword = await bcrypt.hash(user.password, 10);
+
+      // Update the document with the hashed password
+      await User.updateOne({ _id: user._id }, { password: hashedPassword });
+      console.log(`Password for user with _id ${user._id} encrypted.`);
+    }
+  }
+}
+
+encryptPassword();*/
 
 var server = app.listen(port, "0.0.0.0", function () {
   console.log("Node server running at port " + port);

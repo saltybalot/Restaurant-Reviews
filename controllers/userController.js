@@ -81,7 +81,7 @@ exports.loginUser = async (req, res) => {
         // Save user info to session (you'll need to set up session middleware)
         req.session.user = user;
         req.flash("success_msg", "Login successful!");
-        return res.redirect("/loggedIn"); // Redirect to home or dashboard page
+        return res.redirect("/"); // Redirect to home or dashboard page
       } else {
         req.flash("error_msg", "Invalid credentials. Please try again.");
         return res.redirect("/");
@@ -100,5 +100,6 @@ exports.loginUser = async (req, res) => {
 
 exports.logoutUser = (req, res) => {
   // Destroy the session and redirect to login page
-  res.redirect("/loggedout");
+  req.session.destroy();
+  res.redirect("/");
 };

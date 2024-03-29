@@ -5,8 +5,9 @@ const Rating = require("../database/models/Rating");
 const User = require("../database/models/User");
 const Reply = require("../database/models/Reply");
 const router = Router();
+const { isLoggedIn } = require("../index");
 
-router.get("/view", async (req, res) => {
+router.get("/view", isLoggedIn, async (req, res) => {
   const content = req.query.restaurant;
   let reviewID = req.query.reviewID;
   const searchQuery = req.query.searchQuery;
