@@ -8,9 +8,21 @@ var submitBtn = document.getElementById("submitBtn");
 
 var reviewModal = document.getElementById("edit-review-modal");
 
+var dropdown = document.querySelectorAll(".review-actions");
+
 var profileForm = document.getElementById("profile-picture-upload");
 var descForm = document.getElementById("description");
+var loggedUser = document.getElementById("loggedUser")?.value;
+var user = document.querySelector(".username")?.textContent;
 
+console.log(loggedUser + " " + user);
+
+if (loggedUser != user) {
+  btn.style.display = "none";
+  dropdown.forEach((dropdown) => {
+    dropdown.hidden = true;
+  });
+}
 btn.onclick = function () {
   descForm.value = document
     .getElementById("profileDescription")

@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const userModel = require("../database/models/User");
 const { validationResult } = require("express-validator");
 
@@ -40,6 +40,7 @@ exports.registerUser = async (req, res) => {
           password: hashed,
           profilePic: avatar.name,
           description: description,
+          type: "reviewer",
         };
         avatar.mv("public/images/" + avatar.name);
 
@@ -62,22 +63,44 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-exports.loginUser = (req, res) => {
-  // 1. Validate request
+exports.loginUser = async (req, res) => {
+  const errors = validationResult(req);
 
-  // 2. If VALID, find if email exists in users
-  //      EXISTING USER (match retrieved)
-  //        a. Check if password matches hashed password in database
-  //        b. If MATCH, save info to session and redirect to home
-  //        c. If NOT equal, redirect to login page with error
-  //      UNREGISTERED USER (no results retrieved)
-  //        a. Redirect to login page with error message
+  if (errors.isEmpty()) {
+    const { username, password } = req.body;
 
-  // 3. If INVALID, redirect to login page with errors
-  res.redirect("/");
+    try {
+      const user = await userModel.findOne({ username: username });
+
+      if (!user) {
+        req.flash("error_msg", "Invalid credentials. Please try again.");
+        return res.redirect("/");
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (isMatch) {
+        // Save user info to session (you'll need to set up session middleware)
+        req.session.user = user;
+        req.flash("success_msg", "Login successful!");
+        return res.redirect("/"); // Redirect to home or dashboard page
+      } else {
+        req.flash("error_msg", "Invalid credentials. Please try again.");
+        return res.redirect("/");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      req.flash("error_msg", "An error occurred. Please try again.");
+      return res.redirect("/");
+    }
+  } else {
+    const messages = errors.array().map((item) => item.msg);
+    req.flash("error_msg", messages.join(" "));
+    return res.redirect("/");
+  }
 };
 
 exports.logoutUser = (req, res) => {
   // Destroy the session and redirect to login page
-  res.redirect("/loggedout");
+  req.session.destroy();
+  res.redirect("/");
 };

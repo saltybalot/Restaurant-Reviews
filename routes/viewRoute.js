@@ -5,8 +5,10 @@ const Rating = require("../database/models/Rating");
 const User = require("../database/models/User");
 const Reply = require("../database/models/Reply");
 const router = Router();
+const { isLoggedIn } = require("../index");
+const session = require("express-session");
 
-router.get("/view", async (req, res) => {
+router.get("/view", isLoggedIn, async (req, res) => {
   const content = req.query.restaurant;
   let reviewID = req.query.reviewID;
   const searchQuery = req.query.searchQuery;
@@ -66,7 +68,7 @@ router.get("/view", async (req, res) => {
 
   console.log("review:");
   console.log(review);
-  const user = await User.findOne({ username: "PatriciaTom" });
+  const user = req.session.user;
 
   let userReview;
 
@@ -129,6 +131,7 @@ router.get("/view", async (req, res) => {
     });
 
     console.log(reviewId);
+    console.log(req.session);
   }
 });
 
@@ -224,11 +227,11 @@ router.post("/reviewSubmit", async (req, res) => {
   }
 
   const restaurant = req.body.restaurant;
-  const username = "PatriciaTom"; //placeholder, please replace if you have session
+  const username = req.session.user.username; //placeholder, please replace if you have session
   const image = req.files.media;
   const rating = parseInt(req.body.rating);
   const body = req.body.reviewBody;
-  const id = "65e70e1fb8ad88c9f4512d2d"; //placeholder, please replace if you have session
+  const id = req.session.user._id; //placeholder, please replace if you have session
 
   console.log(
     "If you see this text when you submit the reply, you have a problem"
