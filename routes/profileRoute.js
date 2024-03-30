@@ -14,6 +14,7 @@ const { isLoggedIn } = require("../index");
 router.get("/profile", isLoggedIn, async (req, res) => {
   const username = req.query.user;
   console.log("user query: " + username);
+  const loggedUser = req.session?.user?.username;
 
   try {
     const user = await User.findOne({ username: username });
@@ -62,7 +63,7 @@ router.get("/profile", isLoggedIn, async (req, res) => {
     ]);
 
     console.log(reviews);
-    res.render("profile", { user, reviews });
+    res.render("profile", { user, reviews, loggedUser });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -137,8 +137,14 @@ app.get("/", isLoggedIn, async (req, res) => {
   ]);
   const user = await Review.find({}).populate("userId");
   //console.log(review);
+  console.log(req.session.user);
+  console.log(res.locals.isLoggedIn);
 
-  res.render("loggedOutIndex", { review, isLoggedIn: res.locals.isLoggedIn });
+  res.render("loggedOutIndex", {
+    review,
+    isLoggedIn: res.locals.isLoggedIn,
+    user: req.session.user,
+  });
 });
 
 /**

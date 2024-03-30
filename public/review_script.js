@@ -4,8 +4,16 @@ var replyModal = document.getElementById("replyModal");
 
 var btn = document.getElementById("reviewButton");
 
+var isLoggedIn = document.getElementById("isLoggedIn").value;
+
+console.log(isLoggedIn);
+
 btn.onclick = function () {
-  modal.style.display = "block";
+  if (isLoggedIn === "true") {
+    modal.style.display = "block";
+  } else {
+    alert("Please Login first before you write your review");
+  }
 };
 
 var reviewID;
@@ -13,15 +21,21 @@ interactButtons();
 
 function interactButtons() {
   var replyBtns = document.querySelectorAll(".replyBtn");
+  var username = document.getElementById("isOwner").value;
+  var resto = document.getElementById("resto").value;
 
   var span = document.querySelectorAll(".close");
 
   replyBtns.forEach((button) => {
-    button.addEventListener("click", function () {
-      reviewID = button.closest(".reviewBody").id;
-      console.log(reviewID);
-      replyModal.style.display = "block";
-    });
+    if (resto == username) {
+      button.addEventListener("click", function () {
+        reviewID = button.closest(".reviewBody").id;
+        console.log(reviewID);
+        replyModal.style.display = "block";
+      });
+    } else {
+      button.hidden = true;
+    }
   });
 
   span.forEach((button) => {

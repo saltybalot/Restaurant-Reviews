@@ -40,6 +40,7 @@ exports.registerUser = async (req, res) => {
           password: hashed,
           profilePic: avatar.name,
           description: description,
+          type: "reviewer",
         };
         avatar.mv("public/images/" + avatar.name);
 
