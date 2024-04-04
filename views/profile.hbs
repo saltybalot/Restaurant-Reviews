@@ -20,7 +20,7 @@
 		</div>
 		<div class="profile-details">
 			<div id="profile-picture">
-				<img src="images/{{user.profilePic}}" alt="Profile Picture">
+				<img src="images/{{user.profilePic}}" alt="Profile Picture" onerror="this.src='images/default.jpg';">
 			</div>
 			<div class="user-details">
 				<h1 class="username">{{user.username}}</h1>
