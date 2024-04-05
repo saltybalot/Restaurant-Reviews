@@ -23,6 +23,7 @@ router.get("/profile", isLoggedIn, async (req, res) => {
     });
     if (restaurant != null) {
       res.redirect("/view?restaurant=" + username);
+      return;
     }
     if (!user) {
       return res.status(404).json({ message: "User not found" });
