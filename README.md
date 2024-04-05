@@ -15,10 +15,10 @@ This project is a restaurant review web application where users can explore and 
 1. Clone the Github Repository (option 1):
    Open your terminal or command prompt, navigate to the directory where you want to store the project, and run the following command:
 
-git clone https://github.com/username/project.git
+git clone https://github.com/saltybalot/Restaurant-Reviews
 
 2. Direct Download (option 2):
-   Download the zip file which contains the whole MCO2 deliverables.
+   Download the zip file which contains the whole MCO3 deliverables.
 
 3. Navigate to the project directory:
    Navigate into the project's directory using the cd command:
