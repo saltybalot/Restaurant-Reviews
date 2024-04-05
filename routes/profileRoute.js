@@ -18,6 +18,12 @@ router.get("/profile", isLoggedIn, async (req, res) => {
 
   try {
     const user = await User.findOne({ username: username });
+    const restaurant = await Restaurant.findOne({
+      name: new RegExp(username, "i"),
+    });
+    if (restaurant != null) {
+      res.redirect("/view?restaurant=" + username);
+    }
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
