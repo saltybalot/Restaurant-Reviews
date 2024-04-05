@@ -31,51 +31,14 @@
 
 		<div class="content">
 			<div class="content-left">
-				<div class="comments">
-					<h2 class="section-title">Latest Comments</h2>
-					<div class="comment">
-						<img src="images/restaurant1.jpg" alt="User Profile Picture" class="profile-pic">
-						<p>This place has amazing food!</p>
-					</div>
-					<div class="comment">
-						<img src="images/restaurant2.jpg" alt="User Profile Picture" class="profile-pic">
-						<p>I loved the atmosphere here!</p>
-					</div>
-					<div class="comment">
-						<img src="images/restaurant3.jpg" alt="User Profile Picture" class="profile-pic">
-						<p>Great service and delicious meals!</p>
-					</div>
-					<div class="comment">
-						<img src="images/restaurant4.jpg" alt="User Profile Picture" class="profile-pic">
-						<p>Can't wait to go back again!</p>
-					</div>
-					<div class="comment">
-						<img src="images/restaurant5.jpg" alt="User Profile Picture" class="profile-pic">
-						<p>This restaurant exceeded my expectations!</p>
-					</div>
-				</div>
 				<div class="photos">
+				
 					<h2 class="section-title">Photos</h2>
+					{{#each reviews}}
 					<div class="photo">
-						<img src="images/restaurant1.jpg" alt="Photo 1">
-						<p style="text-align: center">Caption for Photo 1</p>
+						<img src="images/{{this.image}}" alt="Photo 1">
 					</div>
-					<div class="photo">
-						<img src="images/restaurant2.jpg" alt="Photo 1">
-						<p style="text-align: center">Caption for Photo 2</p>
-					</div>
-					<div class="photo">
-						<img src="images/restaurant3.jpg" alt="Photo 1">
-						<p style="text-align: center">Caption for Photo 3</p>
-					</div>
-					<div class="photo">
-						<img src="images/restaurant4.jpg" alt="Photo 1">
-						<p style="text-align: center">Caption for Photo 4</p>
-					</div>
-					<div class="photo">
-						<img src="images/restaurant5.jpg" alt="Photo 1">
-						<p style="text-align: center">Caption for Photo 5</p>
-					</div>
+					{{/each}}
 				</div>
 			</div>
 			<div class="content-right">
