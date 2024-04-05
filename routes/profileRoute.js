@@ -93,7 +93,7 @@ router.get("/reviewEdit", async (req, res) => {
 
   console.log(editedReview);
 
-  res.redirect("/profile?user=PatriciaTom"); //edit this after session is implemented
+  res.redirect("/profile?user=" + req.session.user.username);
 });
 
 router.get("/reviewDelete", async (req, res) => {
@@ -102,7 +102,7 @@ router.get("/reviewDelete", async (req, res) => {
   console.log(id);
 
   editedReview = await Review.findByIdAndDelete(id);
-  res.redirect("/profile?user=PatriciaTom"); //edit this after session is implemented
+  res.redirect("/profile?user=" + req.session.user.username);
 });
 
 /**
@@ -110,7 +110,7 @@ router.get("/reviewDelete", async (req, res) => {
  */
 
 router.post("/editProfile", async (req, res) => {
-  var user = await User.findById("65e70e1fb8ad88c9f4512d2d"); //edit this after session is implemented
+  var user = await User.findById(req.session.user._id);
   var profilePic;
   if (!req.files || Object.keys(req.files).length === 0) {
     console.log("no file uploaded, no changes are made");
@@ -125,7 +125,7 @@ router.post("/editProfile", async (req, res) => {
   var updatedUser = await user.save();
 
   console.log(updatedUser);
-  res.redirect("/profile?user=PatriciaTom");
+  res.redirect("/profile?user=" + user.username);
 });
 
 module.exports = router;
