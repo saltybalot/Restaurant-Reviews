@@ -20,7 +20,7 @@
 		</div>
 		<div class="profile-details">
 			<div id="profile-picture">
-				<img src="images/{{user.profilePic}}" alt="Profile Picture">
+				<img src="images/{{user.profilePic}}" alt="Profile Picture" onerror="this.src='images/default.jpg';">
 			</div>
 			<div class="user-details">
 				<h1 class="username">{{user.username}}</h1>
@@ -86,7 +86,7 @@
 						body="{{this.body}}" isEdited="true">
 						<div class="review-info">
 							<img src="images/{{this.userDetails.profilePic}}" alt="User Profile Picture"
-								class="profile-pic">
+								class="profile-pic" onerror="this.src='images/default.jpg';">
 							<p class="review-label">{{this.username}} reviewed <span
 									class="restaurant-name">{{this.restaurant}}</span>
 								<br><span class="date">

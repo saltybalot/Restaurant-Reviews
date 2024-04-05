@@ -40,7 +40,7 @@
                 {{#each review}}
                 <div class="review-item">
                     <div class="reviewer-info">
-                        <img src="images/{{this.userDetails.profilePic}}" alt="Profile picture" class="profile-pic">
+                        <img src="images/{{this.userDetails.profilePic}}" alt="Profile picture" class="profile-pic" onerror="this.src='images/default.jpg';">
                         <div class="reviewer-name-rating">
                             <p class="reviewer-name"> <a href="/profile?user={{this.username}}"> {{this.username}}</a>
                                 reviewed <span class="restaurant-name">{{this.restaurant}}</span><span class="date">
