@@ -205,6 +205,7 @@ app.get("/search", async (req, res) => {
         { name: { $regex: searchTerm, $options: "i" } },
         { cuisine: { $regex: searchTerm, $options: "i" } },
         { meals: { $regex: searchTerm, $options: "i" } },
+        { locations: { $regex: searchTerm, $options: "i" } },
       ],
     });
     console.log(searchResults);
