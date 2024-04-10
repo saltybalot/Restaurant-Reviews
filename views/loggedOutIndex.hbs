@@ -18,15 +18,15 @@
     <section class="top-section">
         <h2 class="section-title">Cuisines</h2>
         <div class="cuisine-grid">
-            <a href="#" class="cuisine-item">
+            <a href="/search?search=Filipino" class="cuisine-item">
                 <img src="fpicons/filfood.jpg" alt="Cuisine icon">
                 <p>Filipino</p>
             </a>
-            <a href="#" class="cuisine-item">
+            <a href="/search?search=American" class="cuisine-item">
                 <img src="fpicons/usfood.jpg" alt="Cuisine icon">
                 <p>American</p>
             </a>
-            <a href="#" class="cuisine-item">
+            <a href="/search?search=Italian" class="cuisine-item">
                 <img src="fpicons/italianfood.jpg" alt="Cuisine icon">
                 <p>Italian</p>
             </a>
@@ -40,7 +40,8 @@
                 {{#each review}}
                 <div class="review-item">
                     <div class="reviewer-info">
-                        <img src="images/{{this.userDetails.profilePic}}" alt="Profile picture" class="profile-pic" onerror="this.src='images/default.jpg';">
+                        <img src="images/{{this.userDetails.profilePic}}" alt="Profile picture" class="profile-pic"
+                            onerror="this.src='images/default.jpg';">
                         <div class="reviewer-name-rating">
                             <p class="reviewer-name"> <a href="/profile?user={{this.username}}"> {{this.username}}</a>
                                 reviewed <span class="restaurant-name">{{this.restaurant}}</span><span class="date">
