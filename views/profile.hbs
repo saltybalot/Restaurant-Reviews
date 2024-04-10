@@ -34,16 +34,21 @@
 				<div class="photos">
 				
 					<h2 class="section-title">Photos</h2>
+					{{#if reviews.length}}
 					{{#each reviews}}
 					<div class="photo">
 						<img src="images/{{this.image}}" alt="Photo 1">
 					</div>
 					{{/each}}
+					{{else}}
+					<p class='filler-text'><br>--User has no photos--</p>
+					{{/if}}
 				</div>
 			</div>
 			<div class="content-right">
 				<div class="reviews">
 					<h2 class="section-title">Latest Reviews</h2>
+					{{#if reviews.length}}
 					{{#each reviews}}
 					<div class="review" id="{{this._id}}" image="{{this.image}}" rating="{{this.rating}}"
 						body="{{this.body}}" isEdited="true">
@@ -70,6 +75,9 @@
 						<p class="review-content">{{this.body}}</p>
 					</div>
 					{{/each}}
+					{{else}}
+					<p class='filler-text'><br>--User has no reviews--</p>
+					{{/if}}
 				</div>
 			</div>
 		</div>
