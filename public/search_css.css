@@ -260,3 +260,7 @@ h2 {
   font-style: italic;
   margin: 0;
 }
+.restaurant-name:hover {
+  color: #ee4e34;
+
+}
