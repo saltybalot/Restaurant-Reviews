@@ -2,11 +2,20 @@
 <html lang="en">
 
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="search_css.css" />
-  <link rel="stylesheet" href="navStyle.css">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="search_css.css" />
+    <link rel="stylesheet" href="navStyle.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <meta name="description" content="Your description here">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    -webkit-text-size-adjust: 100%;
+    -webkit-user-select: none;
+  </style>
   <title>Restaurant Review</title>
 </head>
 
@@ -15,73 +24,26 @@
 
   {{>navBar}}
   <div class="filter">
-    <h2>Filter by:</h2>
-    <div class="filter-options">
-      <label for="rating">Rating:</label>
-      <select id="rating">
-        <option value="all">All</option>
-        <option value="5">5 stars</option>
-        <option value="4">4 stars</option>
-        <option value="3">3 stars</option>
-        <option value="2">2 stars</option>
-        <option value="1">1 star</option>
-      </select>
-    </div>
-    <div class="filter-options">
-      <label for="cuisine">Cuisine:</label>
-      <select id="cuisine">
-        <option value="all">All</option>
-        <option value="italian">Italian</option>
-        <option value="mexican">Mexican</option>
-        <option value="chinese">Chinese</option>
-        <option value="indian">Indian</option>
-        <option value="american">American</option>
-      </select>
-    </div>
+    <!-- Your filter options -->
   </div>
   <div class="container">
-    <h2 class="section-title">Search Results</h2> //show stars, top review 
-    <a href="/view?restaurant=Mcdonalds" style="text-decoration: none; color: black;">
+    <h2 class="section-title">Search Results for "{{query}}"</h2>
+    {{#each restaurants}}
+    <a href="/view?restaurant={{this.name}}" style="text-decoration: none; color: black;">
       <div class="restaurant">
-        <img src="images/restaurant1.jpg" alt="Restaurant Photo" class="restaurant-photo">
+        <img src="images/restaurant-placeholder.jpg" alt="Restaurant Photo" class="restaurant-photo">
         <div class="restaurant-info">
-          <h3 class="restaurant-name">McDonalds</h3>
+          <h3 class="restaurant-name">{{this.name}}</h3>
           <div class="restaurant-rating">
-            <img src="images/3star.png" class="star">
-            <p>5 reviews</p>
+            <img src="images/{{this.rating}}star.png" class="star">
+            <p>{{this.reviewCount}} reviews</p>
           </div>
-          <p class="restaurant-location">Location: Manila, Philippines</p>
+          <p class="restaurant-location">Location: {{this.location}}</p>
         </div>
       </div>
     </a>
-
-    <a href="/view?restaurant=Sbarro, Paco Manila" style="text-decoration: none; color: black;">
-      <div class="restaurant">
-        <img src="images/restaurant2.jpg" alt="Restaurant Photo" class="restaurant-photo">
-        <div class="restaurant-info">
-          <h3 class="restaurant-name">Sbarro</h3>
-          <div class="restaurant-rating">
-            <img src="images/4star.png" class="star">
-            <p>5 reviews</p>
-          </div>
-          <p class="restaurant-location">Location: Paco Manila, Philippines</p>
-        </div>
-      </div>
-    </a>
-    <a href="/view?restaurant=Angrydobo, Taft Avenue" style="text-decoration: none; color: black;">
-      <div class="restaurant">
-        <img src="images/restaurant3.jpg" alt="Restaurant Photo" class="restaurant-photo">
-        <div class="restaurant-info">
-          <h3 class="restaurant-name">Angrydobo</h3>
-          <div class="restaurant-rating">
-            <img src="images/4star.png" class="star">
-            <p>5 reviews</p>
-          </div>
-          <p class="restaurant-location">Location: Taft Avenue, Manila, Philippines</p>
-        </div>
-      </div>
+    {{/each}}
   </div>
-  </a>
   </form>
   <script src="register_script.js"></script>
 </body>

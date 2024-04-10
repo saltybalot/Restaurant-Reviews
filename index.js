@@ -197,6 +197,19 @@ app.get("/about", async (req, res) => {
   res.render("about");
 });
 
+app.get('/search', async (req, res) => {
+  const { query } = req.query;
+  try {
+    const restaurants = await Restaurant.find({
+      name: { $regex: new RegExp(`^${query}$`, 'i') }
+    });
+    res.render('search', { restaurants, query });
+  } catch (error) {
+    console.error('Error searching for restaurants:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 /*
 // Encrypt passwords of accounts with unecrypted password
 async function encryptPassword() {

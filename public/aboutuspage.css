@@ -13,19 +13,22 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 40px;
 }
-
 
 .container {
   max-width: 660px;
   margin: auto;
-  padding: 20px;
 }
 
-.about-section,
 .mission-section {
   color: #333; /* Text color for sections */
-  padding: 50px 0;
+  padding:170px 0;
+}
+
+.about-section {
+  color: #333; /* Text color for sections */
+  padding:80px 0;
 }
 
 .about-section h2 {
@@ -35,9 +38,78 @@ header {
   text-align: center;
   font-size: 44px;
 }
-.mission-section h2 {
+.mission-section h2, .team-section h2 {
   color: #ee4e34; /* Heading color for sections */
   text-align: center;
+}
+
+.img-container {
+  display: flex;
+}
+
+.mem1-image {
+  background-size: cover;
+  height: 300px;
+  display: flex;
+}
+
+.mem2-image, .mem3-image {
+  background-size: cover;
+  margin-left: 60px;
+  height: 300px;
+}
+
+.img-details {
+  display: flex;
+  position: relative;
+}
+
+.member1-details {
+  position: absolute;
+  left: 0px;
+  width: 225px;
+  background-color: white;
+  padding: 10px;
+  height: 150px;
+  box-sizing: border-box;
+
+  text-align: left;
+  font-size: 16px;
+  font-weight:bold;
+}
+
+.member2-details {
+  position: absolute;
+  left: 285px;
+  padding-right: 40px;
+  width: 225px;
+  background-color: white;
+  padding: 10px;
+  height: 150px;
+  box-sizing: border-box;
+
+  text-align: left;
+  font-size: 16px;
+  font-weight:bold;
+}
+
+.member3-details {
+  position: absolute;
+  left: 572px;
+  width: 225px;
+  background-color: white;
+  padding: 10px;
+  height: 150px;
+  box-sizing: border-box;
+
+  text-align: left;
+  font-size: 16px;
+  font-weight:bold;
+}
+
+.h1-mem1, .h1-mem2, .h1-mem3{
+  font-size: 19px;
+  font-weight:bold;
 }
 
 .about-section p,
