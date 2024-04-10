@@ -8,6 +8,9 @@ const router = Router();
 const { isLoggedIn } = require("../index");
 const session = require("express-session");
 
+var tempReviewValue;
+var tempReviewLength;
+
 router.get("/view", isLoggedIn, async (req, res) => {
   const content = req.query.restaurant;
   let reviewID = req.query.reviewID;
@@ -22,7 +25,7 @@ router.get("/view", isLoggedIn, async (req, res) => {
   tempQuery["restaurant"] = content;
 
   if (searchQuery != null) {
-    tempQuery["body"] = new RegExp(searchQuery, "i");
+    tempQuery["body"] = { $regex: searchQuery, $options: "i" };
   }
 
   console.log(tempQuery);
@@ -78,7 +81,7 @@ router.get("/view", isLoggedIn, async (req, res) => {
     console.log(review);
     console.log(user);*/
 
-  if (searchQuery != null) {
+  if (searchQuery != null && review.length >= 1) {
     reviewID = review[0]._id.toString();
     console.log("wahoooo");
     console.log(review[0]._id.toString());
@@ -106,13 +109,24 @@ router.get("/view", isLoggedIn, async (req, res) => {
   console.log(reviewSum);
   let reviewAverage = reviewSum / reviewArray.length;
   let reviewValue = Math.round(reviewAverage);
+  let reviewLength = reviewArray.length;
+  let searchResult = reviewLength;
+
+  if (searchQuery == null) {
+    tempReviewValue = reviewValue;
+    tempReviewLength = reviewLength;
+  } else {
+    reviewValue = tempReviewValue;
+    reviewLength = tempReviewLength;
+  }
   res.render("view", {
     restaurant,
     rating,
     review,
     user,
     reviewValue,
-    reviewLength: reviewArray.length,
+    reviewLength,
+    searchResult,
     reviewID,
     excellent: ratingMatrix[4],
     veryGood: ratingMatrix[3],
