@@ -201,7 +201,11 @@ app.get("/search", async (req, res) => {
   const searchTerm = req.query.search;
   try {
     const searchResults = await Restaurant.find({
-      $or: [{ name: { $regex: searchTerm, $options: "i" } }],
+      $or: [
+        { name: { $regex: searchTerm, $options: "i" } },
+        { cuisine: { $regex: searchTerm, $options: "i" } },
+        { meals: { $regex: searchTerm, $options: "i" } },
+      ],
     });
     console.log(searchResults);
     for (const query of searchResults) {
