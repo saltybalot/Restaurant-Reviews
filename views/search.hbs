@@ -27,18 +27,18 @@
     <!-- Your filter options -->
   </div>
   <div class="container">
-    <h2 class="section-title">Search Results for "{{query}}"</h2>
-    {{#each restaurants}}
+    <h2 class="section-title">Search Results for "{{searchTerm}}"</h2>
+    {{#each searchResults}}
     <a href="/view?restaurant={{this.name}}" style="text-decoration: none; color: black;">
       <div class="restaurant">
-        <img src="images/restaurant-placeholder.jpg" alt="Restaurant Photo" class="restaurant-photo">
+        <img src="{{images.[0]}}" alt="Restaurant Photo" class="restaurant-photo">
         <div class="restaurant-info">
           <h3 class="restaurant-name">{{this.name}}</h3>
           <div class="restaurant-rating">
-            <img src="images/{{this.rating}}star.png" class="star">
-            <p>{{this.reviewCount}} reviews</p>
+            <img src="images/{{reviewValue}}star.png" class="star">
+            <p>{{reviewLength}} reviews</p>
           </div>
-          <p class="restaurant-location">Location: {{this.location}}</p>
+          <p class="restaurant-location">Location: {{this.locations}}</p>
         </div>
       </div>
     </a>
