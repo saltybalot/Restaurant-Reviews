@@ -193,20 +193,21 @@ app.get("/loggedIn", async (req, res) => {
  * This is For About Page
  */
 
-app.get("/about", async (req, res) => {
+app.get("/about", isLoggedIn, async (req, res) => {
   res.render("about");
 });
 
-app.get('/search', async (req, res) => {
+app.get("/search", isLoggedIn, async (req, res) => {
   const { query } = req.query;
+  console.log("This is search function");
   try {
     const restaurants = await Restaurant.find({
-      name: { $regex: new RegExp(`^${query}$`, 'i') }
+      name: { $regex: new RegExp(`^${query}$`, "i") },
     });
-    res.render('search', { restaurants, query });
+    res.render("search", { restaurants, query });
   } catch (error) {
-    console.error('Error searching for restaurants:', error);
-    res.status(500).send('Internal Server Error');
+    console.error("Error searching for restaurants:", error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
