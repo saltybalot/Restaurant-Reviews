@@ -2,7 +2,7 @@ body {
   font-family: Alata, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #fcedda;
+  background-color: #f1dbbd;
 }
 
 .header {
@@ -139,6 +139,12 @@ body {
   text-align: left;
 }
 
+.bottom-section{
+  background-image: url('images/kitchenbg.jpg'); /* Set the background image */
+  background-size: cover; /* Ensure the image covers the entire section */
+  background-position: center; /* Center the background image */
+}
+
 .section-title {
   margin-top: 0;
   color: white;
@@ -152,13 +158,14 @@ body {
 
 .section-title2 {
   margin-top: 0;
-  color: #ee4e34;
+  color: white;
   position: relative;
   font-size: 40px;
   font-family: "Alata", sans-serif;
   letter-spacing: 1px;
   text-align: center;
   padding-bottom: 40px;
+  padding-top: 20px;
 }
 
 .cuisine-grid {
@@ -198,17 +205,19 @@ body {
 .review-content {
   display: flex;
   flex-wrap: wrap;
+  margin: 0;
+  justify-content: center;
 }
 
 .review-item {
   flex-wrap: wrap;
   margin-left: 10px;
   margin-bottom: 20px;
-  background-color: #ecddc8;
+  background-color: #f1dbbd;
   border-radius: 5px;
   padding: 20px;
   width: 350px;
-  border: 2px solid #000;
+  border: 1px solid #000;
 }
 
 .reviewer-info {
@@ -233,6 +242,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  font-size:16px;
 }
 
 .rating {
@@ -280,7 +290,7 @@ h2 {
 }
 
 footer {
-  background-color: #ee4e34;
+  background-color: #f1dbbd;
   color: white;
   text-align: left;
   padding: 25px 35px;
@@ -288,7 +298,8 @@ footer {
 }
 
 .footer-content a {
-  color: white;
+  color: #ee4e34;
+  font-weight: bold;
 }
 .rememberMeLabel {
   padding-top: 9px;
