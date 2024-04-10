@@ -197,19 +197,39 @@ app.get("/about", isLoggedIn, async (req, res) => {
   res.render("about");
 });
 
-app.get('/search', async (req, res) => {
+app.get("/search", async (req, res) => {
   const searchTerm = req.query.search;
   try {
     const searchResults = await Restaurant.find({
-      $or: [
-          { name: { $regex: searchTerm, $options: 'i' } },
-      ]
-  });
-  
-    res.render('search', { searchTerm, searchResults });
+      $or: [{ name: { $regex: searchTerm, $options: "i" } }],
+    });
+    console.log(searchResults);
+    for (const query of searchResults) {
+      console.log("review average processing");
+      const reviews = await Review.find({ restaurant: query.name });
+
+      let reviewArray = [];
+      let ratingMatrix = [0, 0, 0, 0, 0];
+
+      reviews.forEach((reviewNum, i) => {
+        reviewArray.push(reviewNum.rating);
+        ratingMatrix[reviewArray[i] - 1]++;
+      });
+
+      let reviewSum = reviewArray.reduce((acc, val) => acc + val, 0);
+      let reviewAverage = reviewSum / reviewArray.length;
+      let reviewValue = Math.round(reviewAverage);
+      let reviewLength = reviewArray.length;
+
+      query["reviewValue"] = reviewValue;
+      query["reviewLength"] = reviewLength;
+
+      console.log(query);
+    }
+    res.render("search", { searchTerm, searchResults });
   } catch (error) {
-    console.error('Error searching for restaurants:', error);
-    res.status(500).send('Internal Server Error');
+    console.error("Error searching for restaurants:", error);
+    res.status(500).send("Internal Server Error");
   }
 });
 /*

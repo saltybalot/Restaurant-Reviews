@@ -2,16 +2,16 @@
 <html lang="en">
 
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="search_css.css" />
-    <link rel="stylesheet" href="navStyle.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="search_css.css" />
+  <link rel="stylesheet" href="navStyle.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
-    <meta name="description" content="Your description here">
+  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+  <meta name="description" content="Your description here">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     -webkit-text-size-adjust: 100%;
     -webkit-user-select: none;
@@ -35,8 +35,8 @@
         <div class="restaurant-info">
           <h3 class="restaurant-name">{{this.name}}</h3>
           <div class="restaurant-rating">
-            <img src="images/{{reviewValue}}star.png" class="star">
-            <p>{{reviewLength}} reviews</p>
+            <img src="images/{{this.reviewValue}}star.png" class="star">
+            <p>{{this.reviewLength}} reviews</p>
           </div>
           <p class="restaurant-location">Location: {{this.locations}}</p>
         </div>
