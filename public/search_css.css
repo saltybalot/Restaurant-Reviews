@@ -212,7 +212,7 @@ h2 {
 .restaurant {
   display: flex;
   margin-bottom: 30px;
-  background-color: white;
+  background-color: #ecc998;
   border: 1.5px solid black;
 }
 
