@@ -20,7 +20,16 @@ exports.registerUser = async (req, res) => {
 
   if (errors.isEmpty()) {
     const { username, password, description } = req.body;
-    const avatar = req.files.avatar;
+    var avatar;
+
+    if (!req.files || Object.keys(req.files).length === 0) {
+      avatar = {
+        name: "default.jpg",
+      };
+    } else {
+      avatar = req.files.avatar;
+      avatar.mv("public/images/" + avatar.name);
+    }
 
     try {
       const existingUser = await userModel.findOne({ username: username });
@@ -42,7 +51,6 @@ exports.registerUser = async (req, res) => {
           description: description,
           type: "reviewer",
         };
-        avatar.mv("public/images/" + avatar.name);
 
         const user = await userModel.create(newUser);
         console.log(user);
