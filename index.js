@@ -197,7 +197,7 @@ app.get("/about", isLoggedIn, async (req, res) => {
   res.render("about");
 });
 
-app.get("/search", async (req, res) => {
+app.get("/search", isLoggedIn, async (req, res) => {
   const searchTerm = req.query.search;
   try {
     const searchResults = await Restaurant.find({
