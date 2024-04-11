@@ -1,8 +1,10 @@
 body {
   margin: 0;
   font-family: Alata, sans-serif;
-  background-color: #fcedda;
+  background-color: #f1dbbd;
   font-size: 18px;
+  font-weight: bold;
+  text-align: center;
 }
 
 header {
@@ -13,7 +15,11 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 17px;
+}
+
+.npm-bg{
+  background-size: cover;
+  height: 100px;
 }
 
 .container {
@@ -22,13 +28,17 @@ header {
 }
 
 .mission-section {
-  color: #333; /* Text color for sections */
+  color: #333; 
   padding:170px 0;
 }
 
 .about-section {
-  color: #333; /* Text color for sections */
+  color: #333; 
   padding:80px 0;
+}
+
+.about-text{
+  line-height: 2;
 }
 
 .about-section h2 {
@@ -46,9 +56,10 @@ header {
 }
 
 .npmh2 {
-  color: #ee4e34; /* Heading color for sections */
+  color: #ffffff; /* Heading color for sections */
   text-align: center;
-  padding-top: 80px;
+  padding-top: 0px;
+  padding-bottom: 70px;
 }
 .img-container {
   display: flex;
@@ -127,6 +138,14 @@ header {
 .mission-section p {
   text-align: justify;
   line-height: 1.0;
+}
+
+.npm-packages{
+  margin-top: -110px;
+    background-image: url('images/abstract.png'); /* Set the background image */
+    background-size: cover; /* Ensure the image covers the entire section */
+    background-position: center; /* Center the background image */
+    padding: 30px 0; /* Add padding to the section to separate content from the background */
 }
 
 
