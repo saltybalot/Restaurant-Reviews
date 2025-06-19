@@ -1,7 +1,10 @@
 const port = process.env.PORT || 3000;
 const mongoose = require("mongoose");
+/*const connectionString =
+  process.env.DATABASE_URL || "mongodb://127.0.0.1:27017/RestaurantDB";*/
 const connectionString =
-  process.env.DATABASE_URL || "mongodb://127.0.0.1:27017/RestaurantDB";
+  "mongodb+srv://nico0223v2:XBanfrTglVYUgqM1@my-clusters.odvjyhb.mongodb.net/RestaurantDB";
+
 console.log(connectionString);
 const session = require("express-session");
 const flash = require("connect-flash");
