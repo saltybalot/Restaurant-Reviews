@@ -19,7 +19,31 @@ exports.registerUser = async (req, res) => {
   const errors = validationResult(req);
 
   if (errors.isEmpty()) {
-    const { username, password, description } = req.body;
+    const {
+      username,
+      password,
+      description,
+      securityQuestion,
+      securityAnswer,
+    } = req.body;
+
+    console.log("Registration data received:", {
+      username,
+      password: password ? "***" : "undefined",
+      description,
+      securityQuestion,
+      securityAnswer: securityAnswer ? "***" : "undefined",
+    });
+
+    // Check if required fields are present
+    if (!username || !password || !securityQuestion || !securityAnswer) {
+      req.flash(
+        "error_msg",
+        "All fields including security question and answer are required."
+      );
+      return res.redirect("/");
+    }
+
     var avatar;
 
     if (!req.files || Object.keys(req.files).length === 0) {
@@ -43,12 +67,19 @@ exports.registerUser = async (req, res) => {
         const saltRounds = 10;
         // Hash password
         const hashed = await bcrypt.hash(password, saltRounds);
+        // Hash security answer
+        const hashedAnswer = await bcrypt.hash(
+          (securityAnswer || "").toLowerCase().trim(),
+          saltRounds
+        );
 
         const newUser = {
           username: username,
           password: hashed,
           profilePic: avatar.name,
           description: description,
+          securityQuestion: securityQuestion,
+          securityAnswer: hashedAnswer,
           type: "reviewer",
         };
 
@@ -111,4 +142,151 @@ exports.logoutUser = (req, res) => {
   // Destroy the session and redirect to login page
   req.session.destroy();
   res.redirect("/");
+};
+
+exports.showForgotPassword = (req, res) => {
+  res.render("forgotPassword");
+};
+
+exports.showResetPassword = (req, res) => {
+  const username = req.session.resetUsername;
+  const securityQuestion = req.session.resetQuestion;
+
+  if (!username || !securityQuestion) {
+    req.flash("error_msg", "Session expired. Please try again.");
+    return res.redirect("/forgot-password");
+  }
+
+  res.render("resetPassword", {
+    username: username,
+    securityQuestion: securityQuestion,
+  });
+};
+
+exports.verifySecurityAnswer = async (req, res) => {
+  const { securityAnswer } = req.body;
+  const username = req.session.resetUsername;
+
+  if (!username) {
+    return res.json({ success: false, message: "Session expired" });
+  }
+
+  if (!securityAnswer) {
+    return res.json({ success: false, message: "Security answer is required" });
+  }
+
+  try {
+    const user = await userModel.findOne({ username: username });
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    // Verify security answer
+    const isAnswerCorrect = await bcrypt.compare(
+      (securityAnswer || "").toLowerCase().trim(),
+      user.securityAnswer
+    );
+
+    if (isAnswerCorrect) {
+      // Mark that the security answer has been verified
+      req.session.securityAnswerVerified = true;
+      return res.json({ success: true, message: "Security answer is correct" });
+    } else {
+      return res.json({ success: false, message: "Incorrect security answer" });
+    }
+  } catch (err) {
+    console.error("Error:", err);
+    return res.json({ success: false, message: "An error occurred" });
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  const { username } = req.body;
+
+  try {
+    const user = await userModel.findOne({ username: username });
+
+    if (!user) {
+      req.flash(
+        "error_msg",
+        "Username not found. Please check your username and try again."
+      );
+      return res.redirect("/forgot-password");
+    }
+
+    // Store username in session for the next step
+    req.session.resetUsername = username;
+    req.session.resetQuestion = user.securityQuestion;
+
+    // Redirect to reset password page instead of rendering
+    return res.redirect("/reset-password");
+  } catch (err) {
+    console.error("Error:", err);
+    req.flash("error_msg", "An error occurred. Please try again.");
+    return res.redirect("/forgot-password");
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const { newPassword, confirmPassword } = req.body;
+  const username = req.session.resetUsername;
+  const securityAnswerVerified = req.session.securityAnswerVerified;
+
+  if (!username) {
+    req.flash("error_msg", "Session expired. Please try again.");
+    return res.redirect("/forgot-password");
+  }
+
+  if (!securityAnswerVerified) {
+    req.flash("error_msg", "Please verify your security answer first.");
+    return res.redirect("/reset-password");
+  }
+
+  if (!newPassword || !confirmPassword) {
+    req.flash(
+      "error_msg",
+      "All password fields are required. Please try again."
+    );
+    return res.redirect("/reset-password");
+  }
+
+  if (newPassword !== confirmPassword) {
+    req.flash("error_msg", "Passwords do not match. Please try again.");
+    return res.redirect("/reset-password");
+  }
+
+  try {
+    const user = await userModel.findOne({ username: username });
+
+    if (!user) {
+      req.flash("error_msg", "User not found.");
+      return res.redirect("/forgot-password");
+    }
+
+    // Hash new password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    // Update user's password
+    await userModel.updateOne(
+      { username: username },
+      { password: hashedPassword }
+    );
+
+    // Clear session
+    delete req.session.resetUsername;
+    delete req.session.resetQuestion;
+    delete req.session.securityAnswerVerified;
+
+    req.flash(
+      "success_msg",
+      "Password reset successful! Please login with your new password."
+    );
+    return res.redirect("/");
+  } catch (err) {
+    console.error("Error:", err);
+    req.flash("error_msg", "An error occurred. Please try again.");
+    return res.redirect("/forgot-password");
+  }
 };

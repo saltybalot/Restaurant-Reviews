@@ -134,3 +134,42 @@ body {
   text-decoration: none;
   cursor: pointer;
 }
+
+.forgot-password-link {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.forgot-password-link a {
+  color: #ee4e34;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.forgot-password-link a:hover {
+  text-decoration: underline;
+}
+
+.securitylabel {
+  padding-top: 20px;
+  text-align: left;
+}
+
+.security-question {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.security-question label {
+  font-weight: bold;
+  color: #333;
+}
+
+.security-question p {
+  margin: 5px 0 0 0;
+  color: #666;
+  font-style: italic;
+}

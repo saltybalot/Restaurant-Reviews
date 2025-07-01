@@ -62,6 +62,9 @@
                 <label>Remember Me:<input type="checkbox" id="rememberMe" name="rememberMe"></label>
             </div>
             <button type="submit">Login Now</button>
+            <div class="forgot-password-link">
+                <a href="/forgot-password">Forgot Password?</a>
+            </div>
         </form>
     </div>
 </div>
@@ -75,12 +78,25 @@
                 required>
             <input type="password" id="registerPassword" name="password" class="textbox-border" placeholder="Password"
                 required>
-            <input type="password" id="registerPassword" name="confirmpassword" class="textbox-border"
-                placeholder="Confirm Password" required>
             <label for="avatar" class="avatarlabel">Avatar:</label>
             <input type="file" id="avatar" name="avatar" accept="image/*" class="textbox-border">
             <label for="description" class="descriptionlabel">Description:</label>
             <textarea id="description" name="description" placeholder="Optional"></textarea>
+
+            <label for="securityQuestion" class="securitylabel">Security Question:</label>
+            <select id="securityQuestion" name="securityQuestion" class="textbox-border" required>
+                <option value="">Select a security question</option>
+                <option value="What was your first pet's name?">What was your first pet's name?</option>
+                <option value="In what city were you born?">In what city were you born?</option>
+                <option value="What was your mother's maiden name?">What was your mother's maiden name?</option>
+                <option value="What was the name of your first school?">What was the name of your first school?</option>
+                <option value="What is your favorite movie?">What is your favorite movie?</option>
+                <option value="What is your favorite food?">What is your favorite food?</option>
+            </select>
+
+            <input type="text" id="securityAnswer" name="securityAnswer" class="textbox-border"
+                placeholder="Security Answer" required>
+
             <button type="submit">Register Now</button>
         </form>
     </div>
