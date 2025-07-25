@@ -101,7 +101,7 @@ exports.loginUser = async (req, res) => {
   const errors = validationResult(req);
 
   const MAX_ATTEMPTS = 5;
-  const LOCK_TIME = 15 * 60 * 1000; // 15 minutes
+  const LOCK_TIME = 2 * 60 * 1000; // 2 minutes
 
   if (errors.isEmpty()) {
     const { username, password } = req.body;
@@ -124,6 +124,13 @@ exports.loginUser = async (req, res) => {
         );
         req.flash("username", username);
         return res.redirect("/");
+      }
+
+      // Reset login attempts if lockout period has expired
+      if (user.lockUntil && user.lockUntil <= Date.now()) {
+        user.loginAttempts = 0;
+        user.lockUntil = null;
+        await user.save();
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
