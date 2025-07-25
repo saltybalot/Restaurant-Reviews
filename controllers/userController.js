@@ -74,6 +74,9 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   const errors = validationResult(req);
 
+  const MAX_ATTEMPTS = 5;
+  const LOCK_TIME = 15 * 60 * 1000; // 15 minutes
+
   if (errors.isEmpty()) {
     const { username, password } = req.body;
 
@@ -81,23 +84,51 @@ exports.loginUser = async (req, res) => {
       const user = await userModel.findOne({ username: username });
 
       if (!user) {
-        req.flash("error_msg", "Invalid credentials. Please try again.");
+        req.flash("error_msg", "Invalid Username/Password.");
+        req.flash("username", username);
+        return res.redirect("/");
+      }
+
+      // Check if account is locked
+      if (user.lockUntil && user.lockUntil > Date.now()) {
+        const minutes = Math.ceil((user.lockUntil - Date.now()) / 60000);
+        req.flash(
+          "error_msg",
+          `Account locked due to too many failed attempts. Try again in ${minutes} minute${minutes > 1 ? "s" : ""}.`
+        );
+        req.flash("username", username);
         return res.redirect("/");
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (isMatch) {
-        // Save user info to session (you'll need to set up session middleware)
+        // Reset login attempts and lockUntil on successful login
+        user.loginAttempts = 0;
+        user.lockUntil = null;
+        await user.save();
         req.session.user = user;
         req.flash("success_msg", "Login successful!");
         return res.redirect("/"); // Redirect to home or dashboard page
       } else {
-        req.flash("error_msg", "Invalid credentials. Please try again.");
+        // Increment login attempts
+        user.loginAttempts = (user.loginAttempts || 0) + 1;
+        // Lock account if max attempts reached
+        if (user.loginAttempts >= MAX_ATTEMPTS) {
+          user.lockUntil = new Date(Date.now() + LOCK_TIME);
+          await user.save();
+          req.flash("error_msg", "Account locked due to too many failed attempts. Try again later.");
+          req.flash("username", username);
+        } else {
+          await user.save();
+          req.flash("error_msg", "Invalid Username/Password.");
+          req.flash("username", username);
+        }
         return res.redirect("/");
       }
     } catch (err) {
       console.error("Error:", err);
       req.flash("error_msg", "An error occurred. Please try again.");
+      req.flash("username", username);
       return res.redirect("/");
     }
   } else {

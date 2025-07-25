@@ -79,6 +79,10 @@ app.use(express.static("public"));
 var hbs = require("hbs");
 app.set("view engine", "hbs");
 hbs.registerPartials(path.join(__dirname, "views", "partials"));
+// Register custom Handlebars helper 'contains'
+hbs.registerHelper('contains', function(str, substring) {
+  return typeof str === 'string' && str.includes(substring);
+});
 // Flash
 
 app.use("/", viewRouter);
@@ -147,6 +151,7 @@ app.get("/", isLoggedIn, async (req, res) => {
     review,
     isLoggedIn: res.locals.isLoggedIn,
     user: req.session.user,
+    username: req.flash("username")[0],
   });
 });
 

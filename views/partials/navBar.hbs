@@ -54,8 +54,15 @@
         <span class="headerclose" onclick="closeModal('loginModal')">&times;</span>
         <form id="loginForm" action="/login" method="POST">
             <h1 style="text-align: center;">Login</h1>
+            {{#if error_msg.[0]}}
+            <div class="message-overlay" status="error" style="margin-bottom:10px;">
+              <div>
+                <h6 class="red-text text-darken-2"><strong>{{error_msg.[0]}}</strong></h6>
+              </div>
+            </div>
+            {{/if}}
             <input type="text" id="loginUsername" name="username" class="textbox-border" placeholder="Username"
-                required>
+                required value="{{username}}">
             <input type="password" id="loginPassword" name="password" class="textbox-border" placeholder="Password"
                 required>
             <div class="rememberMeLabel">
@@ -86,6 +93,14 @@
     </div>
 </div>
 
+{{#if error_msg.[0]}}
+  {{#if (contains error_msg.[0] "Account locked")}}
+    <script>
+      alert("{{error_msg.[0]}}");
+    </script>
+  {{/if}}
+{{/if}}
+
 {{/if}}
 
 <script>
@@ -98,4 +113,12 @@
         var modal = document.getElementById(modalId);
         modal.style.display = "none";
     }
+
+    // Auto-open login modal if there is a login error
+    window.onload = function() {
+      var hasLoginError = {{#if error_msg}}true{{else}}false{{/if}};
+      if (hasLoginError) {
+        showModal('loginModal');
+      }
+    };
 </script>

@@ -5,6 +5,19 @@ const UserSchema = new mongoose.Schema({
   password: String,
   profilePic: String,
   description: String,
+  type: {
+    type: String,
+    enum: ['admin', 'manager', 'reviewer'],
+    default: 'reviewer'
+  },
+  loginAttempts: {
+    type: Number,
+    default: 0
+  },
+  lockUntil: {
+    type: Date,
+    default: null
+  }
 });
 
 const User = mongoose.model("User", UserSchema);
