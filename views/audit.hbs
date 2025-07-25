@@ -4,30 +4,127 @@
     <link rel="stylesheet" href="navStyle.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Review</title>
+    <title>Audit Logs</title>
+    <style>
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #eee;
+            border: none;
+            outline: none;
+            font-weight: bold;
+        }
+
+        .tab-button.active {
+            background-color: #ccc;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .audit-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .audit-table th,
+        .audit-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .audit-title {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+        }
+
+        .audit-container {
+            padding: 20px;
+        }
+    </style>
 </head>
+
 <div class="audit-container">
-    <h1 class="audit-title">Login Audit Logs</h1>
-    <table class="audit-table">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Success</th>
-                <th>Timestamp</th>
-                <th>IP Address</th>
-                <th>Error Message</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each audits}}
-            <tr>
-                <td>{{this.username}}</td>
-                <td>{{#if this.success}}✅{{else}}❌{{/if}}</td>
-                <td>{{formatDate this.timestamp}}</td>
-                <td>{{this.ip}}</td>
-                <td>{{this.errorMessage}}</td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
-</div>
+    <h1 class="audit-title">Audit Logs</h1>
+
+    <div class="tab-buttons">
+        <button class="tab-button active" onclick="toggleTab('loginLogs')">Login Logs</button>
+        <button class="tab-button" onclick="toggleTab('accessLogs')">Access Control Logs</button>
+    </div>
+
+    <!-- Login Logs Tab -->
+    <div id="loginLogs" class="tab-content active">
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Success</th>
+                    <th>Timestamp</th>
+                    <th>IP Address</th>
+                    <th>Error Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each audits}}
+                <tr>
+                    <td>{{this.username}}</td>
+                    <td>{{#if this.success}}✅{{else}}❌{{/if}}</td>
+                    <td>{{formatDate this.timestamp}}</td>
+                    <td>{{this.ip}}</td>
+                    <td>{{this.errorMessage}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Access Control Logs Tab -->
+    <div id="accessLogs" class="tab-content">
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Path</th>
+                    <th>Method</th>
+                    <th>IP Address</th>
+                    <th>Reason</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each accessLogs}}
+                <tr>
+                    <td>{{this.username}}</td>
+                    <td>{{this.attemptedPath}}</td>
+                    <td>{{this.method}}</td>
+                    <td>{{this.ip}}</td>
+                    <td>{{this.reason}}</td>
+                    <td>{{formatDate this.timestamp}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function toggleTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(div => {
+                div.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>

@@ -6,7 +6,7 @@ const { validationResult } = require("express-validator");
 // Password complexity check function
 function isPasswordComplex(password) {
   return (
-    typeof password === 'string' &&
+    typeof password === "string" &&
     password.length >= 8 &&
     /[a-z]/.test(password) &&
     /[A-Z]/.test(password) &&
@@ -137,7 +137,6 @@ exports.loginUser = async (req, res) => {
   const MAX_ATTEMPTS = 5;
   const LOCK_TIME = 2 * 60 * 1000; // 2 minutes
 
-
   if (errors.isEmpty()) {
     const { username, password } = req.body;
 
@@ -163,7 +162,9 @@ exports.loginUser = async (req, res) => {
         const minutes = Math.ceil((user.lockUntil - Date.now()) / 60000);
         req.flash(
           "error_msg",
-          `Account locked due to too many failed attempts. Try again in ${minutes} minute${minutes > 1 ? "s" : ""}.`
+          `Account locked due to too many failed attempts. Try again in ${minutes} minute${
+            minutes > 1 ? "s" : ""
+          }.`
         );
         req.flash("username", username);
         return res.redirect("/");
@@ -201,14 +202,16 @@ exports.loginUser = async (req, res) => {
           errorMessage: "Incorrect password",
         });
         console.log("Logged failed login: incorrect password");
-        req.flash("error_msg", "Invalid credentials. Please try again.");
         // Increment login attempts
         user.loginAttempts = (user.loginAttempts || 0) + 1;
         // Lock account if max attempts reached
         if (user.loginAttempts >= MAX_ATTEMPTS) {
           user.lockUntil = new Date(Date.now() + LOCK_TIME);
           await user.save();
-          req.flash("error_msg", "Account locked due to too many failed attempts. Try again later.");
+          req.flash(
+            "error_msg",
+            "Account locked due to too many failed attempts. Try again later."
+          );
           req.flash("username", username);
         } else {
           await user.save();

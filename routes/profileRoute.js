@@ -7,6 +7,7 @@ const Reply = require("../database/models/Reply");
 const router = Router();
 const { isLoggedIn } = require("../index");
 const LoginAudit = require("../database/models/Loginaudit");
+const AccessControlLog = require("../database/models/AccessControlLog");
 
 /**
  * This is for rendering the PROFILE page
@@ -137,10 +138,18 @@ router.post("/editProfile", async (req, res) => {
 });
 
 // Middleware to check admin
-function isAdmin(req, res, next) {
+async function isAdmin(req, res, next) {
   if (req.session.user && req.session.user.type === "admin") {
     return next();
   }
+  // Log access control failure
+  await AccessControlLog.create({
+    username: req.session.user ? req.session.user.username : "Guest",
+    attemptedPath: req.originalUrl,
+    method: req.method,
+    ip: req.headers["x-forwarded-for"] || req.connection.remoteAddress,
+    reason: "Not an admin",
+  });
   res.status(403).send("Forbidden: Admins only");
 }
 
@@ -148,7 +157,10 @@ function isAdmin(req, res, next) {
 router.get("/audit", isAdmin, async (req, res) => {
   try {
     const audits = await LoginAudit.find({}).sort({ timestamp: -1 }).limit(100);
-    res.render("audit", { audits });
+    const accessLogs = await AccessControlLog.find({})
+      .sort({ timestamp: -1 })
+      .limit(100);
+    res.render("audit", { audits, accessLogs });
   } catch (err) {
     res.status(500).send("Error loading audit logs");
   }
