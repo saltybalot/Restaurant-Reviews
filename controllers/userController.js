@@ -2,6 +2,18 @@ const bcrypt = require("bcryptjs");
 const userModel = require("../database/models/User");
 const { validationResult } = require("express-validator");
 
+// Password complexity check function
+function isPasswordComplex(password) {
+  return (
+    typeof password === 'string' &&
+    password.length >= 8 &&
+    /[a-z]/.test(password) &&
+    /[A-Z]/.test(password) &&
+    /[0-9]/.test(password) &&
+    /[^A-Za-z0-9]/.test(password)
+  );
+}
+
 exports.registerUser = async (req, res) => {
   // 1. Validate request
 
@@ -22,6 +34,17 @@ exports.registerUser = async (req, res) => {
     const { username, password, description } = req.body;
     var avatar;
 
+    // Password complexity check
+    if (!isPasswordComplex(password)) {
+      req.flash(
+        "error_msg",
+        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+      );
+      req.flash("username", username);
+      req.flash("showRegister", "true");
+      return res.redirect("/");
+    }
+
     if (!req.files || Object.keys(req.files).length === 0) {
       avatar = {
         name: "default.jpg",
@@ -38,6 +61,7 @@ exports.registerUser = async (req, res) => {
         console.log(existingUser);
         // Found a match, return to login with error
         req.flash("error_msg", "User already exists. Please login.");
+        req.flash("showRegister", "true");
         return res.redirect("/");
       } else {
         const saltRounds = 10;
@@ -60,6 +84,7 @@ exports.registerUser = async (req, res) => {
     } catch (err) {
       console.error("Error:", err);
       req.flash("error_msg", "An error occurred. Please try again.");
+      req.flash("showRegister", "true");
       return res.redirect("/");
     }
   } else {
@@ -67,6 +92,7 @@ exports.registerUser = async (req, res) => {
     console.log(messages);
 
     req.flash("error_msg", messages.join(" "));
+    req.flash("showRegister", "true");
     return res.redirect("/");
   }
 };

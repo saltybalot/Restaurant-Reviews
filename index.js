@@ -152,6 +152,7 @@ app.get("/", isLoggedIn, async (req, res) => {
     isLoggedIn: res.locals.isLoggedIn,
     user: req.session.user,
     username: req.flash("username")[0],
+    showRegister: req.flash("showRegister")[0],
   });
 });
 

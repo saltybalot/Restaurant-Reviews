@@ -117,7 +117,10 @@
     // Auto-open login modal if there is a login error
     window.onload = function() {
       var hasLoginError = {{#if error_msg}}true{{else}}false{{/if}};
-      if (hasLoginError) {
+      var showRegister = {{#if showRegister}}true{{else}}false{{/if}};
+      if (showRegister) {
+        showModal('registerModal');
+      } else if (hasLoginError) {
         showModal('loginModal');
       }
     };
