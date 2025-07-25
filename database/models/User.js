@@ -7,6 +7,11 @@ const UserSchema = new mongoose.Schema({
   description: String,
   securityQuestion: String,
   securityAnswer: String,
+  type: {
+    type: String,
+    enum: ["admin", "reviewer", "establishment"],
+    default: "reviewer",
+  },
 });
 
 const User = mongoose.model("User", UserSchema);
