@@ -3,6 +3,18 @@ const userModel = require("../database/models/User");
 const LoginAudit = require("../database/models/Loginaudit");
 const { validationResult } = require("express-validator");
 
+// Password complexity check function
+function isPasswordComplex(password) {
+  return (
+    typeof password === 'string' &&
+    password.length >= 8 &&
+    /[a-z]/.test(password) &&
+    /[A-Z]/.test(password) &&
+    /[0-9]/.test(password) &&
+    /[^A-Za-z0-9]/.test(password)
+  );
+}
+
 exports.registerUser = async (req, res) => {
   // 1. Validate request
 
@@ -47,6 +59,17 @@ exports.registerUser = async (req, res) => {
 
     var avatar;
 
+    // Password complexity check
+    if (!isPasswordComplex(password)) {
+      req.flash(
+        "error_msg",
+        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+      );
+      req.flash("username", username);
+      req.flash("showRegister", "true");
+      return res.redirect("/");
+    }
+
     if (!req.files || Object.keys(req.files).length === 0) {
       avatar = {
         name: "default.jpg",
@@ -63,6 +86,7 @@ exports.registerUser = async (req, res) => {
         console.log(existingUser);
         // Found a match, return to login with error
         req.flash("error_msg", "User already exists. Please login.");
+        req.flash("showRegister", "true");
         return res.redirect("/");
       } else {
         const saltRounds = 10;
@@ -92,6 +116,7 @@ exports.registerUser = async (req, res) => {
     } catch (err) {
       console.error("Error:", err);
       req.flash("error_msg", "An error occurred. Please try again.");
+      req.flash("showRegister", "true");
       return res.redirect("/");
     }
   } else {
@@ -99,6 +124,7 @@ exports.registerUser = async (req, res) => {
     console.log(messages);
 
     req.flash("error_msg", messages.join(" "));
+    req.flash("showRegister", "true");
     return res.redirect("/");
   }
 };
@@ -108,6 +134,9 @@ exports.loginUser = async (req, res) => {
 
   // Get IP address
   const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  const MAX_ATTEMPTS = 5;
+  const LOCK_TIME = 2 * 60 * 1000; // 2 minutes
+
 
   if (errors.isEmpty()) {
     const { username, password } = req.body;
@@ -124,13 +153,35 @@ exports.loginUser = async (req, res) => {
           errorMessage: "User not found",
         });
         console.log("Logged failed login: user not found");
-        req.flash("error_msg", "Invalid credentials. Please try again.");
+        req.flash("error_msg", "Invalid Username/Password.");
+        req.flash("username", username);
         return res.redirect("/");
+      }
+
+      // Check if account is locked
+      if (user.lockUntil && user.lockUntil > Date.now()) {
+        const minutes = Math.ceil((user.lockUntil - Date.now()) / 60000);
+        req.flash(
+          "error_msg",
+          `Account locked due to too many failed attempts. Try again in ${minutes} minute${minutes > 1 ? "s" : ""}.`
+        );
+        req.flash("username", username);
+        return res.redirect("/");
+      }
+
+      // Reset login attempts if lockout period has expired
+      if (user.lockUntil && user.lockUntil <= Date.now()) {
+        user.loginAttempts = 0;
+        user.lockUntil = null;
+        await user.save();
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (isMatch) {
-        // Save user info to session (you'll need to set up session middleware)
+        // Reset login attempts and lockUntil on successful login
+        user.loginAttempts = 0;
+        user.lockUntil = null;
+        await user.save();
         req.session.user = user;
         console.log("Attempting to log successful login");
         await LoginAudit.create({
@@ -151,6 +202,19 @@ exports.loginUser = async (req, res) => {
         });
         console.log("Logged failed login: incorrect password");
         req.flash("error_msg", "Invalid credentials. Please try again.");
+        // Increment login attempts
+        user.loginAttempts = (user.loginAttempts || 0) + 1;
+        // Lock account if max attempts reached
+        if (user.loginAttempts >= MAX_ATTEMPTS) {
+          user.lockUntil = new Date(Date.now() + LOCK_TIME);
+          await user.save();
+          req.flash("error_msg", "Account locked due to too many failed attempts. Try again later.");
+          req.flash("username", username);
+        } else {
+          await user.save();
+          req.flash("error_msg", "Invalid Username/Password.");
+          req.flash("username", username);
+        }
         return res.redirect("/");
       }
     } catch (err) {
@@ -164,6 +228,7 @@ exports.loginUser = async (req, res) => {
       });
       console.log("Logged failed login: error occurred");
       req.flash("error_msg", "An error occurred. Please try again.");
+      req.flash("username", username);
       return res.redirect("/");
     }
   } else {
