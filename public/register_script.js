@@ -1,28 +1,36 @@
-/*
 function login() {
   var username = document.getElementById("loginUsername").value;
   var password = document.getElementById("loginPassword").value;
   var rememberMe = document.getElementById("rememberMe").checked;
-  var sampleData = [
-    { username: "Peter", password: "Parker" },
-    { username: "Donna", password: "Martinez" },
-    { username: "Futaba", password: "Sakura" },
-    { username: "Macie", password: "Adams" },
-    { username: "Patricia", password: "Thomas" },
-  ];
-  var isValidCredentials = sampleData.some(function (data) {
-    return data.username === username && data.password === password;
-  });
 
-  if (isValidCredentials) {
-    alert("Login successful!");
-    if (rememberMe) {
-      setRememberMeCookie();
-    }
-    window.location.href = "FrontPageLoggedIn.html";
-  } else {
-    alert("Invalid username or password. Please try again.");
+  if (!username || !password) {
+    alert("Please enter both username and password.");
+    return;
   }
+
+  var formData = new FormData();
+  formData.append("username", username);
+  formData.append("password", password);
+
+  fetch("/login", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => {
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
+        return response.text();
+      }
+    })
+    .then((data) => {
+      if (data) {
+        console.log(data);
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 }
 
 function register() {
@@ -30,15 +38,46 @@ function register() {
   var password = document.getElementById("registerPassword").value;
   var avatarFile = document.getElementById("avatar").files[0];
   var description = document.getElementById("description").value;
-  if (username && password && avatarFile) {
-    alert("Registration successful!\nAvatar File: " + avatarFile.name);
-    closeModal("registerModal");
+  var securityQuestion = document.getElementById("securityQuestion").value;
+  var securityAnswer = document.getElementById("securityAnswer").value;
+
+  if (username && password && securityQuestion && securityAnswer) {
+    var formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("description", description);
+    formData.append("securityQuestion", securityQuestion);
+    formData.append("securityAnswer", securityAnswer);
+
+    if (avatarFile) {
+      formData.append("avatar", avatarFile);
+    }
+
+    fetch("/register", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (response.redirected) {
+          window.location.href = response.url;
+        } else {
+          return response.text();
+        }
+      })
+      .then((data) => {
+        if (data) {
+          console.log(data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   } else {
     alert(
-      "Please enter a valid username, password, and select an avatar file."
+      "Please fill in all required fields including security question and answer."
     );
   }
-}*/
+}
 
 var reviewBodyClass = document.querySelectorAll(".review-body");
 
@@ -51,3 +90,21 @@ reviewBodyClass.forEach((body) => {
     body.textContent = text.substring(0, maxLength) + "...";
   }
 });
+
+function showModal(modalId) {
+  document.getElementById(modalId).style.display = "block";
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = "none";
+}
+
+// Close modal when clicking outside of it
+window.onclick = function (event) {
+  var modals = document.getElementsByClassName("modal");
+  for (var i = 0; i < modals.length; i++) {
+    if (event.target == modals[i]) {
+      modals[i].style.display = "none";
+    }
+  }
+};

@@ -20,6 +20,13 @@ router.get("/register", async (req, res) => {
 router.post("/register", registerValidation, userController.registerUser);
 router.post("/login", userController.loginUser);
 
+// Forgot password routes
+router.get("/forgot-password", userController.showForgotPassword);
+router.post("/forgot-password", userController.forgotPassword);
+router.get("/reset-password", userController.showResetPassword);
+router.post("/verify-security-answer", userController.verifySecurityAnswer);
+router.post("/reset-password", userController.resetPassword);
+
 // logout
 router.get("/logout", userController.logoutUser);
 

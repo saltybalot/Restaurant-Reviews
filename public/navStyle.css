@@ -198,6 +198,26 @@
   text-align: left;
 }
 
+.securitylabel {
+  padding-top: 20px;
+  text-align: left;
+}
+
+.forgot-password-link {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.forgot-password-link a {
+  color: #ee4e34;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.forgot-password-link a:hover {
+  text-decoration: underline;
+}
+
 .overlay {
   display: none;
   position: fixed;

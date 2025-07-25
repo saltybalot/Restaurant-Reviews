@@ -77,6 +77,16 @@ app.use(express.static("public"));
 
 /* We'll use handlebars for this one */
 var hbs = require("hbs");
+// Register 'eq' helper for Handlebars
+hbs.registerHelper("eq", function (a, b) {
+  return a === b;
+});
+hbs.registerHelper("formatDate", function (date) {
+  if (!date) return "";
+  const d = new Date(date);
+  const pad = (n) => (n < 10 ? "0" + n : n);
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+});
 app.set("view engine", "hbs");
 hbs.registerPartials(path.join(__dirname, "views", "partials"));
 // Register custom Handlebars helper 'contains'
