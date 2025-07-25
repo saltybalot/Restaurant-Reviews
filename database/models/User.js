@@ -12,19 +12,14 @@ const UserSchema = new mongoose.Schema({
     enum: ["admin", "reviewer", "establishment"],
     default: "reviewer",
   },
-  type: {
-    type: String,
-    enum: ['admin', 'manager', 'reviewer'],
-    default: 'reviewer'
-  },
   loginAttempts: {
     type: Number,
-    default: 0
+    default: 0,
   },
   lockUntil: {
     type: Date,
-    default: null
-  }
+    default: null,
+  },
 });
 
 const User = mongoose.model("User", UserSchema);
