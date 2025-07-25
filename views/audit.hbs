@@ -1,0 +1,33 @@
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="FrontPageIndex.css" />
+    <link rel="stylesheet" href="navStyle.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Review</title>
+</head>
+<div class="audit-container">
+    <h1 class="audit-title">Login Audit Logs</h1>
+    <table class="audit-table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Success</th>
+                <th>Timestamp</th>
+                <th>IP Address</th>
+                <th>Error Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each audits}}
+            <tr>
+                <td>{{this.username}}</td>
+                <td>{{#if this.success}}✅{{else}}❌{{/if}}</td>
+                <td>{{formatDate this.timestamp}}</td>
+                <td>{{this.ip}}</td>
+                <td>{{this.errorMessage}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

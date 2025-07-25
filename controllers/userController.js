@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const userModel = require("../database/models/User");
+const LoginAudit = require("../database/models/Loginaudit");
 const { validationResult } = require("express-validator");
 
 exports.registerUser = async (req, res) => {
@@ -80,7 +81,7 @@ exports.registerUser = async (req, res) => {
           description: description,
           securityQuestion: securityQuestion,
           securityAnswer: hashedAnswer,
-          type: "reviewer",
+          type: req.body.type || "reviewer",
         };
 
         const user = await userModel.create(newUser);
@@ -105,6 +106,9 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   const errors = validationResult(req);
 
+  // Get IP address
+  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+
   if (errors.isEmpty()) {
     const { username, password } = req.body;
 
@@ -112,6 +116,14 @@ exports.loginUser = async (req, res) => {
       const user = await userModel.findOne({ username: username });
 
       if (!user) {
+        console.log("Attempting to log failed login: user not found");
+        await LoginAudit.create({
+          username,
+          success: false,
+          ip,
+          errorMessage: "User not found",
+        });
+        console.log("Logged failed login: user not found");
         req.flash("error_msg", "Invalid credentials. Please try again.");
         return res.redirect("/");
       }
@@ -120,19 +132,50 @@ exports.loginUser = async (req, res) => {
       if (isMatch) {
         // Save user info to session (you'll need to set up session middleware)
         req.session.user = user;
+        console.log("Attempting to log successful login");
+        await LoginAudit.create({
+          username,
+          success: true,
+          ip,
+        });
+        console.log("Logged successful login");
         req.flash("success_msg", "Login successful!");
         return res.redirect("/"); // Redirect to home or dashboard page
       } else {
+        console.log("Attempting to log failed login: incorrect password");
+        await LoginAudit.create({
+          username,
+          success: false,
+          ip,
+          errorMessage: "Incorrect password",
+        });
+        console.log("Logged failed login: incorrect password");
         req.flash("error_msg", "Invalid credentials. Please try again.");
         return res.redirect("/");
       }
     } catch (err) {
       console.error("Error:", err);
+      console.log("Attempting to log failed login: error occurred");
+      await LoginAudit.create({
+        username: req.body.username,
+        success: false,
+        ip,
+        errorMessage: err.message,
+      });
+      console.log("Logged failed login: error occurred");
       req.flash("error_msg", "An error occurred. Please try again.");
       return res.redirect("/");
     }
   } else {
     const messages = errors.array().map((item) => item.msg);
+    console.log("Attempting to log failed login: validation error");
+    await LoginAudit.create({
+      username: req.body.username,
+      success: false,
+      ip,
+      errorMessage: messages.join(" "),
+    });
+    console.log("Logged failed login: validation error");
     req.flash("error_msg", messages.join(" "));
     return res.redirect("/");
   }

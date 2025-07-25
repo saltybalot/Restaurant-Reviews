@@ -6,6 +6,7 @@ const User = require("../database/models/User");
 const Reply = require("../database/models/Reply");
 const router = Router();
 const { isLoggedIn } = require("../index");
+const LoginAudit = require("../database/models/Loginaudit");
 
 /**
  * This is for rendering the PROFILE page
@@ -133,6 +134,24 @@ router.post("/editProfile", async (req, res) => {
 
   console.log(updatedUser);
   res.redirect("/profile?user=" + user.username);
+});
+
+// Middleware to check admin
+function isAdmin(req, res, next) {
+  if (req.session.user && req.session.user.type === "admin") {
+    return next();
+  }
+  res.status(403).send("Forbidden: Admins only");
+}
+
+// Audit log page for admins
+router.get("/audit", isAdmin, async (req, res) => {
+  try {
+    const audits = await LoginAudit.find({}).sort({ timestamp: -1 }).limit(100);
+    res.render("audit", { audits });
+  } catch (err) {
+    res.status(500).send("Error loading audit logs");
+  }
 });
 
 module.exports = router;

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="register_css.css">
+    <title>Admin Registration - Restaurant Review Web Application</title>
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Register New Admin</h2>
+        <div id="adminRegisterModal" class="modal" style="display:block;">
+            <div class="modal-content2">
+                <form id="adminRegisterForm">
+                    <h1>Admin Registration</h1>
+                    <input type="text" id="adminRegisterUsername" name="username" class="textbox-border"
+                        placeholder="Username" required>
+                    <input type="password" id="adminRegisterPassword" name="password" class="textbox-border"
+                        placeholder="Password" required>
+                    <label for="adminAvatar" class="avatarlabel">Avatar:</label>
+                    <input type="file" id="adminAvatar" name="avatar" accept="image/*" class="textbox-border">
+                    <label for="adminDescription" class="descriptionlabel">Description:</label>
+                    <textarea id="adminDescription" name="description" placeholder="Optional"></textarea>
+                    <label for="adminSecurityQuestion" class="securitylabel">Security Question:</label>
+                    <select id="adminSecurityQuestion" name="securityQuestion" class="textbox-border" required>
+                        <option value="">Select a security question</option>
+                        <option value="What was your first pet's name?">What was your first pet's name?</option>
+                        <option value="In what city were you born?">In what city were you born?</option>
+                        <option value="What was your mother's maiden name?">What was your mother's maiden name?</option>
+                        <option value="What was the name of your first school?">What was the name of your first school?
+                        </option>
+                        <option value="What is your favorite movie?">What is your favorite movie?</option>
+                        <option value="What is your favorite food?">What is your favorite food?</option>
+                    </select>
+                    <input type="text" id="adminSecurityAnswer" name="securityAnswer" class="textbox-border"
+                        placeholder="Security Answer" required>
+                    <button type="button" onclick="registerAdmin()">Register Admin</button>
+                </form>
+            </div>
+        </div>
+        <script src="register_script.js"></script>
+        <script>
+            // Admin registration function
+            function registerAdmin() {
+                var username = document.getElementById("adminRegisterUsername").value;
+                var password = document.getElementById("adminRegisterPassword").value;
+                var avatarFile = document.getElementById("adminAvatar").files[0];
+                var description = document.getElementById("adminDescription").value;
+                var securityQuestion = document.getElementById("adminSecurityQuestion").value;
+                var securityAnswer = document.getElementById("adminSecurityAnswer").value;
+
+                if (username && password && securityQuestion && securityAnswer) {
+                    var formData = new FormData();
+                    formData.append("username", username);
+                    formData.append("password", password);
+                    formData.append("description", description);
+                    formData.append("securityQuestion", securityQuestion);
+                    formData.append("securityAnswer", securityAnswer);
+                    formData.append("type", "admin"); // Set type to admin
+
+                    if (avatarFile) {
+                        formData.append("avatar", avatarFile);
+                    }
+
+                    fetch("/register", {
+                        method: "POST",
+                        body: formData,
+                    })
+                        .then((response) => {
+                            if (response.redirected) {
+                                window.location.href = response.url;
+                            } else {
+                                return response.text();
+                            }
+                        })
+                        .then((data) => {
+                            if (data) {
+                                console.log(data);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                        });
+                } else {
+                    alert(
+                        "Please fill in all required fields including security question and answer."
+                    );
+                }
+            }
+        </script>
+</body>
+
+</html>
