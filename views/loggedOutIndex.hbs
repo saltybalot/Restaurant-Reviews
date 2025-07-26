@@ -14,6 +14,65 @@
 
 {{>navBar}}
 
+{{#if showPasswordResetAlert}}
+<script>
+  // Show success alert for password reset
+  alert("Password reset successful! Your password has been updated.");
+</script>
+{{/if}}
+
+{{#if showLastLoginModal}}
+<!-- Last Login Modal -->
+<div id="lastLoginModal" class="modal-overlay">
+  <div class="last-login-modal-content">
+    <div class="modal-header">
+      <h3>Welcome Back!</h3>
+      <button class="modal-close" onclick="closeLastLoginModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      {{#if lastLoginInfo.isFirstLogin}}
+        <p>This appears to be your first login. Welcome to Restaurant Reviews!</p>
+      {{else}}
+        <p><strong>Last Login Activity:</strong></p>
+        <div class="login-info">
+          <p><strong>Last login attempt:</strong> {{formatDate lastLoginInfo.timestamp}}</p>
+          <p><strong>Status:</strong> 
+            {{#if lastLoginInfo.success}}
+              <span style="color: #28a745; font-weight: bold;">✓ Successful</span>
+            {{else}}
+              <span style="color: #dc3545; font-weight: bold;">✗ Unsuccessful</span>
+            {{/if}}
+          </p>
+          {{#if lastLoginInfo.errorMessage}}
+            <p><strong>Error:</strong> {{lastLoginInfo.errorMessage}}</p>
+          {{/if}}
+        </div>
+      {{/if}}
+    </div>
+    <div class="modal-footer">
+      <button class="modal-button" onclick="closeLastLoginModal()">Continue</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Show last login modal
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('lastLoginModal');
+    if (modal) {
+      modal.style.display = 'flex';
+    }
+  });
+
+  function closeLastLoginModal() {
+    const modal = document.getElementById('lastLoginModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+  }
+</script>
+{{/if}}
+
 <main class="main">
     <section class="top-section">
         <h2 class="section-title">Cuisines</h2>

@@ -233,6 +233,23 @@ exports.loginUser = async (req, res) => {
         user.lockUntil = null;
         await user.save();
         req.session.user = user;
+        
+        // Get last login information (successful or unsuccessful)
+        const lastLoginAudit = await LoginAudit.findOne(
+          { username: username },
+          {},
+          { sort: { timestamp: -1 }, skip: 1 }
+        );
+        
+        // Store last login info in session for modal display
+        req.session.lastLoginInfo = {
+          timestamp: lastLoginAudit ? lastLoginAudit.timestamp : null,
+          ip: lastLoginAudit ? lastLoginAudit.ip : null,
+          success: lastLoginAudit ? lastLoginAudit.success : null,
+          errorMessage: lastLoginAudit ? lastLoginAudit.errorMessage : null,
+          isFirstLogin: !lastLoginAudit
+        };
+        
         console.log("Attempting to log successful login");
         await LoginAudit.create({
           username,
@@ -311,6 +328,8 @@ exports.showForgotPassword = (req, res) => {
 exports.showResetPassword = (req, res) => {
   const username = req.session.resetUsername;
   const securityQuestion = req.session.resetQuestion;
+  const securityAnswerVerified = req.session.securityAnswerVerified;
+  const errorParam = req.query.error;
 
   if (!username || !securityQuestion) {
     req.flash("error_msg", "Session expired. Please try again.");
@@ -320,6 +339,8 @@ exports.showResetPassword = (req, res) => {
   res.render("resetPassword", {
     username: username,
     securityQuestion: securityQuestion,
+    showPreviousPasswordAlert: errorParam === 'previous_password',
+    securityAnswerVerified: securityAnswerVerified,
   });
 };
 
@@ -443,8 +464,8 @@ exports.resetPassword = async (req, res) => {
     // Check if new password exists in password history
     const isInHistory = await isPasswordInHistory(user, newPassword);
     if (isInHistory) {
-      req.flash("error_msg", "New password cannot be the same as any of your previous passwords. Please choose a different password.");
-      return res.redirect("/reset-password");
+      // Redirect with error parameter for alert
+      return res.redirect("/reset-password?error=previous_password");
     }
 
     // Update user's password with history tracking
@@ -456,13 +477,8 @@ exports.resetPassword = async (req, res) => {
     delete req.session.resetQuestion;
     delete req.session.securityAnswerVerified;
 
-    console.log("Setting success flash message...");
-    req.flash(
-      "success_msg",
-      "Password reset successful"
-    );
-    console.log("Flash message set, redirecting to /");
-    return res.redirect("/");
+    // Redirect to home page with success parameter
+    res.redirect("/?success=password_reset");
   } catch (err) {
     console.error("Error:", err);
     req.flash("error_msg", "An error occurred. Please try again.");
