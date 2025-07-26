@@ -1,4 +1,19 @@
-<script> console.log("hello")</script>
+<script>
+  // Auto-hide success messages after 5 seconds
+  document.addEventListener('DOMContentLoaded', function() {
+    const successMessages = document.querySelectorAll('.message-overlay[status="success"]');
+    successMessages.forEach(function(message) {
+      setTimeout(function() {
+        message.style.animation = 'slideOutUp 0.5s ease-out';
+        setTimeout(function() {
+          message.remove();
+        }, 500);
+      }, 5000);
+    });
+  });
+</script>
+
+<!-- Messages partial loaded -->
 {{#if error_msg}}
 <div class="message-overlay" status="error">
   <div>
@@ -10,6 +25,7 @@
 {{#if success_msg}}
 <div class="message-overlay" status="success">
   <div>
+    <button class="close-message" onclick="this.parentElement.parentElement.remove()">&times;</button>
     <h6 class="green-text text-darken-2"><strong>{{success_msg}}</strong></h6>
   </div>
 </div>

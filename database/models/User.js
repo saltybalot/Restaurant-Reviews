@@ -20,6 +20,17 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
+  passwordHistory: [{
+    password: String,
+    changedAt: {
+      type: Date,
+      default: Date.now
+    }
+  }],
+  passwordHistoryLimit: {
+    type: Number,
+    default: 5  // Keep last 5 passwords
+  }
 });
 
 const User = mongoose.model("User", UserSchema);

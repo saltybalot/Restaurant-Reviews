@@ -15,6 +15,53 @@ function isPasswordComplex(password) {
   );
 }
 
+// Check if password exists in user's password history
+async function isPasswordInHistory(user, newPassword) {
+  if (!user.passwordHistory || user.passwordHistory.length === 0) {
+    return false;
+  }
+  
+  for (const historyEntry of user.passwordHistory) {
+    const isMatch = await bcrypt.compare(newPassword, historyEntry.password);
+    if (isMatch) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// Update user's password and maintain password history
+async function updatePasswordWithHistory(user, newPassword) {
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+  
+  // Add current password to history before updating
+  if (user.password) {
+    const historyEntry = {
+      password: user.password,
+      changedAt: new Date()
+    };
+    
+    // Add to history array
+    if (!user.passwordHistory) {
+      user.passwordHistory = [];
+    }
+    
+    user.passwordHistory.push(historyEntry);
+    
+    // Keep only the last N passwords (default 5)
+    const limit = user.passwordHistoryLimit || 5;
+    if (user.passwordHistory.length > limit) {
+      user.passwordHistory = user.passwordHistory.slice(-limit);
+    }
+  }
+  
+  // Update current password
+  user.password = hashedPassword;
+  
+  return user;
+}
+
 exports.registerUser = async (req, res) => {
   // 1. Validate request
 
@@ -106,6 +153,8 @@ exports.registerUser = async (req, res) => {
           securityQuestion: securityQuestion,
           securityAnswer: hashedAnswer,
           type: req.body.type || "reviewer",
+          passwordHistory: [], // Initialize empty password history
+          passwordHistoryLimit: 5 // Set default history limit
         };
 
         const user = await userModel.create(newUser);
@@ -367,37 +416,56 @@ exports.resetPassword = async (req, res) => {
     return res.redirect("/reset-password");
   }
 
+  // Password complexity check
+  if (!isPasswordComplex(newPassword)) {
+    req.flash(
+      "error_msg",
+      "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+    );
+    return res.redirect("/reset-password");
+  }
+
   try {
     const user = await userModel.findOne({ username: username });
 
     if (!user) {
-      req.flash("error_msg", "User not found.");
-      return res.redirect("/forgot-password");
+      req.flash("error_msg", "User not found. Please try again.");
+      return res.redirect("/reset-password");
     }
 
-    // Hash new password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    // Check if new password is the same as current password
+    const isSamePassword = await bcrypt.compare(newPassword, user.password);
+    if (isSamePassword) {
+      req.flash("error_msg", "New password cannot be the same as your current password. Please choose a different password.");
+      return res.redirect("/reset-password");
+    }
 
-    // Update user's password
-    await userModel.updateOne(
-      { username: username },
-      { password: hashedPassword }
-    );
+    // Check if new password exists in password history
+    const isInHistory = await isPasswordInHistory(user, newPassword);
+    if (isInHistory) {
+      req.flash("error_msg", "New password cannot be the same as any of your previous passwords. Please choose a different password.");
+      return res.redirect("/reset-password");
+    }
+
+    // Update user's password with history tracking
+    const updatedUser = await updatePasswordWithHistory(user, newPassword);
+    await updatedUser.save();
 
     // Clear session
     delete req.session.resetUsername;
     delete req.session.resetQuestion;
     delete req.session.securityAnswerVerified;
 
+    console.log("Setting success flash message...");
     req.flash(
       "success_msg",
-      "Password reset successful! Please login with your new password."
+      "Password reset successful"
     );
+    console.log("Flash message set, redirecting to /");
     return res.redirect("/");
   } catch (err) {
     console.error("Error:", err);
     req.flash("error_msg", "An error occurred. Please try again.");
-    return res.redirect("/forgot-password");
+    return res.redirect("/reset-password");
   }
 };

@@ -37,12 +37,6 @@ app.use(
 );
 
 app.use(flash());
-// Global messages vars
-app.use((req, res, next) => {
-  res.locals.success_msg = req.flash("success_msg");
-  res.locals.error_msg = req.flash("error_msg");
-  next();
-});
 
 function isLoggedIn(req, res, next) {
   if (req.session && req.session.user) {
@@ -126,6 +120,8 @@ findRatings();
  */
 
 app.get("/", isLoggedIn, async (req, res) => {
+  res.locals.success_msg = req.flash("success_msg")[0] || null;
+  res.locals.error_msg = req.flash("error_msg")[0] || null;
   //temporarily adding toDate field to sort
   req.session.isAuth = true;
   const review = await Review.aggregate([
@@ -199,9 +195,10 @@ app.get("/loggedIn", async (req, res) => {
   const user = await Review.find({}).populate("userId");
   console.log(review);
 
-  const message = req.flash();
-
-  res.render("index", { review, message });
+  console.log("Rendering index page");
+  console.log("Success message:", res.locals.success_msg);
+  console.log("Error message:", res.locals.error_msg);
+  res.render("index", { review });
 });
 
 /**
