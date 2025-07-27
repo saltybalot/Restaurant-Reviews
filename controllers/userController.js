@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const userModel = require("../database/models/User");
 const LoginAudit = require("../database/models/Loginaudit");
+const DataValidationLog = require("../database/models/DataValidationLog");
 const { validationResult } = require("express-validator");
 
 // Password complexity check function
@@ -63,23 +64,18 @@ async function updatePasswordWithHistory(user, newPassword) {
 }
 
 exports.registerUser = async (req, res) => {
-  // Check if this is an admin registration request
   const isAdminRegistration = req.body.type === "admin";
-
-  // 1. Validate request
-
-  // 2. If VALID, find if email exists in users
-  //      NEW USER (no results retrieved)
-  //        a. Hash password
-  //        b. Create user
-  //        c. Redirect to login page
-  //      EXISTING USER (match retrieved)
-  //        a. Redirect user to login page with error message.
-
-  // 3. If INVALID, redirect to register page with errors
-  console.log(req.body.password);
-  console.log(req.body.confirmpassword);
   const errors = validationResult(req);
+  // Mask sensitive fields
+  const maskedBody = { ...req.body };
+  if (maskedBody.password) maskedBody.password = "***";
+  if (maskedBody.confirmpassword) maskedBody.confirmpassword = "***";
+  if (maskedBody.securityAnswer) maskedBody.securityAnswer = "***";
+  const logBase = {
+    username: req.body.username || "unknown",
+    action: "register",
+    data: JSON.stringify(maskedBody),
+  };
 
   if (errors.isEmpty()) {
     const {
@@ -90,16 +86,12 @@ exports.registerUser = async (req, res) => {
       securityAnswer,
     } = req.body;
 
-    console.log("Registration data received:", {
-      username,
-      password: password ? "***" : "undefined",
-      description,
-      securityQuestion,
-      securityAnswer: securityAnswer ? "***" : "undefined",
-    });
-
     // Check if required fields are present
     if (!username || !password || !securityQuestion || !securityAnswer) {
+      await DataValidationLog.create({
+        ...logBase,
+        result: "Missing required fields",
+      });
       if (isAdminRegistration) {
         return res.status(400).json({
           success: false,
@@ -114,10 +106,12 @@ exports.registerUser = async (req, res) => {
       return res.redirect("/");
     }
 
-    var avatar;
-
     // Password complexity check
     if (!isPasswordComplex(password)) {
+      await DataValidationLog.create({
+        ...logBase,
+        result: "Password complexity requirement not met",
+      });
       if (isAdminRegistration) {
         return res.status(400).json({
           success: false,
@@ -134,6 +128,7 @@ exports.registerUser = async (req, res) => {
       return res.redirect("/");
     }
 
+    var avatar;
     if (!req.files || Object.keys(req.files).length === 0) {
       avatar = {
         name: "default.jpg",
@@ -147,8 +142,10 @@ exports.registerUser = async (req, res) => {
       const existingUser = await userModel.findOne({ username: username });
 
       if (existingUser) {
-        console.log(existingUser);
-        // Found a match, return to login with error
+        await DataValidationLog.create({
+          ...logBase,
+          result: "User already exists",
+        });
         if (isAdminRegistration) {
           return res.status(400).json({
             success: false,
@@ -160,9 +157,7 @@ exports.registerUser = async (req, res) => {
         return res.redirect("/");
       } else {
         const saltRounds = 10;
-        // Hash password
         const hashed = await bcrypt.hash(password, saltRounds);
-        // Hash security answer
         const hashedAnswer = await bcrypt.hash(
           (securityAnswer || "").toLowerCase().trim(),
           saltRounds
@@ -176,12 +171,15 @@ exports.registerUser = async (req, res) => {
           securityQuestion: securityQuestion,
           securityAnswer: hashedAnswer,
           type: req.body.type || "reviewer",
-          passwordHistory: [], // Initialize empty password history
-          passwordHistoryLimit: 5, // Set default history limit
+          passwordHistory: [],
+          passwordHistoryLimit: 5,
         };
 
         const user = await userModel.create(newUser);
-        console.log(user);
+        await DataValidationLog.create({
+          ...logBase,
+          result: "success",
+        });
         if (isAdminRegistration) {
           return res.status(200).json({
             success: true,
@@ -192,7 +190,10 @@ exports.registerUser = async (req, res) => {
         return res.redirect("/");
       }
     } catch (err) {
-      console.error("Error:", err);
+      await DataValidationLog.create({
+        ...logBase,
+        result: `Error: ${err.message}`,
+      });
       if (isAdminRegistration) {
         return res.status(500).json({
           success: false,
@@ -205,8 +206,10 @@ exports.registerUser = async (req, res) => {
     }
   } else {
     const messages = errors.array().map((item) => item.msg);
-    console.log(messages);
-
+    await DataValidationLog.create({
+      ...logBase,
+      result: messages.join(" "),
+    });
     if (isAdminRegistration) {
       return res.status(400).json({
         success: false,
@@ -221,9 +224,16 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   const errors = validationResult(req);
-
-  // Get IP address
   const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  // Mask sensitive fields
+  const maskedBody = { ...req.body };
+  if (maskedBody.password) maskedBody.password = "***";
+  if (maskedBody.confirmpassword) maskedBody.confirmpassword = "***";
+  const logBase = {
+    username: req.body.username || "unknown",
+    action: "login",
+    data: JSON.stringify(maskedBody),
+  };
   const MAX_ATTEMPTS = 5;
   const LOCK_TIME = 2 * 60 * 1000; // 2 minutes
 
@@ -234,21 +244,26 @@ exports.loginUser = async (req, res) => {
       const user = await userModel.findOne({ username: username });
 
       if (!user) {
-        console.log("Attempting to log failed login: user not found");
+        await DataValidationLog.create({
+          ...logBase,
+          result: "User not found",
+        });
         await LoginAudit.create({
           username,
           success: false,
           ip,
           errorMessage: "User not found",
         });
-        console.log("Logged failed login: user not found");
         req.flash("error_msg", "Invalid Username/Password.");
         req.flash("username", username);
         return res.redirect("/");
       }
 
-      // Check if account is locked
       if (user.lockUntil && user.lockUntil > Date.now()) {
+        await DataValidationLog.create({
+          ...logBase,
+          result: "Account locked",
+        });
         const minutes = Math.ceil((user.lockUntil - Date.now()) / 60000);
         req.flash(
           "error_msg",
@@ -260,7 +275,6 @@ exports.loginUser = async (req, res) => {
         return res.redirect("/");
       }
 
-      // Reset login attempts if lockout period has expired
       if (user.lockUntil && user.lockUntil <= Date.now()) {
         user.loginAttempts = 0;
         user.lockUntil = null;
@@ -269,20 +283,17 @@ exports.loginUser = async (req, res) => {
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (isMatch) {
-        // Reset login attempts and lockUntil on successful login
         user.loginAttempts = 0;
         user.lockUntil = null;
         await user.save();
         req.session.user = user;
 
-        // Get last login information (successful or unsuccessful)
         const lastLoginAudit = await LoginAudit.findOne(
           { username: username },
           {},
           { sort: { timestamp: -1 }, skip: 1 }
         );
 
-        // Store last login info in session for modal display
         req.session.lastLoginInfo = {
           timestamp: lastLoginAudit ? lastLoginAudit.timestamp : null,
           ip: lastLoginAudit ? lastLoginAudit.ip : null,
@@ -291,27 +302,29 @@ exports.loginUser = async (req, res) => {
           isFirstLogin: !lastLoginAudit,
         };
 
-        console.log("Attempting to log successful login");
+        await DataValidationLog.create({
+          ...logBase,
+          result: "success",
+        });
         await LoginAudit.create({
           username,
           success: true,
           ip,
         });
-        console.log("Logged successful login");
         req.flash("success_msg", "Login successful!");
-        return res.redirect("/"); // Redirect to home or dashboard page
+        return res.redirect("/");
       } else {
-        console.log("Attempting to log failed login: incorrect password");
+        await DataValidationLog.create({
+          ...logBase,
+          result: "Incorrect password",
+        });
         await LoginAudit.create({
           username,
           success: false,
           ip,
           errorMessage: "Incorrect password",
         });
-        console.log("Logged failed login: incorrect password");
-        // Increment login attempts
         user.loginAttempts = (user.loginAttempts || 0) + 1;
-        // Lock account if max attempts reached
         if (user.loginAttempts >= MAX_ATTEMPTS) {
           user.lockUntil = new Date(Date.now() + LOCK_TIME);
           await user.save();
@@ -328,29 +341,32 @@ exports.loginUser = async (req, res) => {
         return res.redirect("/");
       }
     } catch (err) {
-      console.error("Error:", err);
-      console.log("Attempting to log failed login: error occurred");
+      await DataValidationLog.create({
+        ...logBase,
+        result: `Error: ${err.message}`,
+      });
       await LoginAudit.create({
         username: req.body.username,
         success: false,
         ip,
         errorMessage: err.message,
       });
-      console.log("Logged failed login: error occurred");
       req.flash("error_msg", "An error occurred. Please try again.");
-      req.flash("username", username);
+      req.flash("username", req.body.username);
       return res.redirect("/");
     }
   } else {
     const messages = errors.array().map((item) => item.msg);
-    console.log("Attempting to log failed login: validation error");
+    await DataValidationLog.create({
+      ...logBase,
+      result: messages.join(" "),
+    });
     await LoginAudit.create({
       username: req.body.username,
       success: false,
       ip,
       errorMessage: messages.join(" "),
     });
-    console.log("Logged failed login: validation error");
     req.flash("error_msg", messages.join(" "));
     return res.redirect("/");
   }
