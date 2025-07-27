@@ -166,4 +166,13 @@ router.get("/audit", isAdmin, async (req, res) => {
   }
 });
 
+// Register admin page for admins
+router.get("/register_admin", isAdmin, async (req, res) => {
+  try {
+    res.render("register_admin");
+  } catch (err) {
+    res.status(500).send("Error loading register admin page");
+  }
+});
+
 module.exports = router;

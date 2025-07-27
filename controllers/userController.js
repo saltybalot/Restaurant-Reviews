@@ -20,7 +20,7 @@ async function isPasswordInHistory(user, newPassword) {
   if (!user.passwordHistory || user.passwordHistory.length === 0) {
     return false;
   }
-  
+
   for (const historyEntry of user.passwordHistory) {
     const isMatch = await bcrypt.compare(newPassword, historyEntry.password);
     if (isMatch) {
@@ -34,35 +34,38 @@ async function isPasswordInHistory(user, newPassword) {
 async function updatePasswordWithHistory(user, newPassword) {
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-  
+
   // Add current password to history before updating
   if (user.password) {
     const historyEntry = {
       password: user.password,
-      changedAt: new Date()
+      changedAt: new Date(),
     };
-    
+
     // Add to history array
     if (!user.passwordHistory) {
       user.passwordHistory = [];
     }
-    
+
     user.passwordHistory.push(historyEntry);
-    
+
     // Keep only the last N passwords (default 5)
     const limit = user.passwordHistoryLimit || 5;
     if (user.passwordHistory.length > limit) {
       user.passwordHistory = user.passwordHistory.slice(-limit);
     }
   }
-  
+
   // Update current password
   user.password = hashedPassword;
-  
+
   return user;
 }
 
 exports.registerUser = async (req, res) => {
+  // Check if this is an admin registration request
+  const isAdminRegistration = req.body.type === "admin";
+
   // 1. Validate request
 
   // 2. If VALID, find if email exists in users
@@ -97,6 +100,13 @@ exports.registerUser = async (req, res) => {
 
     // Check if required fields are present
     if (!username || !password || !securityQuestion || !securityAnswer) {
+      if (isAdminRegistration) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "All fields including security question and answer are required.",
+        });
+      }
       req.flash(
         "error_msg",
         "All fields including security question and answer are required."
@@ -108,6 +118,13 @@ exports.registerUser = async (req, res) => {
 
     // Password complexity check
     if (!isPasswordComplex(password)) {
+      if (isAdminRegistration) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
+        });
+      }
       req.flash(
         "error_msg",
         "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
@@ -132,6 +149,12 @@ exports.registerUser = async (req, res) => {
       if (existingUser) {
         console.log(existingUser);
         // Found a match, return to login with error
+        if (isAdminRegistration) {
+          return res.status(400).json({
+            success: false,
+            message: "User already exists. Please choose a different username.",
+          });
+        }
         req.flash("error_msg", "User already exists. Please login.");
         req.flash("showRegister", "true");
         return res.redirect("/");
@@ -154,16 +177,28 @@ exports.registerUser = async (req, res) => {
           securityAnswer: hashedAnswer,
           type: req.body.type || "reviewer",
           passwordHistory: [], // Initialize empty password history
-          passwordHistoryLimit: 5 // Set default history limit
+          passwordHistoryLimit: 5, // Set default history limit
         };
 
         const user = await userModel.create(newUser);
         console.log(user);
+        if (isAdminRegistration) {
+          return res.status(200).json({
+            success: true,
+            message: "Admin registered successfully!",
+          });
+        }
         req.flash("success_msg", "You are now registered! Login below.");
         return res.redirect("/");
       }
     } catch (err) {
       console.error("Error:", err);
+      if (isAdminRegistration) {
+        return res.status(500).json({
+          success: false,
+          message: "An error occurred. Please try again.",
+        });
+      }
       req.flash("error_msg", "An error occurred. Please try again.");
       req.flash("showRegister", "true");
       return res.redirect("/");
@@ -172,6 +207,12 @@ exports.registerUser = async (req, res) => {
     const messages = errors.array().map((item) => item.msg);
     console.log(messages);
 
+    if (isAdminRegistration) {
+      return res.status(400).json({
+        success: false,
+        message: messages.join(" "),
+      });
+    }
     req.flash("error_msg", messages.join(" "));
     req.flash("showRegister", "true");
     return res.redirect("/");
@@ -233,23 +274,23 @@ exports.loginUser = async (req, res) => {
         user.lockUntil = null;
         await user.save();
         req.session.user = user;
-        
+
         // Get last login information (successful or unsuccessful)
         const lastLoginAudit = await LoginAudit.findOne(
           { username: username },
           {},
           { sort: { timestamp: -1 }, skip: 1 }
         );
-        
+
         // Store last login info in session for modal display
         req.session.lastLoginInfo = {
           timestamp: lastLoginAudit ? lastLoginAudit.timestamp : null,
           ip: lastLoginAudit ? lastLoginAudit.ip : null,
           success: lastLoginAudit ? lastLoginAudit.success : null,
           errorMessage: lastLoginAudit ? lastLoginAudit.errorMessage : null,
-          isFirstLogin: !lastLoginAudit
+          isFirstLogin: !lastLoginAudit,
         };
-        
+
         console.log("Attempting to log successful login");
         await LoginAudit.create({
           username,
@@ -322,7 +363,20 @@ exports.logoutUser = (req, res) => {
 };
 
 exports.showForgotPassword = (req, res) => {
-  res.render("forgotPassword");
+  // Consume flash messages
+  const success_msg = req.flash("success_msg")[0] || null;
+  const error_msg = req.flash("error_msg")[0] || null;
+
+  console.log("open showForgotPassword");
+  console.log(success_msg);
+  console.log(error_msg);
+  console.log("close showForgotPassword");
+
+  res.render("forgotPassword", {
+    pageTitle: "Forgot Password",
+    error_msg: error_msg,
+    success_msg: success_msg,
+  });
 };
 
 exports.showResetPassword = (req, res) => {
@@ -339,7 +393,7 @@ exports.showResetPassword = (req, res) => {
   res.render("resetPassword", {
     username: username,
     securityQuestion: securityQuestion,
-    showPreviousPasswordAlert: errorParam === 'previous_password',
+    showPreviousPasswordAlert: errorParam === "previous_password",
     securityAnswerVerified: securityAnswerVerified,
   });
 };
@@ -392,6 +446,12 @@ exports.forgotPassword = async (req, res) => {
       req.flash(
         "error_msg",
         "Username not found. Please check your username and try again."
+      );
+      return res.redirect("/forgot-password");
+    } else if (user.securityQuestion === undefined) {
+      req.flash(
+        "error_msg",
+        "Security question is not set. Please contact an administrator."
       );
       return res.redirect("/forgot-password");
     }
@@ -457,7 +517,10 @@ exports.resetPassword = async (req, res) => {
     // Check if new password is the same as current password
     const isSamePassword = await bcrypt.compare(newPassword, user.password);
     if (isSamePassword) {
-      req.flash("error_msg", "New password cannot be the same as your current password. Please choose a different password.");
+      req.flash(
+        "error_msg",
+        "New password cannot be the same as your current password. Please choose a different password."
+      );
       return res.redirect("/reset-password");
     }
 
