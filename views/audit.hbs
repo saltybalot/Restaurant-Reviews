@@ -60,6 +60,7 @@
     <div class="tab-buttons">
         <button class="tab-button active" onclick="toggleTab('loginLogs')">Login Logs</button>
         <button class="tab-button" onclick="toggleTab('accessLogs')">Access Control Logs</button>
+        <button class="tab-button" onclick="toggleTab('dataValidationLogs')">Data Validation Logs</button>
     </div>
 
     <!-- Login Logs Tab -->
@@ -115,6 +116,33 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Data Validation Logs Tab -->
+    <div id="dataValidationLogs" class="tab-content">
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Action</th>
+                    <th>Data</th>
+                    <th>Result</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each dataValidationLogs}}
+                <tr>
+                    <td>{{this.username}}</td>
+                    <td>{{this.action}}</td>
+                    <td><pre style="white-space: pre-wrap; word-break: break-word;">{{this.data}}</pre></td>
+                    <td>{{this.result}}</td>
+                    <td>{{formatDate this.timestamp}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
 
     <script>
         function toggleTab(tabId) {
