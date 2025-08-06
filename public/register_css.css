@@ -11,10 +11,14 @@ body {
 }
 
 .login-container {
-  text-align: center;
-  padding: 20px;
-  border: 1px solid #fcedda;
+  margin-top: 300px; /* adjust this as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fcedda;
+  padding: 30px;
   border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .rememberMeLabel {
@@ -174,6 +178,7 @@ body {
   font-style: italic;
 }
 
+<<<<<<< HEAD
 .password-input-container {
   position: relative;
   display: flex;
@@ -211,4 +216,9 @@ body {
 
 .eye-icon {
   font-size: 18px;
+=======
+.form-wrapper {
+  width: 100%;
+  max-width: 400px;
+>>>>>>> f5ebaaffc4e43c9ef9fafac66ca18f512860d043
 }

@@ -20,7 +20,7 @@
     </div>
     <div class="header-nav">
         {{#if (eq user.type "admin")}}
-        <a href="/register_admin.html" class="header-userprofile">Register Admin</a>
+        <a href="/register_admin" class="header-userprofile">Register Admin</a>
         <a href="/audit" class="header-userprofile">Audit Logs</a>
         {{/if}}
         <a href="/profile?user={{user.username}}" class="header-userprofile">User Profile</a>
@@ -60,20 +60,15 @@
             <h1 style="text-align: center;">Login</h1>
             {{#if error_msg.[0]}}
             <div class="message-overlay" status="error" style="margin-bottom:10px;">
-              <div>
-                <h6 class="red-text text-darken-2"><strong>{{error_msg.[0]}}</strong></h6>
-              </div>
+                <div>
+                    <h6 class="red-text text-darken-2"><strong>{{error_msg.[0]}}</strong></h6>
+                </div>
             </div>
             {{/if}}
             <input type="text" id="loginUsername" name="username" class="textbox-border" placeholder="Username"
                 required value="{{username}}">
-            <div class="password-input-container">
-                <input type="password" id="loginPassword" name="password" class="textbox-border" placeholder="Password"
-                    required>
-                <button type="button" class="toggle-password" onclick="togglePassword('loginPassword')" style="background: none; border: none;">
-                    <span class="eye-icon">👁️</span>
-                </button>
-            </div>
+            <input type="password" id="loginPassword" name="password" class="textbox-border" placeholder="Password"
+                required>
             <div class="rememberMeLabel">
                 <label>Remember Me:<input type="checkbox" id="rememberMe" name="rememberMe"></label>
             </div>
@@ -169,11 +164,11 @@
 
 
 {{#if error_msg.[0]}}
-  {{#if (contains error_msg.[0] "Account locked")}}
-    <script>
-      alert("{{error_msg.[0]}}");
-    </script>
-  {{/if}}
+{{#if (contains error_msg.[0] "Account locked")}}
+<script>
+    alert("{{error_msg.[0]}}");
+</script>
+{{/if}}
 {{/if}}
 
 {{/if}}
@@ -226,21 +221,5 @@
       } else if (hasLoginError) {
         showModal('loginModal');
       }
-      
-      // Show last login modal if available
-      {{#if showLastLoginModal}}
-      const lastLoginModal = document.getElementById('lastLoginModal');
-      if (lastLoginModal) {
-        lastLoginModal.style.display = 'flex';
-      }
-      {{/if}}
-      
     };
-    
-    function closeLastLoginModal() {
-      const modal = document.getElementById('lastLoginModal');
-      if (modal) {
-        modal.style.display = 'none';
-      }
-    }
 </script>

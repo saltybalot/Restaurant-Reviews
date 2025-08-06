@@ -8,7 +8,11 @@ const router = Router();
 const { isLoggedIn } = require("../index");
 const LoginAudit = require("../database/models/Loginaudit");
 const AccessControlLog = require("../database/models/AccessControlLog");
+<<<<<<< HEAD
 const bcrypt = require("bcryptjs");
+=======
+const DataValidationLog = require("../database/models/DataValidationLog");
+>>>>>>> f5ebaaffc4e43c9ef9fafac66ca18f512860d043
 
 /**
  * This is for rendering the PROFILE page
@@ -161,12 +165,16 @@ router.get("/audit", isAdmin, async (req, res) => {
     const accessLogs = await AccessControlLog.find({})
       .sort({ timestamp: -1 })
       .limit(100);
-    res.render("audit", { audits, accessLogs });
+    const dataValidationLogs = await DataValidationLog.find({})
+      .sort({ timestamp: -1 })
+      .limit(100);
+    res.render("audit", { audits, accessLogs, dataValidationLogs });
   } catch (err) {
     res.status(500).send("Error loading audit logs");
   }
 });
 
+<<<<<<< HEAD
 // Password complexity check function
 function isPasswordComplex(password) {
   return (
@@ -402,6 +410,14 @@ router.post("/profile/reset-password", isLoggedIn, async (req, res) => {
   } catch (err) {
     console.error("Error:", err);
     return res.json({ success: false, message: "An error occurred. Please try again." });
+=======
+// Register admin page for admins
+router.get("/register_admin", isAdmin, async (req, res) => {
+  try {
+    res.render("register_admin");
+  } catch (err) {
+    res.status(500).send("Error loading register admin page");
+>>>>>>> f5ebaaffc4e43c9ef9fafac66ca18f512860d043
   }
 });
 

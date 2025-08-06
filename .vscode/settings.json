@@ -4,5 +4,10 @@
         "**/*.rpa": true,
         "**/*.rpymc": true,
         "**/cache/": true
+    },
+    "[handlebars]": {
+        "editor.formatOnSave": false,
+        "editor.formatOnPaste": false,
+        "editor.formatOnType": false
     }
 }

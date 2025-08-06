@@ -6,10 +6,14 @@ const registerValidation = [
 
   // Description is optional, so we'll remove the validation for it
 
-  // Password needs to be min 6 chars
+  // Password needs to be min 8 chars with complexity
   body("password")
-    .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters long."),
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long.")
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+    .withMessage(
+      "Password must include uppercase, lowercase, number, and special character."
+    ),
 
   // Security question and answer are required
   body("securityQuestion")

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="register_css.css">
+    <title>Admin Registration - Restaurant Review Web Application</title>
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Register New Admin</h2>
+
+        <!-- Removed modal wrapper -->
+        <div class="form-wrapper"> <!-- Optional: use a wrapper for styling -->
+            <div id="message" style="display: none; padding: 15px; margin: 15px 0; border-radius: 8px; font-weight: bold; text-align: center;"></div>
+            <form id="adminRegisterForm">
+                <h1>Admin Registration</h1>
+                <input type="text" id="adminRegisterUsername" name="username" class="textbox-border"
+                    placeholder="Username" required>
+                <input type="password" id="adminRegisterPassword" name="password" class="textbox-border"
+                    placeholder="Password" required>
+
+                <label for="adminAvatar" class="avatarlabel">Avatar:</label>
+                <input type="file" id="adminAvatar" name="avatar" accept="image/*" class="textbox-border">
+
+                <label for="adminDescription" class="descriptionlabel">Description:</label>
+                <textarea id="adminDescription" name="description" placeholder="Optional"></textarea>
+
+                <label for="adminSecurityQuestion" class="securitylabel">Security Question:</label>
+                <select id="adminSecurityQuestion" name="securityQuestion" class="textbox-border" required>
+                    <option value="">Select a security question</option>
+                    <option value="What was your first pet's name?">What was your first pet's name?</option>
+                    <option value="In what city were you born?">In what city were you born?</option>
+                    <option value="What was your mother's maiden name?">What was your mother's maiden name?</option>
+                    <option value="What was the name of your first school?">What was the name of your first school?</option>
+                    <option value="What is your favorite movie?">What is your favorite movie?</option>
+                    <option value="What is your favorite food?">What is your favorite food?</option>
+                </select>
+
+                <input type="text" id="adminSecurityAnswer" name="securityAnswer" class="textbox-border"
+                    placeholder="Security Answer" required>
+
+                <button type="button" id="registerBtn" onclick="registerAdmin()">Register Admin</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function showMessage(message, isError = false) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.style.display = 'block';
+            messageDiv.style.backgroundColor = isError ? '#ffebee' : '#e8f5e8';
+            messageDiv.style.color = isError ? '#c62828' : '#2e7d32';
+            messageDiv.style.border = isError ? '1px solid #ffcdd2' : '1px solid #c8e6c9';
+        }
+
+        function registerAdmin() {
+            const registerBtn = document.getElementById('registerBtn');
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'Registering...';
+            
+            var username = document.getElementById("adminRegisterUsername").value;
+            var password = document.getElementById("adminRegisterPassword").value;
+            var avatarFile = document.getElementById("adminAvatar").files[0];
+            var description = document.getElementById("adminDescription").value;
+            var securityQuestion = document.getElementById("adminSecurityQuestion").value;
+            var securityAnswer = document.getElementById("adminSecurityAnswer").value;
+
+            if (username && password && securityQuestion && securityAnswer) {
+                // Check password complexity
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                if (!passwordRegex.test(password)) {
+                    showMessage("Password must be at least 8 characters and include uppercase, lowercase, number, and special character.", true);
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = 'Register Admin';
+                    return;
+                }
+                var formData = new FormData();
+                formData.append("username", username);
+                formData.append("password", password);
+                formData.append("description", description);
+                formData.append("securityQuestion", securityQuestion);
+                formData.append("securityAnswer", securityAnswer);
+                formData.append("type", "admin");
+
+                if (avatarFile) {
+                    formData.append("avatar", avatarFile);
+                }
+
+                fetch("/register", {
+                    method: "POST",
+                    body: formData,
+                })
+                    .then((response) => {
+                        console.log("Response status:", response.status);
+                        console.log("Response headers:", response.headers);
+                        
+                        // Check if response is JSON
+                        const contentType = response.headers.get("content-type");
+                        if (contentType && contentType.includes("application/json")) {
+                            return response.json();
+                        } else if (response.redirected) {
+                            console.log("Redirecting to:", response.url);
+                            // Check if the redirect URL indicates an error
+                            if (response.url.includes("showRegister") || response.url.includes("error")) {
+                                // This is likely an error redirect, let's handle it
+                                showMessage("Registration failed. Please check all fields and try again.", true);
+                                registerBtn.disabled = false;
+                                registerBtn.textContent = 'Register Admin';
+                                return;
+                            } else {
+                                // Successful redirect
+                                showMessage("Admin registration successful! Redirecting...", false);
+                                setTimeout(() => {
+                                    window.location.href = response.url;
+                                }, 1500);
+                            }
+                        } else {
+                            return response.text();
+                        }
+                    })
+                    .then((data) => {
+                        if (data) {
+                            console.log("Response data:", data);
+                            
+                            // Handle JSON response
+                            if (typeof data === 'object') {
+                                if (data.success) {
+                                    showMessage(data.message || "Admin registration successful!", false);
+                                    // Clear form on success
+                                    document.getElementById("adminRegisterForm").reset();
+                                } else {
+                                    showMessage(data.message || "Registration failed.", true);
+                                }
+                            } else {
+                                // Handle text response (fallback)
+                                if (data.includes("User already exists")) {
+                                    showMessage("User already exists. Please choose a different username.", true);
+                                } else if (data.includes("Password must be at least 8 characters")) {
+                                    showMessage("Password must be at least 8 characters and include uppercase, lowercase, number, and special character.", true);
+                                } else if (data.includes("All fields including security question and answer are required")) {
+                                    showMessage("All fields including security question and answer are required.", true);
+                                } else if (data.includes("error") || data.includes("Error")) {
+                                    showMessage("Registration failed. Please check all fields and try again.", true);
+                                } else {
+                                    showMessage("Admin registration successful!", false);
+                                }
+                            }
+                            registerBtn.disabled = false;
+                            registerBtn.textContent = 'Register Admin';
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                        showMessage("Error: " + error.message, true);
+                        registerBtn.disabled = false;
+                        registerBtn.textContent = 'Register Admin';
+                    });
+            } else {
+                showMessage("Please fill in all required fields including security question and answer.", true);
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Register Admin';
+            }
+        }
+    </script>
+</body>
+
+</html>

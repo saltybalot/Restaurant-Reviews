@@ -78,31 +78,41 @@ hbs.registerHelper("eq", function (a, b) {
 hbs.registerHelper("formatDate", function (date) {
   if (!date) return "";
   const d = new Date(date);
-  
+
   const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
-  
+
   const month = months[d.getMonth()];
   const day = d.getDate();
   const year = d.getFullYear();
-  
+
   // Convert to 12-hour format
   let hours = d.getHours();
-  const ampm = hours >= 12 ? 'PM' : 'AM';
+  const ampm = hours >= 12 ? "PM" : "AM";
   hours = hours % 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'
-  
-  const minutes = d.getMinutes().toString().padStart(2, '0');
-  
+
+  const minutes = d.getMinutes().toString().padStart(2, "0");
+
   return `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`;
 });
 app.set("view engine", "hbs");
 hbs.registerPartials(path.join(__dirname, "views", "partials"));
 // Register custom Handlebars helper 'contains'
-hbs.registerHelper('contains', function(str, substring) {
-  return typeof str === 'string' && str.includes(substring);
+hbs.registerHelper("contains", function (str, substring) {
+  return typeof str === "string" && str.includes(substring);
 });
 // Flash
 
@@ -139,33 +149,42 @@ findRatings();
 app.get("/", isLoggedIn, async (req, res) => {
   // Check for success parameter
   const successParam = req.query.success;
+<<<<<<< HEAD
   const logoutParam = req.query.logout;
   
+=======
+
+>>>>>>> f5ebaaffc4e43c9ef9fafac66ca18f512860d043
   // Consume flash messages
   const success_msg = req.flash("success_msg")[0] || null;
   const error_msg = req.flash("error_msg")[0] || null;
   const username = req.flash("username")[0] || null;
   const showRegister = req.flash("showRegister")[0] || null;
+<<<<<<< HEAD
   
   // Handle logout success message
   const logoutSuccess = logoutParam === 'success' ? "Logout successful!" : null;
   
+=======
+
+>>>>>>> f5ebaaffc4e43c9ef9fafac66ca18f512860d043
   // Check for last login info
   const lastLoginInfo = req.session.lastLoginInfo;
-  const showLastLoginModal = lastLoginInfo && success_msg === "Login successful!";
-  
+  const showLastLoginModal =
+    lastLoginInfo && success_msg === "Login successful!";
+
   // Clear last login info after using it
   if (lastLoginInfo) {
     delete req.session.lastLoginInfo;
   }
-  
+
   // Set res.locals
   res.locals.success_msg = success_msg || logoutSuccess;
   res.locals.error_msg = error_msg;
-  res.locals.showPasswordResetAlert = successParam === 'password_reset';
+  res.locals.showPasswordResetAlert = successParam === "password_reset";
   res.locals.showLastLoginModal = showLastLoginModal;
   res.locals.lastLoginInfo = lastLoginInfo;
-  
+
   //temporarily adding toDate field to sort
   req.session.isAuth = true;
   const review = await Review.aggregate([
