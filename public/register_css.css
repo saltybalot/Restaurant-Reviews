@@ -173,3 +173,42 @@ body {
   color: #666;
   font-style: italic;
 }
+
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container input {
+  flex: 1;
+  padding-right: 50px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #666;
+  transition: color 0.3s;
+}
+
+.toggle-password:hover {
+  color: #ee4e34;
+  background-color: rgba(238, 78, 52, 0.1);
+}
+
+.toggle-password.active {
+  color: #ee4e34;
+}
+
+.eye-icon {
+  font-size: 18px;
+}

@@ -139,12 +139,16 @@ findRatings();
 app.get("/", isLoggedIn, async (req, res) => {
   // Check for success parameter
   const successParam = req.query.success;
+  const logoutParam = req.query.logout;
   
   // Consume flash messages
   const success_msg = req.flash("success_msg")[0] || null;
   const error_msg = req.flash("error_msg")[0] || null;
   const username = req.flash("username")[0] || null;
   const showRegister = req.flash("showRegister")[0] || null;
+  
+  // Handle logout success message
+  const logoutSuccess = logoutParam === 'success' ? "Logout successful!" : null;
   
   // Check for last login info
   const lastLoginInfo = req.session.lastLoginInfo;
@@ -156,7 +160,7 @@ app.get("/", isLoggedIn, async (req, res) => {
   }
   
   // Set res.locals
-  res.locals.success_msg = success_msg;
+  res.locals.success_msg = success_msg || logoutSuccess;
   res.locals.error_msg = error_msg;
   res.locals.showPasswordResetAlert = successParam === 'password_reset';
   res.locals.showLastLoginModal = showLastLoginModal;

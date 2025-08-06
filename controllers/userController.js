@@ -62,6 +62,13 @@ async function updatePasswordWithHistory(user, newPassword) {
   return user;
 }
 
+// Check if password is old enough to be changed (2 minutes for demo)
+function isPasswordOldEnough(passwordChangedAt) {
+  const now = new Date();
+  const twoMinutesAgo = new Date(now.getTime() - (2 * 60 * 1000)); // 2 minutes ago
+  return passwordChangedAt < twoMinutesAgo;
+}
+
 exports.registerUser = async (req, res) => {
   // 1. Validate request
 
@@ -153,6 +160,7 @@ exports.registerUser = async (req, res) => {
           securityQuestion: securityQuestion,
           securityAnswer: hashedAnswer,
           type: req.body.type || "reviewer",
+          passwordChangedAt: new Date(), // Set initial password change timestamp
           passwordHistory: [], // Initialize empty password history
           passwordHistoryLimit: 5 // Set default history limit
         };
@@ -315,10 +323,38 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-exports.logoutUser = (req, res) => {
-  // Destroy the session and redirect to login page
-  req.session.destroy();
-  res.redirect("/");
+exports.logoutUser = async (req, res) => {
+  try {
+    // Get user info before destroying session
+    const username = req.session.user ? req.session.user.username : 'Unknown';
+    const ip = req.ip || req.connection.remoteAddress;
+    
+    // Log the logout event
+    console.log("Attempting to log logout event");
+    await LoginAudit.create({
+      username,
+      success: true,
+      ip,
+      action: 'logout',
+      timestamp: new Date()
+    });
+    console.log("Logged logout event");
+    
+    // Flash a success message BEFORE destroying session
+    req.flash("success_msg", "Logout successful!");
+    
+    // Store flash message in a way that survives session destruction
+    const flashMessage = "Logout successful!";
+    
+    // Destroy the session and redirect with flash message
+    req.session.destroy();
+    res.redirect("/?logout=success");
+  } catch (err) {
+    console.error("Error logging logout:", err);
+    // Still logout even if logging fails
+    req.session.destroy();
+    res.redirect("/?logout=success");
+  }
 };
 
 exports.showForgotPassword = (req, res) => {
@@ -454,6 +490,13 @@ exports.resetPassword = async (req, res) => {
       return res.redirect("/reset-password");
     }
 
+    // Check if password is old enough to be changed (2 minutes for demo)
+    if (!isPasswordOldEnough(user.passwordChangedAt)) {
+      const timeRemaining = Math.ceil((user.passwordChangedAt.getTime() + (2 * 60 * 1000) - new Date().getTime()) / 1000 / 60);
+      req.flash("error_msg", `Password cannot be changed yet. Please wait ${timeRemaining} more minute(s) before changing your password again.`);
+      return res.redirect("/reset-password");
+    }
+
     // Check if new password is the same as current password
     const isSamePassword = await bcrypt.compare(newPassword, user.password);
     if (isSamePassword) {
@@ -470,6 +513,8 @@ exports.resetPassword = async (req, res) => {
 
     // Update user's password with history tracking
     const updatedUser = await updatePasswordWithHistory(user, newPassword);
+    // Update the passwordChangedAt timestamp
+    updatedUser.passwordChangedAt = new Date();
     await updatedUser.save();
 
     // Clear session

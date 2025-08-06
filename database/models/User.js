@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
+  passwordChangedAt: {
+    type: Date,
+    default: Date.now
+  },
   passwordHistory: [{
     password: String,
     changedAt: {

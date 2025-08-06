@@ -1,3 +1,19 @@
+function togglePassword(inputId) {
+  const input = document.getElementById(inputId);
+  const button = input.parentElement.querySelector('.toggle-password');
+  const eyeIcon = button.querySelector('.eye-icon');
+  
+  if (input.type === 'password') {
+    input.type = 'text';
+    button.classList.add('active');
+    eyeIcon.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    button.classList.remove('active');
+    eyeIcon.textContent = '👁️';
+  }
+}
+
 function login() {
   var username = document.getElementById("loginUsername").value;
   var password = document.getElementById("loginPassword").value;
@@ -36,12 +52,17 @@ function login() {
 function register() {
   var username = document.getElementById("registerUsername").value;
   var password = document.getElementById("registerPassword").value;
+  var confirmPassword = document.getElementById("confirmPassword").value;
   var avatarFile = document.getElementById("avatar").files[0];
   var description = document.getElementById("description").value;
   var securityQuestion = document.getElementById("securityQuestion").value;
   var securityAnswer = document.getElementById("securityAnswer").value;
 
-  if (username && password && securityQuestion && securityAnswer) {
+  if (username && password && confirmPassword && securityQuestion && securityAnswer) {
+    if (password !== confirmPassword) {
+      alert("Passwords do not match. Please try again.");
+      return;
+    }
     var formData = new FormData();
     formData.append("username", username);
     formData.append("password", password);
@@ -74,7 +95,7 @@ function register() {
       });
   } else {
     alert(
-      "Please fill in all required fields including security question and answer."
+      "Please fill in all required fields including password confirmation and security question and answer."
     );
   }
 }

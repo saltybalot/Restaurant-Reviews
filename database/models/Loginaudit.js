@@ -6,6 +6,7 @@ const LoginAuditSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now },
   ip: { type: String },
   errorMessage: { type: String },
+  action: { type: String, default: 'login' }, // 'login' or 'logout'
 });
 
 const LoginAudit = mongoose.model("LoginAudit", LoginAuditSchema);

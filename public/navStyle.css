@@ -445,3 +445,70 @@
     transform: translateY(0) scale(1);
   }
 }
+
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container input {
+  flex: 1;
+  padding-right: 40px;
+  height: 20px;
+  padding-bottom: 5px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none !important;
+  border: none !important;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #666;
+  transition: color 0.3s;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none !important;
+}
+
+.toggle-password:hover {
+  color: #ee4e34;
+  background-color: rgba(238, 78, 52, 0.1);
+}
+
+.toggle-password.active {
+  color: #ee4e34;
+}
+
+.eye-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Override header button styles for toggle buttons */
+.password-input-container .toggle-password {
+  background: none !important;
+  border: none !important;
+  color: #666 !important;
+  padding: 8px !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+.password-input-container .toggle-password:hover {
+  background-color: rgba(238, 78, 52, 0.1) !important;
+  color: #ee4e34 !important;
+}
+
+.password-input-container .toggle-password.active {
+  color: #ee4e34 !important;
+}

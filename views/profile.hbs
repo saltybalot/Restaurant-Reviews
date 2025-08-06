@@ -25,7 +25,12 @@
 			<div class="user-details">
 				<h1 class="username">{{user.username}}</h1>
 				<p id="profileDescription" content="{{user.description}}">{{user.description}}</p>
-				<button id="edit-profile-btn">Edit Profile</button>
+				<div class="profile-buttons">
+					<button id="edit-profile-btn">Edit Profile</button>
+					{{#if (eq loggedUser user.username)}}
+					<button id="reset-password-btn" onclick="window.location.href='/password-reset'">Reset Password</button>
+					{{/if}}
+				</div>
 			</div>
 		</div>
 
