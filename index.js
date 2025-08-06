@@ -149,25 +149,16 @@ findRatings();
 app.get("/", isLoggedIn, async (req, res) => {
   // Check for success parameter
   const successParam = req.query.success;
-<<<<<<< HEAD
   const logoutParam = req.query.logout;
   
-=======
-
->>>>>>> f5ebaaffc4e43c9ef9fafac66ca18f512860d043
   // Consume flash messages
   const success_msg = req.flash("success_msg")[0] || null;
   const error_msg = req.flash("error_msg")[0] || null;
   const username = req.flash("username")[0] || null;
   const showRegister = req.flash("showRegister")[0] || null;
-<<<<<<< HEAD
   
   // Handle logout success message
   const logoutSuccess = logoutParam === 'success' ? "Logout successful!" : null;
-  
-=======
-
->>>>>>> f5ebaaffc4e43c9ef9fafac66ca18f512860d043
   // Check for last login info
   const lastLoginInfo = req.session.lastLoginInfo;
   const showLastLoginModal =

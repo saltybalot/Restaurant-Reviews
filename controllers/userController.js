@@ -178,14 +178,9 @@ exports.registerUser = async (req, res) => {
           securityQuestion: securityQuestion,
           securityAnswer: hashedAnswer,
           type: req.body.type || "reviewer",
-<<<<<<< HEAD
           passwordChangedAt: new Date(), // Set initial password change timestamp
           passwordHistory: [], // Initialize empty password history
           passwordHistoryLimit: 5 // Set default history limit
-=======
-          passwordHistory: [],
-          passwordHistoryLimit: 5,
->>>>>>> f5ebaaffc4e43c9ef9fafac66ca18f512860d043
         };
 
         const user = await userModel.create(newUser);
