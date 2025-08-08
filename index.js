@@ -62,6 +62,7 @@ const path = require("path"); // our path directory
 const viewRouter = require("./routes/viewRoute.js");
 const authRouter = require("./routes/auth.js");
 const profileRouter = require("./routes/profileRoute.js");
+const adminRouter = require("./routes/adminRoute.js");
 
 var bodyParser = require("body-parser");
 
@@ -119,6 +120,7 @@ hbs.registerHelper("contains", function (str, substring) {
 app.use("/", viewRouter);
 app.use("/", authRouter);
 app.use("/", profileRouter);
+app.use("/", adminRouter);
 
 /*
 const restaurant = Restaurant.find({});
@@ -150,15 +152,15 @@ app.get("/", isLoggedIn, async (req, res) => {
   // Check for success parameter
   const successParam = req.query.success;
   const logoutParam = req.query.logout;
-  
+
   // Consume flash messages
   const success_msg = req.flash("success_msg")[0] || null;
   const error_msg = req.flash("error_msg")[0] || null;
   const username = req.flash("username")[0] || null;
   const showRegister = req.flash("showRegister")[0] || null;
-  
+
   // Handle logout success message
-  const logoutSuccess = logoutParam === 'success' ? "Logout successful!" : null;
+  const logoutSuccess = logoutParam === "success" ? "Logout successful!" : null;
   // Check for last login info
   const lastLoginInfo = req.session.lastLoginInfo;
   const showLastLoginModal =
