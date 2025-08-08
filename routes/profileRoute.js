@@ -10,6 +10,8 @@ const LoginAudit = require("../database/models/Loginaudit");
 const AccessControlLog = require("../database/models/AccessControlLog");
 const bcrypt = require("bcryptjs");
 const DataValidationLog = require("../database/models/DataValidationLog");
+const path = require("path");
+const crypto = require("crypto");
 
 /**
  * This is for rendering the PROFILE page
@@ -127,9 +129,25 @@ router.post("/editProfile", async (req, res) => {
     console.log("no file uploaded, no changes are made");
   } else {
     profilePic = req.files.profilePicture;
-    profilePic.mv("public/images/" + profilePic.name);
-    user.profilePic = profilePic.name;
+
+    // Allowed types
+    const allowedTypes = ["image/jpeg", "image/png"];
+
+    if (!allowedTypes.includes(profilePic.mimetype)) {
+        return res.status(400).send("Only JPG and PNG files are allowed.");
+    }
+
+    // Generate unique filename
+    const extension = path.extname(profilePic.name).toLowerCase();
+    const uniqueName = crypto.randomUUID() + extension;
+
+    // Save file safely
+    await profilePic.mv("public/images/" + uniqueName);
+
+    // Store new name in DB
+    user.profilePic = uniqueName;
   }
+
   const description = req.body.description;
   user.description = description;
 
