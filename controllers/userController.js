@@ -4,6 +4,9 @@ const LoginAudit = require("../database/models/Loginaudit");
 const DataValidationLog = require("../database/models/DataValidationLog");
 const { validationResult } = require("express-validator");
 
+const path = require('path');
+const crypto = require('crypto');
+
 // Password complexity check function
 function isPasswordComplex(password) {
   return (
@@ -135,14 +138,40 @@ exports.registerUser = async (req, res) => {
       return res.redirect("/");
     }
 
+    // var avatar;
+    // if (!req.files || Object.keys(req.files).length === 0) {
+    //   avatar = {
+    //     name: "default.jpg",
+    //   };
+    // } else {
+    //   avatar = req.files.avatar;
+    //   avatar.mv("public/images/" + avatar.name);
+    // }
+
     var avatar;
     if (!req.files || Object.keys(req.files).length === 0) {
-      avatar = {
-        name: "default.jpg",
-      };
+        avatar = { name: "default.jpg" };
     } else {
-      avatar = req.files.avatar;
-      avatar.mv("public/images/" + avatar.name);
+        avatar = req.files.avatar;
+
+        // JPG and PNG are only allowed
+        const allowedTypes = ['image/jpeg', 'image/png'];
+
+        if (!allowedTypes.includes(avatar.mimetype)) {
+            return res.status(400).json({
+                success: false,
+                message: "Only JPG and PNG files are allowed."
+            });
+        }
+
+        // Generate a safe unique filename
+        const extension = path.extname(avatar.name).toLowerCase();
+        const uniqueName = crypto.randomUUID() + extension;
+
+        // Save to public/images
+        await avatar.mv("public/images/" + uniqueName);
+
+        avatar.name = uniqueName; // store new filename in DB
     }
 
     try {

@@ -23,7 +23,8 @@
     "express-session": "^1.17.0",
     "express-validator": "^6.4.0",
     "hbs": "^4.2.0",
-    "mongoose": "^8.2.0"
+    "mongoose": "^8.2.0",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

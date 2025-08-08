@@ -8,7 +8,7 @@ const registerValidation = [
   body("username")
     .isLength({ min: 3, max: 20 })
     .withMessage("Username must be between 3 and 20 characters.")
-    .matches(/^[A-Za-z0-9_]$/)
+    .matches(/^[A-Za-z0-9_]+$/)
     .withMessage("Username must only contain letters, numbers, and underscores."),
 
   // Description is optional, so we'll remove the validation for it
