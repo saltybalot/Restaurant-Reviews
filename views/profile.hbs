@@ -93,10 +93,10 @@
 				<h2 style="color:#EE4E34">Edit Profile</h2>
 				<form id="edit-profile-form" enctype="multipart/form-data" method="post" action="/editProfile">
 					<div id="profilelabel"><label for="profile-picture-upload">Profile Picture:</label></div>
-					<input type="file" id="profile-picture-upload" name="profilePicture" accept="image/*">
+					<input type="file" id="profile-picture-upload" name="profilePicture" accept="image/png, image/jpeg">
 					<div id="descriptionDiv"> <label for="description">Short Description:</label></div>
 					<textarea id="description" name="description" rows="4" cols="50"></textarea>
-					<button type="submit">Save Changes</button>
+					<button id="edit-profile-submit" type="submit">Save Changes</button>
 				</form>
 			</div>
 		</div>
@@ -126,6 +126,7 @@
 
 		<script src="profile_script.js"></script>
 		<script src="register_script.js"></script>
+		<script src="edit_profile_validation.js"></script>
 </body>
 
 </html>
