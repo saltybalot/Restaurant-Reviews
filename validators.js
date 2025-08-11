@@ -11,8 +11,6 @@ const registerValidation = [
     .matches(/^[A-Za-z0-9_]+$/)
     .withMessage("Username must only contain letters, numbers, and underscores."),
 
-  // Description is optional, so we'll remove the validation for it
-
   // Password needs to be min 8 chars with complexity
   body("password")
     .isLength({ min: 8 })
@@ -25,6 +23,26 @@ const registerValidation = [
   // Security question and answer are required
   body("securityQuestion").not().isEmpty().withMessage("Security question is required."),
   body("securityAnswer").not().isEmpty().withMessage("Security answer is required."),
+
+  // Description can only contain characters used in text (to avoid code insertion)
+  // Min length is 0 because it's optional
+  body("description")
+    .trim()
+    .isLength({ min: 0, max: 200 })
+    .withMessage("Description must be between 1 and 200 characters.")
+    .matches(/^[A-Za-z0-9\s.,!?'"()-]*$/)
+    .withMessage("Description contains invalid characters."),
 ];
 
-module.exports = { registerValidation };
+const editProfileValidation = [
+  // Description can only contain characters used in text (to avoid code insertion)
+  // Min length is 0 because it's optional
+  body("description")
+    .trim()
+    .isLength({ min: 0, max: 200 })
+    .withMessage("Description must be between 1 and 200 characters.")
+    .matches(/^[A-Za-z0-9\s.,!?'"()-]*$/)
+    .withMessage("Description contains invalid characters."),
+];
+
+module.exports = { registerValidation, editProfileValidation };
