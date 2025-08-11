@@ -16,7 +16,7 @@ try {
   mongoose.connect(connectionString);
   console.log("Connected to MongoDB successfully");
 } catch (err) {
-  console.error(err);
+  console.error("Error Loading the database");
 }
 
 var express = require("express");
@@ -305,7 +305,7 @@ app.get("/search", isLoggedIn, async (req, res) => {
     }
     res.render("search", { searchTerm, searchResults });
   } catch (error) {
-    console.error("Error searching for restaurants:", error);
+    console.error("Error searching for restaurants");
     res.status(500).send("Internal Server Error");
   }
 });

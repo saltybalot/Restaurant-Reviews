@@ -140,9 +140,9 @@ router.post("/editProfile", editProfileValidation, async (req, res) => {
       // Allowed types
       const allowedTypes = ["image/jpeg", "image/png"];
 
-      if (!allowedTypes.includes(profilePic.mimetype)) {
-          return res.status(400).send("Only JPG and PNG files are allowed.");
-      }
+    if (!allowedTypes.includes(profilePic.mimetype)) {
+      return res.status(400).send("Only JPG and PNG files are allowed.");
+    }
 
       // Generate unique filename
       const extension = path.extname(profilePic.name).toLowerCase();
@@ -223,7 +223,7 @@ async function isPasswordInHistory(user, newPassword) {
   if (!user.passwordHistory || user.passwordHistory.length === 0) {
     return false;
   }
-  
+
   for (const historyEntry of user.passwordHistory) {
     const isMatch = await bcrypt.compare(newPassword, historyEntry.password);
     if (isMatch) {
@@ -237,38 +237,38 @@ async function isPasswordInHistory(user, newPassword) {
 async function updatePasswordWithHistory(user, newPassword) {
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-  
+
   // Add current password to history before updating
   if (user.password) {
     const historyEntry = {
       password: user.password,
-      changedAt: new Date()
+      changedAt: new Date(),
     };
-    
+
     // Add to history array
     if (!user.passwordHistory) {
       user.passwordHistory = [];
     }
-    
+
     user.passwordHistory.push(historyEntry);
-    
+
     // Keep only the last N passwords (default 5)
     const limit = user.passwordHistoryLimit || 5;
     if (user.passwordHistory.length > limit) {
       user.passwordHistory = user.passwordHistory.slice(-limit);
     }
   }
-  
+
   // Update current password
   user.password = hashedPassword;
-  
+
   return user;
 }
 
 // Check if password is old enough to be changed (2 minutes for demo)
 function isPasswordOldEnough(passwordChangedAt) {
   const now = new Date();
-  const twoMinutesAgo = new Date(now.getTime() - (2 * 60 * 1000)); // 2 minutes ago
+  const twoMinutesAgo = new Date(now.getTime() - 2 * 60 * 1000); // 2 minutes ago
   return passwordChangedAt < twoMinutesAgo;
 }
 
@@ -276,7 +276,7 @@ function isPasswordOldEnough(passwordChangedAt) {
 router.get("/password-reset", isLoggedIn, async (req, res) => {
   try {
     const user = await User.findById(req.session.user._id);
-    
+
     if (!user) {
       req.flash("error_msg", "User not found.");
       return res.redirect("/profile?user=" + req.session.user.username);
@@ -285,7 +285,7 @@ router.get("/password-reset", isLoggedIn, async (req, res) => {
     res.render("profilePasswordReset", {
       username: user.username,
       securityQuestion: user.securityQuestion,
-      securityAnswerVerified: false
+      securityAnswerVerified: false,
     });
   } catch (err) {
     console.error("Error:", err);
@@ -298,12 +298,15 @@ router.post("/verify-current-password", isLoggedIn, async (req, res) => {
   console.log("Current password verification route hit");
   console.log("Request body:", req.body);
   console.log("Session user:", req.session.user);
-  
+
   const { currentPassword } = req.body;
 
   if (!currentPassword) {
     console.log("No current password provided");
-    return res.json({ success: false, message: "Current password is required" });
+    return res.json({
+      success: false,
+      message: "Current password is required",
+    });
   }
 
   try {
@@ -316,15 +319,24 @@ router.post("/verify-current-password", isLoggedIn, async (req, res) => {
     }
 
     // Verify current password
-    const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
+    const isPasswordCorrect = await bcrypt.compare(
+      currentPassword,
+      user.password
+    );
     console.log("Password verification result:", isPasswordCorrect);
 
     if (isPasswordCorrect) {
       console.log("Current password verified successfully");
-      return res.json({ success: true, message: "Current password is correct" });
+      return res.json({
+        success: true,
+        message: "Current password is correct",
+      });
     } else {
       console.log("Current password verification failed");
-      return res.json({ success: false, message: "Incorrect current password" });
+      return res.json({
+        success: false,
+        message: "Incorrect current password",
+      });
     }
   } catch (err) {
     console.error("Error in current password verification:", err);
@@ -335,7 +347,7 @@ router.post("/verify-current-password", isLoggedIn, async (req, res) => {
 router.post("/profile/verify-security-answer", isLoggedIn, async (req, res) => {
   console.log("Security answer verification route hit");
   console.log("Request body:", req.body);
-  
+
   const { securityAnswer } = req.body;
 
   if (!securityAnswer) {
@@ -354,7 +366,10 @@ router.post("/profile/verify-security-answer", isLoggedIn, async (req, res) => {
 
     console.log("User's security answer hash:", user.securityAnswer);
     console.log("Input security answer:", securityAnswer);
-    console.log("Processed security answer:", (securityAnswer || "").toLowerCase().trim());
+    console.log(
+      "Processed security answer:",
+      (securityAnswer || "").toLowerCase().trim()
+    );
 
     // Verify security answer
     const isAnswerCorrect = await bcrypt.compare(
@@ -366,10 +381,16 @@ router.post("/profile/verify-security-answer", isLoggedIn, async (req, res) => {
 
     if (isAnswerCorrect) {
       console.log("Security answer verified successfully");
-      return res.json({ success: true, message: "Security answer is correct" });
+      return res.json({
+        success: true,
+        message: "Security answer is correct",
+      });
     } else {
       console.log("Security answer verification failed");
-      return res.json({ success: false, message: "Incorrect security answer" });
+      return res.json({
+        success: false,
+        message: "Incorrect security answer",
+      });
     }
   } catch (err) {
     console.error("Error in security answer verification:", err);
@@ -380,54 +401,86 @@ router.post("/profile/verify-security-answer", isLoggedIn, async (req, res) => {
 router.post("/profile/reset-password", isLoggedIn, async (req, res) => {
   const { newPassword, confirmPassword, currentPassword } = req.body;
 
-      if (!newPassword || !confirmPassword) {
-      return res.json({ success: false, message: "All password fields are required. Please try again." });
-    }
+  if (!newPassword || !confirmPassword) {
+    return res.json({
+      success: false,
+      message: "All password fields are required. Please try again.",
+    });
+  }
 
-    if (newPassword !== confirmPassword) {
-      return res.json({ success: false, message: "Passwords do not match. Please try again." });
-    }
+  if (newPassword !== confirmPassword) {
+    return res.json({
+      success: false,
+      message: "Passwords do not match. Please try again.",
+    });
+  }
 
-    // Password complexity check
-    if (!isPasswordComplex(newPassword)) {
-      return res.json({ success: false, message: "Password must be at least 8 characters and include uppercase, lowercase, number, and special character." });
-    }
+  // Password complexity check
+  if (!isPasswordComplex(newPassword)) {
+    return res.json({
+      success: false,
+      message:
+        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
+    });
+  }
 
   try {
     const user = await User.findById(req.session.user._id);
 
     if (!user) {
-      return res.json({ success: false, message: "User not found. Please try again." });
+      return res.json({
+        success: false,
+        message: "User not found. Please try again.",
+      });
     }
 
     // Check if password is old enough to be changed (2 minutes for demo)
     if (!isPasswordOldEnough(user.passwordChangedAt)) {
-      const timeRemaining = Math.ceil((user.passwordChangedAt.getTime() + (2 * 60 * 1000) - new Date().getTime()) / 1000 / 60);
-      return res.json({ 
-        success: false, 
-        message: `Password cannot be changed yet. Please wait ${timeRemaining} more minute(s) before changing your password again.` 
+      const timeRemaining = Math.ceil(
+        (user.passwordChangedAt.getTime() +
+          2 * 60 * 1000 -
+          new Date().getTime()) /
+          1000 /
+          60
+      );
+      return res.json({
+        success: false,
+        message: `Password cannot be changed yet. Please wait ${timeRemaining} more minute(s) before changing your password again.`,
       });
     }
 
     // Re-verify current password for additional security
     if (currentPassword) {
-      const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
+      const isPasswordCorrect = await bcrypt.compare(
+        currentPassword,
+        user.password
+      );
       if (!isPasswordCorrect) {
-        return res.json({ success: false, message: "Current password verification failed. Please try again." });
+        return res.json({
+          success: false,
+          message: "Current password verification failed. Please try again.",
+        });
       }
     }
 
     // Check if new password is the same as current password
     const isSamePassword = await bcrypt.compare(newPassword, user.password);
     if (isSamePassword) {
-      return res.json({ success: false, message: "New password cannot be the same as your current password. Please choose a different password." });
+      return res.json({
+        success: false,
+        message:
+          "New password cannot be the same as your current password. Please choose a different password.",
+      });
     }
 
     // Check if new password exists in password history
     const isInHistory = await isPasswordInHistory(user, newPassword);
     if (isInHistory) {
       // Return JSON error response for JavaScript alert
-      return res.json({ success: false, message: "Cannot use previous passwords as new password" });
+      return res.json({
+        success: false,
+        message: "Cannot use previous passwords as new password",
+      });
     }
 
     // Update user's password with history tracking
@@ -437,10 +490,24 @@ router.post("/profile/reset-password", isLoggedIn, async (req, res) => {
     await updatedUser.save();
 
     // Return success response
-    return res.json({ success: true, message: "Password has been successfully reset!" });
+    return res.json({
+      success: true,
+      message: "Password has been successfully reset!",
+    });
   } catch (err) {
     console.error("Error:", err);
-    return res.json({ success: false, message: "An error occurred. Please try again." });
+    return res.json({
+      success: false,
+      message: "An error occurred. Please try again.",
+    });
+  }
+});
+
+router.get("/register_admin", isAdmin, async (req, res) => {
+  try {
+    res.render("register_admin");
+  } catch (err) {
+    res.status(500).send("Error loading register admin page");
   }
 });
 
