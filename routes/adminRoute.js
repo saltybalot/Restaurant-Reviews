@@ -5,6 +5,7 @@ const router = Router();
 const { isLoggedIn } = require("../index");
 const AccessControlLog = require("../database/models/AccessControlLog");
 const DataValidationLog = require("../database/models/DataValidationLog");
+const bcrypt = require("bcryptjs");
 
 // Middleware to check admin
 async function isAdmin(req, res, next) {
@@ -40,8 +41,16 @@ router.get("/establishments", isLoggedIn, isAdmin, async (req, res) => {
 // Add new establishment
 router.post("/establishments/add", isLoggedIn, isAdmin, async (req, res) => {
   try {
-    const { name, cuisine, meals, features, locations, website, phone } =
-      req.body;
+    const {
+      name,
+      cuisine,
+      meals,
+      features,
+      locations,
+      website,
+      phone,
+      password,
+    } = req.body;
 
     // Validate required fields
     if (!name || !cuisine || !locations) {
@@ -92,6 +101,16 @@ router.post("/establishments/add", isLoggedIn, isAdmin, async (req, res) => {
       data: JSON.stringify(req.body),
       result: "Success",
     });
+
+    const saltRounds = 10;
+    const hashed = await bcrypt.hash(password.trim(), saltRounds);
+
+    const newUser = new User({
+      username: name.trim(),
+      password: hashed,
+      type: "establishment",
+    });
+    await newUser.save();
 
     res.json({
       success: true,
