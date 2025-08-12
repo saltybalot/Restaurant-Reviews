@@ -104,6 +104,29 @@
             <label for="avatar" class="avatarlabel">Avatar:</label>
             <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" class="textbox-border">
 
+            <script>
+                document.getElementById('avatar').addEventListener('change', function () {
+                    const file = this.files[0];
+                    if (file) {
+                        // Check MIME type
+                        const validTypes = ['image/jpeg', 'image/png'];
+                        if (!validTypes.includes(file.type)) {
+                            alert('Only JPG and PNG files are allowed.');
+                            this.value = ''; // Clear the field
+                            return;
+                        }
+
+                        // Optionally: check extension as well
+                        const extension = file.name.split('.').pop().toLowerCase();
+                        if (!['jpg', 'jpeg', 'png'].includes(extension)) {
+                            alert('Only JPG and PNG files are allowed.');
+                            this.value = '';
+                            return;
+                        }
+                    }
+                });
+            </script>
+
             <label for="description" class="descriptionlabel">Description:</label>
             <textarea id="description" name="description" placeholder="Optional"></textarea>
 
@@ -223,5 +246,3 @@
       }
     };
 </script>
-
-<script src="register_validation.js"></script>
