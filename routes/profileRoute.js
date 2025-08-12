@@ -495,4 +495,18 @@ router.get("/register_admin", isAdmin, async (req, res) => {
   }
 });
 
+router.post("/delete_review", async (req, res) => {
+  const { reviewId } = req.body;
+  const username = req.session.user.username;
+  const review = await Review.findById(reviewId);
+  if (username == review.restaurant) {
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect("/profile?user=" + req.session.user.username);
+  } else {
+    return res
+      .status(403)
+      .send("Forbidden: Only the establishment can delete their own review");
+  }
+});
+
 module.exports = router;

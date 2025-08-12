@@ -154,6 +154,14 @@
                                     reviewed <span class="restaurant-name">{{this.restaurant}}</span> <br><span
                                         class="date">
                                         {{this.date}}</span></p>
+                                    
+                                    <span class="deleteReview">
+                                        <form method="post" action="/delete_review">
+                                            <input type="hidden" name="reviewId" value="{{this._id}}">
+                                            <button type="submit">Delete</button>
+                                        </form>
+                                    </span>
+                                    
 
                             </div>
                             <img src="images/{{this.image}}" alt="Restaurant Review" class="review-photo">
