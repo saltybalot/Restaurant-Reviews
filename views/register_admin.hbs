@@ -22,7 +22,7 @@
                     placeholder="Password" required>
 
                 <label for="adminAvatar" class="avatarlabel">Avatar:</label>
-                <input type="file" id="adminAvatar" name="avatar" accept="image/*" class="textbox-border">
+                <input type="file" id="adminAvatar" name="avatar" accept="image/png, image/jpeg" class="textbox-border">
 
                 <label for="adminDescription" class="descriptionlabel">Description:</label>
                 <textarea id="adminDescription" name="description" placeholder="Optional"></textarea>
@@ -38,7 +38,7 @@
                     <option value="What is your favorite food?">What is your favorite food?</option>
                 </select>
 
-                <input type="text" id="adminSecurityAnswer" name="securityAnswer" class="textbox-border"
+                <input type="password" id="adminSecurityAnswer" name="securityAnswer" class="textbox-border"
                     placeholder="Security Answer" required>
 
                 <button type="button" id="registerBtn" onclick="registerAdmin()">Register Admin</button>
@@ -164,6 +164,8 @@
             }
         }
     </script>
+
+    <script src="admin_register_validation.js"></script>
 </body>
 
 </html>

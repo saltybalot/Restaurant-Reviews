@@ -138,16 +138,6 @@ exports.registerUser = async (req, res) => {
       return res.redirect("/");
     }
 
-    // var avatar;
-    // if (!req.files || Object.keys(req.files).length === 0) {
-    //   avatar = {
-    //     name: "default.jpg",
-    //   };
-    // } else {
-    //   avatar = req.files.avatar;
-    //   avatar.mv("public/images/" + avatar.name);
-    // }
-
     var avatar;
     if (!req.files || Object.keys(req.files).length === 0) {
         avatar = { name: "default.jpg" };
