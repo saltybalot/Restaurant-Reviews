@@ -223,7 +223,7 @@
                 </div>
                 <input type="hidden" id="rating" name="rating" value="0" required>
                 <div id="mediaLabel"><label for="media">Upload Media (Image/Video):</label></div>
-                <input type="file" id="media" name="media" accept="image/*,video/*">
+                <input type="file" id="media" name="media" accept="image/*,video/*" required>
                 <div id="reviewBodyLabel"><label for="reviewBody">Review Body:</label></div>
                 <textarea id="reviewBody" name="reviewBody" rows="4" required></textarea>
                 <input type="hidden" name="restaurant" value="{{restaurant.name}}">
@@ -246,5 +246,31 @@
     <script src="review_script.js"></script>
     <script src="register_script.js"></script>
 </body>
+
+<script>
+    document.getElementById('media').addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+            // Accept any image/* or video/* MIME type
+            if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
+                alert('Only image and video files are allowed.');
+                this.value = ''; // Clear the field
+                return;
+            }
+
+            // Optional: also check by file extension
+            const allowedExtensions = [
+                'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg',   // images
+                'mp4', 'mov', 'avi', 'mkv', 'webm', 'wmv'            // videos
+            ];
+            const extension = file.name.split('.').pop().toLowerCase();
+            if (!allowedExtensions.includes(extension)) {
+                alert('Unsupported file extension.');
+                this.value = '';
+                return;
+            }
+        }
+    });
+</script>
 
 </html>

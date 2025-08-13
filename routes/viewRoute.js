@@ -251,6 +251,25 @@ router.post("/reviewSubmit", async (req, res) => {
     "If you see this text when you submit the reply, you have a problem"
   );
 
+  // If a file is uploaded
+  /*
+  if (image) {
+
+    // Allowed types
+    const allowedTypes = ["image/*", "video/*"];
+
+    if (!allowedTypes.includes(image.mimetype)) {
+        return res.status(400).send("Only images and videos are allowed.");
+    }
+
+    // Generate unique filename
+    const extension = path.extname(image.name).toLowerCase();
+    const uniqueName = crypto.randomUUID() + extension;
+
+    // Save file safely
+    await image.mv(path.join(__dirname, "../public/images", uniqueName));
+  } */
+
   image.mv("public/images/" + image.name);
 
   const newReview = new Review({
