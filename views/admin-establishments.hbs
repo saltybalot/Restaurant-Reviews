@@ -615,7 +615,20 @@
         closeEditModal();
         location.reload(); // Refresh to show updated establishment
       } else {
-        showAlert(result.message, 'error');
+        document.querySelector('.message-overlay')?.remove();
+
+        // Create the same structure as your Handlebars template
+        const overlay = document.createElement('div');
+        overlay.className = 'message-overlay';
+        overlay.setAttribute('status', 'error');
+        overlay.innerHTML = `
+          <div>
+            <button class="close-message" onclick="this.parentElement.parentElement.remove()">&times;</button>
+            <h6 style="color: #f44336;"><strong>${result.message}</strong></h6>
+          </div>
+        `;
+        document.body.prepend(overlay);
+        
       }
     } catch (error) {
       showAlert('Error updating establishment. Please try again.', 'error');

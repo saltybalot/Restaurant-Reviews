@@ -79,4 +79,45 @@ const establishmentValidation = [
     .withMessage("Phone number contains invalid characters.")
 ];
 
-module.exports = { registerValidation, editProfileValidation, establishmentValidation };
+const editEstablishmentValidation = [
+  body("name")
+    .isLength({ min: 3, max: 30 })
+    .withMessage("Establishment name must be between 3 and 30 characters.")
+    .matches(/^[A-Za-z0-9\s.,!?'"()-]*$/)
+    .withMessage("Establishment name contains invalid characters."),
+
+  body("cuisine")
+    .isLength({ min: 5, max: 20 })
+    .withMessage("Cuisine type must be between 5 and 20 characters.")
+    .matches(/^[A-Za-z]*$/)
+    .withMessage("Cuisine type can only contain letters."),
+
+  body("meals")
+    .isLength({ max: 20 })
+    .withMessage("Meals Served must have up to 20 characters only!")
+    .matches(/^[A-Za-z]*$/)
+    .withMessage("Meals Served can only contain letters."),
+
+  body("features")
+    .isLength({ max: 30 })
+    .withMessage("Features must have up to 30 characters only!")
+    .matches(/^[A-Za-z0-9\s.,!?'"()-]*$/)
+    .withMessage("Features contains invalid characters."),
+
+  body("locations")
+    .isLength({ min: 4, max: 30 })
+    .withMessage("Location must be between 4 and 30 characters.")
+    .matches(/^[A-Za-z0-9\s.,!?'()-]*$/)
+    .withMessage("Location contains invalid characters."),
+
+  body("phone")
+    .matches(/^\+?[0-9\s()-]*$/)
+    .withMessage("Phone number contains invalid characters.")
+];
+
+module.exports = { 
+  registerValidation,
+  editProfileValidation,
+  establishmentValidation,
+  editEstablishmentValidation
+};

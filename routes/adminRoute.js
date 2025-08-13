@@ -6,7 +6,7 @@ const { isLoggedIn } = require("../index");
 const AccessControlLog = require("../database/models/AccessControlLog");
 const DataValidationLog = require("../database/models/DataValidationLog");
 const bcrypt = require("bcryptjs");
-const { establishmentValidation } = require("../validators");
+const { establishmentValidation, editEstablishmentValidation } = require("../validators");
 const { validationResult } = require("express-validator");
 
 // Middleware to check admin
@@ -60,13 +60,12 @@ router.post("/establishments/add", isLoggedIn, isAdmin, establishmentValidation,
   } = req.body;
 
   const logBase = {
-    username: req.session.user.username || "unknown",
+    username: req.session.user.username,
     action: "ADD_ESTABLISHMENT",
     data: JSON.stringify(req.body),
   };
 
   const errors = validationResult(req);
-  console.log('Is errors empty? ' + errors.isEmpty())
 
   if (!errors.isEmpty()) {
     const messages = errors.array().map(item => item.msg);
@@ -162,11 +161,6 @@ router.post("/establishments/add", isLoggedIn, isAdmin, establishmentValidation,
         result: "Database error",
       });
 
-      // res.status(500).json({
-      //   success: false,
-      //   message: "Error adding establishment. Please try again.",
-      // });
-
       req.flash("add_est_error_msg", "Error adding establishment. Please try again.");
       return res.redirect("/establishments");
     }
@@ -209,89 +203,120 @@ router.delete("/establishments/:id", isLoggedIn, isAdmin, async (req, res) => {
 });
 
 // Update establishment
-router.put("/establishments/:id", isLoggedIn, isAdmin, async (req, res) => {
-  try {
-    const { name, cuisine, meals, features, locations, website, phone } =
-      req.body;
+router.put("/establishments/:id", isLoggedIn, isAdmin, editEstablishmentValidation, async (req, res) => {
+  
+  const { name, cuisine, meals, features, locations, website, phone } =
+    req.body;
 
-    // Validate required fields
-    if (!name || !cuisine || !locations) {
-      await DataValidationLog.create({
-        username: req.session.user.username,
-        action: "UPDATE_ESTABLISHMENT",
-        data: JSON.stringify(req.body),
-        result: "Missing required fields: name, cuisine, or locations",
-      });
-      return res.status(400).json({
-        success: false,
-        message: "Name, cuisine, and locations are required fields.",
-      });
-    }
+  const logBase = {
+    username: req.session.user.username,
+    action: "UPDATE_ESTABLISHMENT",
+    data: JSON.stringify(req.body),
+  };
 
-    // Check if name already exists for different establishment
-    const existingEstablishment = await Restaurant.findOne({
-      name: name.trim(),
-      _id: { $ne: req.params.id },
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const messages = errors.array().map(item => item.msg);
+    await DataValidationLog.create({
+      ...logBase,
+      result: messages.join(" "),
     });
 
-    if (existingEstablishment) {
-      await DataValidationLog.create({
-        username: req.session.user.username,
-        action: "UPDATE_ESTABLISHMENT",
-        data: JSON.stringify(req.body),
-        result: "Establishment with this name already exists",
-      });
+    // Check if request is AJAX (fetch)
+    if (req.headers['content-type'] === 'application/json') {
       return res.status(400).json({
         success: false,
-        message: "An establishment with this name already exists.",
+        message: messages.join(" "),
       });
     }
 
-    const updatedEstablishment = await Restaurant.findByIdAndUpdate(
-      req.params.id,
-      {
+    req.flash("add_est_error_msg", messages.join(" "));
+    return res.redirect("/establishments");
+    
+  } else {
+    try {
+
+      // Validate required fields
+      if (!name || !cuisine || !locations) {
+        await DataValidationLog.create({
+          username: req.session.user.username,
+          action: "UPDATE_ESTABLISHMENT",
+          data: JSON.stringify(req.body),
+          result: "Missing required fields: name, cuisine, or locations",
+        });
+        return res.status(400).json({
+          success: false,
+          message: "Name, cuisine, and locations are required fields.",
+        });
+      }
+
+      // Check if name already exists for different establishment
+      const existingEstablishment = await Restaurant.findOne({
         name: name.trim(),
-        cuisine: cuisine.trim(),
-        meals: meals ? meals.trim() : "",
-        features: features ? features.trim() : "",
-        locations: locations.trim(),
-        website: website ? website.trim() : "",
-        phone: phone ? phone.trim() : "",
-      },
-      { new: true }
-    );
+        _id: { $ne: req.params.id },
+      });
 
-    if (!updatedEstablishment) {
-      return res.status(404).json({
+      if (existingEstablishment) {
+        await DataValidationLog.create({
+          username: req.session.user.username,
+          action: "UPDATE_ESTABLISHMENT",
+          data: JSON.stringify(req.body),
+          result: "Establishment with this name already exists",
+        });
+        return res.status(400).json({
+          success: false,
+          message: "An establishment with this name already exists.",
+        });
+      }
+
+      const updatedEstablishment = await Restaurant.findByIdAndUpdate(
+        req.params.id,
+        {
+          name: name.trim(),
+          cuisine: cuisine.trim(),
+          meals: meals ? meals.trim() : "",
+          features: features ? features.trim() : "",
+          locations: locations.trim(),
+          website: website ? website.trim() : "",
+          phone: phone ? phone.trim() : "",
+        },
+        { new: true }
+      );
+
+      if (!updatedEstablishment) {
+        return res.status(404).json({
+          success: false,
+          message: "Establishment not found.",
+        });
+      }
+
+      await DataValidationLog.create({
+        username: req.session.user.username,
+        action: "UPDATE_ESTABLISHMENT",
+        data: JSON.stringify(req.body),
+        result: "Success",
+      });
+
+      res.json({
+        success: true,
+        message: "Establishment updated successfully!",
+        establishment: updatedEstablishment,
+      });
+
+    } catch (err) {
+      console.error("Error updating establishment:", err);
+      await DataValidationLog.create({
+        username: req.session.user.username,
+        action: "UPDATE_ESTABLISHMENT",
+        data: JSON.stringify(req.body),
+        result: "Database error",
+      });
+      res.status(500).json({
         success: false,
-        message: "Establishment not found.",
+        message: "Error updating establishment. Please try again.",
       });
     }
-
-    await DataValidationLog.create({
-      username: req.session.user.username,
-      action: "UPDATE_ESTABLISHMENT",
-      data: JSON.stringify(req.body),
-      result: "Success",
-    });
-
-    res.json({
-      success: true,
-      message: "Establishment updated successfully!",
-      establishment: updatedEstablishment,
-    });
-  } catch (err) {
-    console.error("Error updating establishment:", err);
-    await DataValidationLog.create({
-      username: req.session.user.username,
-      action: "UPDATE_ESTABLISHMENT",
-      data: JSON.stringify(req.body),
-      result: "Database error",
-    });
-    res.status(500).json({
-      success: false,
-      message: "Error updating establishment. Please try again.",
-    });
   }
 });
 
